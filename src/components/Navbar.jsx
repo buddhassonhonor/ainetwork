@@ -39,21 +39,33 @@ const Navbar = () => {
         </Link>
 
         {/* Nav Links - centered */}
-        <div className="hidden md:flex items-center gap-10">
-          <Link to="/" className="text-2xl font-bold text-slate-800 hover:text-indigo-600 transition-colors duration-200 uppercase">首页</Link>
-          <a href="/#courses" className="text-2xl font-bold text-slate-800 hover:text-indigo-600 transition-colors duration-200 uppercase">教学团队</a>
-          <a href="/#resources" className="text-2xl font-bold text-slate-800 hover:text-indigo-600 transition-colors duration-200 uppercase">学习资源</a>
-          <Link to="/tools" className="text-2xl font-bold text-slate-800 hover:text-indigo-600 transition-colors duration-200 uppercase">仿真工具</Link>
-          <Link to="/knowledge-graph" className="text-2xl font-bold text-slate-800 hover:text-indigo-600 transition-colors duration-200 flex items-center gap-1.5 uppercase">
+        <div className="hidden md:flex items-center gap-8">
+          <Link to="/" className="text-xl font-bold text-slate-800 hover:text-indigo-600 transition-colors duration-200 uppercase no-underline">首页</Link>
+          <a href="/#courses" className="text-xl font-bold text-slate-800 hover:text-indigo-600 transition-colors duration-200 uppercase no-underline">教学团队</a>
+          <a href="/#resources" className="text-xl font-bold text-slate-800 hover:text-indigo-600 transition-colors duration-200 uppercase no-underline">学习资源</a>
+          <Link to="/tools" className="text-xl font-bold text-slate-800 hover:text-indigo-600 transition-colors duration-200 uppercase no-underline">仿真工具</Link>
+          <Link to="/knowledge-graph" className="text-xl font-bold text-slate-800 hover:text-indigo-600 transition-colors duration-200 flex items-center gap-1.5 uppercase no-underline">
             <span className="text-indigo-600 font-black">AI+</span>知识图谱
           </Link>
-          <Link to="/dashboard" className="text-2xl font-bold text-slate-800 hover:text-indigo-600 transition-colors duration-200 flex items-center gap-1 uppercase">
+          <Link to="/dashboard" className="text-xl font-bold text-slate-800 hover:text-indigo-600 transition-colors duration-200 flex items-center gap-1 uppercase no-underline">
             学业诊断
           </Link>
         </div>
 
-        {/* Spacer to balance logo */}
-        <div className="w-24" />
+        {/* Right Actions - AI Assistant Entry */}
+        <div className="hidden md:flex items-center gap-4 w-48 justify-end">
+          <button 
+            onClick={() => document.getElementById('ai-assistant-trigger')?.click()}
+            className="flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 font-bold rounded-xl hover:bg-indigo-100 transition-all border border-indigo-100"
+          >
+            <div className="relative">
+              <div className="w-2 h-2 bg-sky-400 rounded-full absolute -top-0.5 -right-0.5 animate-ping opacity-75"></div>
+              <div className="w-2 h-2 bg-sky-500 rounded-full absolute -top-0.5 -right-0.5"></div>
+              <span className="text-lg">🤖</span>
+            </div>
+            <span>AI 助教</span>
+          </button>
+        </div>
       </div>
     </motion.nav>
   );

@@ -64,6 +64,7 @@ const AIAssistant = () => {
       {/* Prominent Trigger Button in bottom-right */}
       <div className="fixed bottom-6 right-6 z-[60]">
         <button
+          id="ai-assistant-trigger"
           onClick={() => setIsOpen(!isOpen)}
           className={`flex items-center gap-3 px-6 py-4 bg-indigo-600 border border-indigo-500 text-white font-black rounded-full shadow-2xl hover:bg-indigo-700 transition-all duration-300 transform ${isOpen ? 'scale-0' : 'scale-100'}`}
         >
