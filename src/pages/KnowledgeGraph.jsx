@@ -62,6 +62,8 @@ const KnowledgeGraph = () => {
     return { nodes, links };
   }, []);
 
+  const fgRef = React.useRef();
+
   return (
     <div className="pt-24 min-h-screen bg-slate-50">
       <div className="section-container">
@@ -107,7 +109,13 @@ const KnowledgeGraph = () => {
           </div>
 
           <ForceGraph2D
+            ref={fgRef}
             graphData={graphData}
+            onEngineStop={() => {
+              if (fgRef.current) {
+                fgRef.current.zoomToFit(400, 100);
+              }
+            }}
             nodeLabel={(node) => `
               <div class="bg-white text-slate-800 p-3 rounded-xl shadow-2xl border border-slate-200">
                 <p class="font-black text-lg mb-1">${node.label}</p>
