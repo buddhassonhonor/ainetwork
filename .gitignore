@@ -25,3 +25,5 @@ dist-ssr
 
 # Source courseware folder (large, not needed in repo)
 计算机网络课件/
+
+.vercel
