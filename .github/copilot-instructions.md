@@ -9,7 +9,10 @@ Purpose: Provide Copilot sessions immediate, repo-specific guidance so suggestio
 - Type-check only: npx tsc --noEmit
 - Run Vite build only: npx vite build
 
-> Note: There are no test or lint scripts configured in package.json.
+> E2E tests: Playwright has been added. Run all e2e tests: npm run test:e2e (alias for `playwright test`).
+> Run a single test file: npx playwright test tests/example.spec.ts
+> To install Playwright browsers locally (optional): npx playwright install
+> No unit test or lint scripts are configured by default.
 
 ## High-level architecture (big picture)
 - Frontend-only single-page app built with Vite + React (SWC) + TypeScript.
