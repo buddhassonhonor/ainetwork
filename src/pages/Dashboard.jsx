@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import ForceGraph2D from 'react-force-graph-2d';
-import { forceCollide as d3ForceCollide } from 'd3-force';
+import { forceCollide as d3ForceCollide, forceX as d3ForceX, forceY as d3ForceY } from 'd3-force';
 import { 
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer,
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LineChart, Line
@@ -42,7 +42,7 @@ const Dashboard = () => {
 
   // Graph Data Memoization
   const graphData = useMemo(() => {
-    const nodes = [{ id: 'center', name: '通信工程\n2024级', val: 50, color: '#4f46e5', group: 0 }];
+    const nodes = [];
     const links = [];
     classStudents.forEach(student => {
       let color = '#818cf8'; // indigo-400
@@ -52,29 +52,23 @@ const Dashboard = () => {
       nodes.push({
         id: student.id,
         name: student.name,
-        val: student.progress * 0.4, // Size scaling
+        val: Math.max(30, student.progress), // Size based on progress, ensure min size
         color: color,
         group: 1,
         student: student
       });
-      links.push({ source: 'center', target: student.id, value: 1 });
     });
     return { nodes, links };
   }, []);
 
   const handleNodeClick = useCallback(node => {
-    if (node.id !== 'center') {
+    if (node) {
       setSelectedStudent(generateStudentData(node.student));
-    } else {
-      // Re-center graph
-      if (fgRef.current) {
-        fgRef.current.zoomToFit(400);
-      }
     }
   }, []);
 
   const handleNodeHover = useCallback(node => {
-    if (node && node.id !== 'center') {
+    if (node) {
       setHoveredStudent(node.student);
     } else {
       setHoveredStudent(null);
@@ -83,10 +77,14 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (fgRef.current) {
-      // Tweak physics forces to avoid node overlapping
-      fgRef.current.d3Force('charge').strength(-300);
-      fgRef.current.d3Force('link').distance(150);
-      fgRef.current.d3Force('collide', fgRef.current.d3Force('collide') || d3ForceCollide().radius(node => Math.sqrt(node.val || 1) * 2 + 15).iterations(2));
+      // Tweak physics forces for floating bubbles layout
+      fgRef.current.d3Force('charge').strength(-30); // Gentle repulsion
+      fgRef.current.d3Force('link', null); // Remove links to let them float
+      fgRef.current.d3Force('center', null); // Remove rigid center gravity
+      fgRef.current.d3Force('x', d3ForceX(0).strength(0.02)); // Soft pull to X center
+      fgRef.current.d3Force('y', d3ForceY(0).strength(0.02)); // Soft pull to Y center
+      // Collision force to prevent heavy overlap but allow bumping
+      fgRef.current.d3Force('collide', d3ForceCollide().radius(node => Math.sqrt(node.val) * 2.8 + 15).iterations(3));
     }
   }, [graphData]);
 
@@ -143,32 +141,27 @@ const Dashboard = () => {
                   backgroundColor="#0f172a"
                   nodeCanvasObject={(node, ctx, globalScale) => {
                     const label = node.name;
-                    const fontSize = node.id === 'center' ? 14/globalScale : 12/globalScale;
+                    const fontSize = 14/globalScale;
                     ctx.font = `bold ${fontSize}px Sans-Serif`;
+                    
+                    const radius = Math.sqrt(node.val) * 2.8;
                     
                     // Draw node glow
                     ctx.shadowColor = node.color;
                     ctx.shadowBlur = 15;
                     ctx.beginPath();
-                    ctx.arc(node.x, node.y, Math.sqrt(node.val) * 2, 0, 2 * Math.PI, false);
+                    ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI, false);
                     ctx.fillStyle = node.color;
                     ctx.fill();
                     ctx.shadowBlur = 0; // reset
                     
                     // Draw text label
                     const textWidth = ctx.measureText(label).width;
-                    const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2); 
                     
-                    ctx.fillStyle = 'rgba(15, 23, 42, 0.8)';
-                    if (node.id === 'center') {
-                       ctx.fillText(label.split('\n')[0], node.x - textWidth/2, node.y - fontSize/2);
-                       ctx.fillText(label.split('\n')[1], node.x - textWidth/2, node.y + fontSize/2 + 2);
-                    } else {
-                       ctx.fillStyle = '#f8fafc';
-                       ctx.textAlign = 'center';
-                       ctx.textBaseline = 'middle';
-                       ctx.fillText(label, node.x, node.y + Math.sqrt(node.val) * 2 + fontSize + 2);
-                    }
+                    ctx.fillStyle = '#f8fafc';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(label, node.x, node.y + radius + fontSize + 2);
                   }}
                 />
               </div>
@@ -282,45 +275,6 @@ const Dashboard = () => {
                   </ResponsiveContainer>
                 </div>
               </div>
-            </div>
-          </div>
-          
-          {/* Quick List - Cards Design */}
-          <div className="mt-8">
-            <h4 className="text-xl font-black text-slate-900 mb-6 flex items-center gap-2">
-              <Users className="text-slate-400" size={24} /> 所有学生名录
-            </h4>
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-              {classStudents.map(student => (
-                <motion.button 
-                  whileHover={{ y: -5 }}
-                  key={student.id}
-                  onClick={() => setSelectedStudent(generateStudentData(student))}
-                  className="bg-white p-4 rounded-3xl border border-slate-200 hover:border-indigo-500 shadow-sm hover:shadow-xl hover:shadow-indigo-100 transition-all text-left flex flex-col group"
-                >
-                  <div className="flex justify-between items-start mb-3">
-                    <div className="w-10 h-10 rounded-2xl bg-slate-100 text-slate-600 flex items-center justify-center font-black group-hover:bg-indigo-100 group-hover:text-indigo-600 transition-colors">
-                      {student.name.charAt(0)}
-                    </div>
-                    <div className={`text-xs font-bold px-2 py-1 rounded-full ${
-                      student.score >= 90 ? 'bg-emerald-50 text-emerald-600' :
-                      student.score < 70 ? 'bg-amber-50 text-amber-600' :
-                      'bg-sky-50 text-sky-600'
-                    }`}>
-                      {student.score}分
-                    </div>
-                  </div>
-                  <div className="font-black text-slate-900 mb-1">{student.name}</div>
-                  <div className="w-full bg-slate-100 rounded-full h-1.5 mt-auto mb-1">
-                    <div className={`h-1.5 rounded-full ${
-                      student.progress >= 80 ? 'bg-emerald-400' :
-                      student.progress < 60 ? 'bg-amber-400' :
-                      'bg-indigo-400'
-                    }`} style={{ width: `${student.progress}%` }}></div>
-                  </div>
-                  <div className="text-[10px] font-bold text-slate-400 text-right">{student.progress}%</div>
-                </motion.button>
-              ))}
             </div>
           </div>
         </div>
