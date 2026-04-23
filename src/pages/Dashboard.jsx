@@ -1,39 +1,123 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer,
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ScatterChart, Scatter, ZAxis
 } from 'recharts';
 import { 
   User, BookOpen, CheckCircle, Award, 
-  ArrowRight, Brain, Target, Sparkles, TrendingUp
+  ArrowRight, Brain, Target, Sparkles, TrendingUp, Users, ArrowLeft
 } from 'lucide-react';
-
-const mockData = {
-  studentName: "黄炳炎",
-  major: "通信工程",
-  progress: 75,
-  experiments: 8,
-  totalExperiments: 12,
-  diagnosticData: [
-    { subject: '物理层', A: 90, fullMark: 100 },
-    { subject: '链路层', A: 75, fullMark: 100 },
-    { subject: '网络层', A: 60, fullMark: 100 },
-    { subject: '传输层', A: 85, fullMark: 100 },
-    { subject: '应用层', A: 70, fullMark: 100 },
-    { subject: 'AI融合', A: 50, fullMark: 100 },
-  ],
-  weeklyProgress: [
-    { name: 'W1', hours: 4 },
-    { name: 'W2', hours: 7 },
-    { name: 'W3', hours: 5 },
-    { name: 'W4', hours: 10 },
-  ]
-};
+import { classStudents, generateStudentData } from '../data/students';
 
 const Dashboard = () => {
+  const [selectedStudent, setSelectedStudent] = useState(null);
+
+  // Class Overview View
+  if (!selectedStudent) {
+    return (
+      <div className="pt-24 min-h-screen bg-slate-50 pb-16">
+        <div className="section-container">
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 flex items-center justify-center gap-3">
+              <Users className="text-indigo-600" size={40} />
+              班级学业全景视图
+            </h1>
+            <p className="text-lg text-slate-500 font-medium">
+              通信工程 2024 级 - 点击任意同学的节点查看个人专属“AI 学业诊断报告”
+            </p>
+          </div>
+
+          <div className="bg-white p-8 md:p-12 rounded-[3rem] border border-slate-100 shadow-xl shadow-indigo-900/5">
+            <div className="h-[500px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                  <XAxis 
+                    type="number" 
+                    dataKey="progress" 
+                    name="课程进度" 
+                    unit="%" 
+                    stroke="#64748b" 
+                    tick={{ fill: '#64748b', fontWeight: 600 }}
+                    label={{ value: '理论课进度 (%)', position: 'bottom', fill: '#64748b', fontWeight: 700 }}
+                  />
+                  <YAxis 
+                    type="number" 
+                    dataKey="score" 
+                    name="综合得分" 
+                    stroke="#64748b" 
+                    tick={{ fill: '#64748b', fontWeight: 600 }}
+                    label={{ value: 'AI 诊断综合得分', angle: -90, position: 'insideLeft', fill: '#64748b', fontWeight: 700 }}
+                  />
+                  <ZAxis type="number" dataKey="hours" range={[200, 1000]} name="在线时长" unit="h" />
+                  <Tooltip 
+                    cursor={{ strokeDasharray: '3 3' }}
+                    content={({ active, payload }) => {
+                      if (active && payload && payload.length) {
+                        const data = payload[0].payload;
+                        return (
+                          <div className="bg-slate-900 text-white p-4 rounded-2xl shadow-2xl border border-white/10">
+                            <p className="font-black text-lg mb-2 flex items-center gap-2">
+                              <User size={16} className="text-indigo-400" /> {data.name}
+                            </p>
+                            <p className="text-sm text-slate-300 font-medium mb-1">进度: <span className="text-indigo-400 font-bold">{data.progress}%</span></p>
+                            <p className="text-sm text-slate-300 font-medium mb-1">得分: <span className="text-indigo-400 font-bold">{data.score}</span></p>
+                            <p className="text-sm text-slate-300 font-medium">时长: <span className="text-indigo-400 font-bold">{data.hours}h</span></p>
+                            <p className="mt-3 text-xs text-sky-400 font-bold uppercase tracking-wider">点击查看详细报告 👉</p>
+                          </div>
+                        );
+                      }
+                      return null;
+                    }}
+                  />
+                  <Scatter 
+                    name="班级学生" 
+                    data={classStudents} 
+                    fill="#4f46e5" 
+                    fillOpacity={0.7}
+                    onClick={(data) => setSelectedStudent(generateStudentData(data))}
+                    style={{ cursor: 'pointer' }}
+                    className="hover:fill-sky-400 transition-colors duration-300"
+                  />
+                </ScatterChart>
+              </ResponsiveContainer>
+            </div>
+            
+            {/* Quick List for mobile or direct click */}
+            <div className="mt-12 pt-8 border-t border-slate-100">
+              <h4 className="font-black text-slate-900 mb-6">学生列表快速访问：</h4>
+              <div className="flex flex-wrap gap-3">
+                {classStudents.map(student => (
+                  <button 
+                    key={student.id}
+                    onClick={() => setSelectedStudent(generateStudentData(student))}
+                    className="px-4 py-2 bg-slate-50 hover:bg-indigo-600 hover:text-white border border-slate-200 hover:border-indigo-600 rounded-xl text-sm font-bold text-slate-600 transition-all"
+                  >
+                    {student.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Individual Student Dashboard View
+  const mockData = selectedStudent;
+
   return (
     <div className="pt-24 min-h-screen bg-slate-50 pb-16">
       <div className="section-container">
+        
+        <button 
+          onClick={() => setSelectedStudent(null)}
+          className="inline-flex items-center gap-2 text-indigo-600 font-bold mb-8 hover:text-indigo-800 transition-colors"
+        >
+          <ArrowLeft size={20} /> 返回班级全景
+        </button>
+
         {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
           <div className="flex items-center gap-6">
