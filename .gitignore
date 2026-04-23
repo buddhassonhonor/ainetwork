@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Source courseware folder (large, not needed in repo)
+计算机网络课件/

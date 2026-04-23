@@ -17,24 +17,17 @@ const Hero = () => {
           <span className="inline-block px-4 py-1.5 mb-6 text-xs font-bold tracking-widest text-indigo-400 uppercase glass rounded-full">
             辅助学习课程资源门户
           </span>
-          <h1 className="text-6xl md:text-8xl font-extrabold mb-8 leading-tight">
-            从比特到 <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">
-              全球互联
+          <h1 className="text-6xl md:text-8xl font-extrabold mb-10 leading-tight tracking-tighter">
+            探索核心原理 <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-sky-500">
+              计算机网络 + AI
             </span>
           </h1>
-          <p className="max-w-2xl mx-auto mb-10 text-lg md:text-xl text-slate-400 font-medium">
-            探索计算机网络的奥秘。汇集智慧树及各大名校精品资源，助你构建坚实的网络技术底座，从协议分析到实战仿真。
+          <p className="max-w-3xl mx-auto mb-12 text-xl md:text-2xl text-slate-500 font-semibold leading-relaxed">
+            由泉州师范学院物信学院黄志高及专家团队倾力打造。汇集最前沿的网络技术与人工智能结合应用，从底层协议到AI赋能的网络架构。
           </p>
           
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button className="flex items-center gap-2 px-8 py-4 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-500 transition-all shadow-xl shadow-indigo-600/25 group">
-              开始探索 <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
-            </button>
-            <button className="flex items-center gap-2 px-8 py-4 bg-white/5 border border-white/10 text-white font-bold rounded-xl hover:bg-white/10 transition-all">
-              <Play size={20} className="fill-white" /> 观看导论
-            </button>
-          </div>
+
         </motion.div>
       </div>
 

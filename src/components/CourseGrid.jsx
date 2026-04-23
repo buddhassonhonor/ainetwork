@@ -8,8 +8,8 @@ const CourseGrid = () => {
     <section id="courses" className="section-container">
       <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
         <div>
-          <h2 className="text-4xl md:text-5xl mb-4">名校精品课程</h2>
-          <p className="text-slate-400 text-lg">汇集全国顶级学府的计算机网络核心课程</p>
+          <h2 className="text-4xl md:text-5xl mb-4">名师教学团队</h2>
+          <p className="text-slate-500 text-lg">泉州师范学院物理与信息工程学院计算机网络核心教研组</p>
         </div>
         <div className="flex gap-2">
           {['全部', '国家精品', '名校推荐', '考研必备'].map((filter) => (
@@ -45,16 +45,16 @@ const CourseGrid = () => {
               </div>
             </div>
             
-            <div className="p-6">
-              <div className="flex justify-between items-start mb-2">
-                <h3 className="text-xl group-hover:text-indigo-400 transition-colors">{course.title}</h3>
-                <Star size={16} className="text-amber-400 fill-amber-400" />
+            <div className="p-8">
+              <div className="flex justify-between items-start mb-3">
+                <h3 className="text-2xl font-extrabold group-hover:text-indigo-600 transition-colors">{course.title}</h3>
+                <Star size={20} className="text-amber-400 fill-amber-400" />
               </div>
-              <p className="text-sm text-slate-400 mb-4 font-medium">{course.school} · {course.lecturer}</p>
-              <p className="text-sm text-slate-500 mb-6 line-clamp-2">{course.description}</p>
+              <p className="text-lg text-slate-500 mb-6 font-bold">{course.school} · {course.lecturer}</p>
+              <p className="text-base text-slate-500 mb-8 line-clamp-3 leading-relaxed font-medium">{course.description}</p>
               
-              <button className="w-full py-3 flex items-center justify-center gap-2 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all font-bold text-sm">
-                查看详情 <ExternalLink size={14} />
+              <button className="w-full py-4 flex items-center justify-center gap-2 bg-slate-50 border border-slate-100 rounded-2xl hover:bg-indigo-50 hover:text-indigo-600 transition-all font-bold text-lg">
+                查看详情 <ExternalLink size={18} />
               </button>
             </div>
           </motion.div>
