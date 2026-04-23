@@ -9,7 +9,7 @@ const CourseGrid = () => {
     <section id="courses" className="section-container">
       <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
         <div>
-          <h2 className="text-4xl md:text-5xl mb-4">名师教学团队</h2>
+          <h2 className="text-4xl md:text-5xl mb-4">教学团队</h2>
           <p className="text-slate-500 text-lg">泉州师范学院物理与信息工程学院计算机网络核心教研组</p>
         </div>
         <div className="flex gap-2">
