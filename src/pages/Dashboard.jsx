@@ -1,102 +1,326 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
+import ForceGraph2D from 'react-force-graph-2d';
+import { forceCollide as d3ForceCollide } from 'd3-force';
 import { 
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer,
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ScatterChart, Scatter, ZAxis
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LineChart, Line
 } from 'recharts';
 import { 
   User, BookOpen, CheckCircle, Award, 
-  ArrowRight, Brain, Target, Sparkles, TrendingUp, Users, ArrowLeft
+  ArrowRight, Brain, Target, Sparkles, TrendingUp, Users, ArrowLeft, MousePointerClick, Activity, Clock
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { classStudents, generateStudentData } from '../data/students';
 
 const Dashboard = () => {
   const [selectedStudent, setSelectedStudent] = useState(null);
+  const [hoveredStudent, setHoveredStudent] = useState(null);
+  
+  // For Force Graph dimensions
+  const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
+  const containerRef = useRef(null);
+  const fgRef = useRef();
+
+  useEffect(() => {
+    if (!selectedStudent && containerRef.current) {
+      setDimensions({
+        width: containerRef.current.offsetWidth,
+        height: containerRef.current.offsetHeight
+      });
+    }
+    const handleResize = () => {
+      if (!selectedStudent && containerRef.current) {
+        setDimensions({
+          width: containerRef.current.offsetWidth,
+          height: containerRef.current.offsetHeight
+        });
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [selectedStudent]);
+
+  // Graph Data Memoization
+  const graphData = useMemo(() => {
+    const nodes = [{ id: 'center', name: '通信工程\n2024级', val: 50, color: '#4f46e5', group: 0 }];
+    const links = [];
+    classStudents.forEach(student => {
+      let color = '#818cf8'; // indigo-400
+      if (student.score >= 90) color = '#34d399'; // emerald-400
+      else if (student.score < 70) color = '#fbbf24'; // amber-400
+      
+      nodes.push({
+        id: student.id,
+        name: student.name,
+        val: student.progress * 0.4, // Size scaling
+        color: color,
+        group: 1,
+        student: student
+      });
+      links.push({ source: 'center', target: student.id, value: 1 });
+    });
+    return { nodes, links };
+  }, []);
+
+  const handleNodeClick = useCallback(node => {
+    if (node.id !== 'center') {
+      setSelectedStudent(generateStudentData(node.student));
+    } else {
+      // Re-center graph
+      if (fgRef.current) {
+        fgRef.current.zoomToFit(400);
+      }
+    }
+  }, []);
+
+  const handleNodeHover = useCallback(node => {
+    if (node && node.id !== 'center') {
+      setHoveredStudent(node.student);
+    } else {
+      setHoveredStudent(null);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (fgRef.current) {
+      // Tweak physics forces to avoid node overlapping
+      fgRef.current.d3Force('charge').strength(-300);
+      fgRef.current.d3Force('link').distance(150);
+      fgRef.current.d3Force('collide', fgRef.current.d3Force('collide') || d3ForceCollide().radius(node => Math.sqrt(node.val || 1) * 2 + 15).iterations(2));
+    }
+  }, [graphData]);
 
   // Class Overview View
   if (!selectedStudent) {
     return (
       <div className="pt-24 min-h-screen bg-slate-50 pb-16">
         <div className="section-container">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 flex items-center justify-center gap-3">
-              <Users className="text-indigo-600" size={40} />
-              班级学业全景视图
-            </h1>
-            <p className="text-lg text-slate-500 font-medium">
-              通信工程 2024 级 - 点击任意同学的节点查看个人专属“AI 学业诊断报告”
-            </p>
-          </div>
-
-          <div className="bg-white p-8 md:p-12 rounded-[3rem] border border-slate-100 shadow-xl shadow-indigo-900/5">
-            <div className="h-[500px] w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                  <XAxis 
-                    type="number" 
-                    dataKey="progress" 
-                    name="课程进度" 
-                    unit="%" 
-                    stroke="#64748b" 
-                    tick={{ fill: '#64748b', fontWeight: 600 }}
-                    label={{ value: '理论课进度 (%)', position: 'bottom', fill: '#64748b', fontWeight: 700 }}
-                  />
-                  <YAxis 
-                    type="number" 
-                    dataKey="score" 
-                    name="综合得分" 
-                    stroke="#64748b" 
-                    tick={{ fill: '#64748b', fontWeight: 600 }}
-                    label={{ value: 'AI 诊断综合得分', angle: -90, position: 'insideLeft', fill: '#64748b', fontWeight: 700 }}
-                  />
-                  <ZAxis type="number" dataKey="hours" range={[200, 1000]} name="在线时长" unit="h" />
-                  <Tooltip 
-                    cursor={{ strokeDasharray: '3 3' }}
-                    content={({ active, payload }) => {
-                      if (active && payload && payload.length) {
-                        const data = payload[0].payload;
-                        return (
-                          <div className="bg-slate-900 text-white p-4 rounded-2xl shadow-2xl border border-white/10">
-                            <p className="font-black text-lg mb-2 flex items-center gap-2">
-                              <User size={16} className="text-indigo-400" /> {data.name}
-                            </p>
-                            <p className="text-sm text-slate-300 font-medium mb-1">进度: <span className="text-indigo-400 font-bold">{data.progress}%</span></p>
-                            <p className="text-sm text-slate-300 font-medium mb-1">得分: <span className="text-indigo-400 font-bold">{data.score}</span></p>
-                            <p className="text-sm text-slate-300 font-medium">时长: <span className="text-indigo-400 font-bold">{data.hours}h</span></p>
-                            <p className="mt-3 text-xs text-sky-400 font-bold uppercase tracking-wider">点击查看详细报告 👉</p>
-                          </div>
-                        );
-                      }
-                      return null;
-                    }}
-                  />
-                  <Scatter 
-                    name="班级学生" 
-                    data={classStudents} 
-                    fill="#4f46e5" 
-                    fillOpacity={0.7}
-                    onClick={(data) => setSelectedStudent(generateStudentData(data))}
-                    style={{ cursor: 'pointer' }}
-                    className="hover:fill-sky-400 transition-colors duration-300"
-                  />
-                </ScatterChart>
-              </ResponsiveContainer>
+          <div className="mb-10 text-center md:text-left flex flex-col md:flex-row justify-between items-end gap-6">
+            <div>
+              <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 flex items-center gap-3">
+                <Users className="text-indigo-600" size={40} />
+                班级学业全景视图
+              </h1>
+              <p className="text-lg text-slate-500 font-medium max-w-2xl">
+                基于图谱化数据的智能学情分析。探索 2024 级每位同学的学业宇宙，点击进入专属诊断报告。
+              </p>
             </div>
             
-            {/* Quick List for mobile or direct click */}
-            <div className="mt-12 pt-8 border-t border-slate-100">
-              <h4 className="font-black text-slate-900 mb-6">学生列表快速访问：</h4>
-              <div className="flex flex-wrap gap-3">
-                {classStudents.map(student => (
-                  <button 
-                    key={student.id}
-                    onClick={() => setSelectedStudent(generateStudentData(student))}
-                    className="px-4 py-2 bg-slate-50 hover:bg-indigo-600 hover:text-white border border-slate-200 hover:border-indigo-600 rounded-xl text-sm font-bold text-slate-600 transition-all"
-                  >
-                    {student.name}
-                  </button>
-                ))}
+            <div className="flex gap-4">
+              <div className="bg-white px-6 py-3 rounded-2xl shadow-sm border border-slate-200 flex flex-col items-center">
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">班级均分</span>
+                <span className="text-2xl font-black text-indigo-600">82.5</span>
               </div>
+              <div className="bg-white px-6 py-3 rounded-2xl shadow-sm border border-slate-200 flex flex-col items-center">
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">进度中位数</span>
+                <span className="text-2xl font-black text-emerald-500">76%</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-12">
+            {/* Universe/Galaxy View using ForceGraph */}
+            <div className="lg:col-span-3 bg-slate-900 p-1 rounded-[2.5rem] shadow-2xl shadow-indigo-900/10 relative overflow-hidden h-[600px] md:h-[700px] border border-slate-800 flex flex-col">
+              <div className="absolute top-6 left-6 z-20 flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md text-white rounded-2xl text-sm font-bold border border-white/10 shadow-lg">
+                <Sparkles size={16} className="text-sky-400" /> 
+                <span className="opacity-90">学业星系图谱 - 点击星球查看详情</span>
+              </div>
+              
+              <div className="flex-1 w-full h-full relative" ref={containerRef}>
+                <ForceGraph2D
+                  ref={fgRef}
+                  width={dimensions.width}
+                  height={dimensions.height}
+                  graphData={graphData}
+                  nodeLabel=""
+                  nodeColor="color"
+                  nodeRelSize={1}
+                  nodeVal="val"
+                  onNodeClick={handleNodeClick}
+                  onNodeHover={handleNodeHover}
+                  linkColor={() => 'rgba(255,255,255,0.1)'}
+                  linkWidth={2}
+                  backgroundColor="#0f172a"
+                  nodeCanvasObject={(node, ctx, globalScale) => {
+                    const label = node.name;
+                    const fontSize = node.id === 'center' ? 14/globalScale : 12/globalScale;
+                    ctx.font = `bold ${fontSize}px Sans-Serif`;
+                    
+                    // Draw node glow
+                    ctx.shadowColor = node.color;
+                    ctx.shadowBlur = 15;
+                    ctx.beginPath();
+                    ctx.arc(node.x, node.y, Math.sqrt(node.val) * 2, 0, 2 * Math.PI, false);
+                    ctx.fillStyle = node.color;
+                    ctx.fill();
+                    ctx.shadowBlur = 0; // reset
+                    
+                    // Draw text label
+                    const textWidth = ctx.measureText(label).width;
+                    const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2); 
+                    
+                    ctx.fillStyle = 'rgba(15, 23, 42, 0.8)';
+                    if (node.id === 'center') {
+                       ctx.fillText(label.split('\n')[0], node.x - textWidth/2, node.y - fontSize/2);
+                       ctx.fillText(label.split('\n')[1], node.x - textWidth/2, node.y + fontSize/2 + 2);
+                    } else {
+                       ctx.fillStyle = '#f8fafc';
+                       ctx.textAlign = 'center';
+                       ctx.textBaseline = 'middle';
+                       ctx.fillText(label, node.x, node.y + Math.sqrt(node.val) * 2 + fontSize + 2);
+                    }
+                  }}
+                />
+              </div>
+
+              {/* Hover Tooltip/Card */}
+              <AnimatePresence>
+                {hoveredStudent && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    className="absolute bottom-6 right-6 z-50 bg-white/10 backdrop-blur-xl border border-white/20 p-6 rounded-3xl w-72 shadow-2xl text-white pointer-events-none"
+                  >
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h3 className="text-2xl font-black">{hoveredStudent.name}</h3>
+                        <p className="text-sky-300 text-sm font-bold mt-1">全省排名 Top {hoveredStudent.rank}</p>
+                      </div>
+                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-black text-xl shadow-lg ${
+                        hoveredStudent.score >= 90 ? 'bg-emerald-500 shadow-emerald-500/50' : 
+                        hoveredStudent.score < 70 ? 'bg-amber-500 shadow-amber-500/50' : 
+                        'bg-indigo-500 shadow-indigo-500/50'
+                      }`}>
+                        {hoveredStudent.score}
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <div>
+                        <div className="flex justify-between items-center text-sm font-medium mb-1.5">
+                          <span className="text-slate-300">课程进度</span>
+                          <span className="font-bold">{hoveredStudent.progress}%</span>
+                        </div>
+                        <div className="w-full bg-white/10 rounded-full h-2 overflow-hidden">
+                          <motion.div 
+                            initial={{ width: 0 }}
+                            animate={{ width: `${hoveredStudent.progress}%` }}
+                            className={`h-full rounded-full ${
+                              hoveredStudent.progress >= 80 ? 'bg-emerald-400' : 
+                              hoveredStudent.progress < 60 ? 'bg-amber-400' : 
+                              'bg-sky-400'
+                            }`} 
+                          />
+                        </div>
+                      </div>
+                      
+                      <div className="grid grid-cols-2 gap-3 pt-2">
+                        <div className="bg-white/5 p-3 rounded-xl border border-white/5">
+                          <div className="text-xs text-slate-400 mb-1">在线时长</div>
+                          <div className="font-bold text-lg">{hoveredStudent.hours}h</div>
+                        </div>
+                        <div className="bg-white/5 p-3 rounded-xl border border-white/5">
+                          <div className="text-xs text-slate-400 mb-1">活跃度</div>
+                          <div className="font-bold text-lg text-emerald-400">High</div>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* Class Stats Sidebar */}
+            <div className="flex flex-col gap-6">
+              {/* Leaderboard */}
+              <div className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-slate-200 flex-1 flex flex-col">
+                <h3 className="text-lg font-black text-slate-900 mb-6 flex items-center gap-2">
+                  <Award className="text-amber-500" /> 学业风云榜
+                </h3>
+                <div className="flex-1 space-y-4">
+                  {classStudents.sort((a,b) => b.score - a.score).slice(0, 5).map((student, i) => (
+                    <div key={student.id} 
+                         onClick={() => setSelectedStudent(generateStudentData(student))}
+                         className="flex items-center gap-4 p-3 rounded-2xl hover:bg-slate-50 cursor-pointer transition-colors border border-transparent hover:border-slate-100 group">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-sm ${
+                        i === 0 ? 'bg-amber-100 text-amber-600' : 
+                        i === 1 ? 'bg-slate-100 text-slate-500' : 
+                        i === 2 ? 'bg-orange-100 text-orange-700' : 
+                        'bg-slate-50 text-slate-400'
+                      }`}>
+                        {i + 1}
+                      </div>
+                      <div className="flex-1">
+                        <div className="font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">{student.name}</div>
+                        <div className="text-xs text-slate-500">综合得分 {student.score}</div>
+                      </div>
+                      <div className="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-sm">
+                        {student.progress}%
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Activity Trend Mini */}
+              <div className="bg-indigo-600 p-6 rounded-[2.5rem] shadow-lg shadow-indigo-200 text-white relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none"></div>
+                <h3 className="text-lg font-black mb-2 flex items-center gap-2 relative z-10">
+                  <Activity size={20} /> 本周学习热度
+                </h3>
+                <p className="text-indigo-200 text-sm mb-6 relative z-10">全班累计在线 420 小时，较上周增长 12%</p>
+                
+                <div className="h-24 relative z-10">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={[
+                      { name: 'Mon', val: 30 }, { name: 'Tue', val: 45 }, { name: 'Wed', val: 38 },
+                      { name: 'Thu', val: 65 }, { name: 'Fri', val: 55 }, { name: 'Sat', val: 85 }, { name: 'Sun', val: 95 }
+                    ]}>
+                      <Line type="monotone" dataKey="val" stroke="#ffffff" strokeWidth={3} dot={{r:4, fill:"#4f46e5", strokeWidth: 2}} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Quick List - Cards Design */}
+          <div className="mt-8">
+            <h4 className="text-xl font-black text-slate-900 mb-6 flex items-center gap-2">
+              <Users className="text-slate-400" size={24} /> 所有学生名录
+            </h4>
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+              {classStudents.map(student => (
+                <motion.button 
+                  whileHover={{ y: -5 }}
+                  key={student.id}
+                  onClick={() => setSelectedStudent(generateStudentData(student))}
+                  className="bg-white p-4 rounded-3xl border border-slate-200 hover:border-indigo-500 shadow-sm hover:shadow-xl hover:shadow-indigo-100 transition-all text-left flex flex-col group"
+                >
+                  <div className="flex justify-between items-start mb-3">
+                    <div className="w-10 h-10 rounded-2xl bg-slate-100 text-slate-600 flex items-center justify-center font-black group-hover:bg-indigo-100 group-hover:text-indigo-600 transition-colors">
+                      {student.name.charAt(0)}
+                    </div>
+                    <div className={`text-xs font-bold px-2 py-1 rounded-full ${
+                      student.score >= 90 ? 'bg-emerald-50 text-emerald-600' :
+                      student.score < 70 ? 'bg-amber-50 text-amber-600' :
+                      'bg-sky-50 text-sky-600'
+                    }`}>
+                      {student.score}分
+                    </div>
+                  </div>
+                  <div className="font-black text-slate-900 mb-1">{student.name}</div>
+                  <div className="w-full bg-slate-100 rounded-full h-1.5 mt-auto mb-1">
+                    <div className={`h-1.5 rounded-full ${
+                      student.progress >= 80 ? 'bg-emerald-400' :
+                      student.progress < 60 ? 'bg-amber-400' :
+                      'bg-indigo-400'
+                    }`} style={{ width: `${student.progress}%` }}></div>
+                  </div>
+                  <div className="text-[10px] font-bold text-slate-400 text-right">{student.progress}%</div>
+                </motion.button>
+              ))}
             </div>
           </div>
         </div>
