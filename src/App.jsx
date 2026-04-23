@@ -46,9 +46,10 @@ function App() {
               <div>
                 <h4 className="text-slate-900 text-2xl mb-8 font-black">平台导航</h4>
                 <ul className="space-y-6 text-slate-500 text-xl font-bold">
-                  <li><a href="#" className="hover:text-indigo-600 transition-colors">课程体系</a></li>
-                  <li><a href="#" className="hover:text-indigo-600 transition-colors">实验资源</a></li>
+                  <li><a href="/#courses" className="hover:text-indigo-600 transition-colors">课程体系</a></li>
+                  <li><a href="/tools" className="hover:text-indigo-600 transition-colors">实验资源</a></li>
                   <li><a href="/knowledge-graph" className="hover:text-indigo-600 transition-colors">AI知识图谱</a></li>
+                  <li><a href="/dashboard" className="hover:text-indigo-600 transition-colors">学业诊断</a></li>
                 </ul>
               </div>
               <div>

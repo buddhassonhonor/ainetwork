@@ -10,17 +10,17 @@ const Home = () => {
       <section id="home" className="section-container relative z-10 flex flex-col items-center justify-center text-center min-h-[70vh] pt-16">
         
         {/* Hero Text */}
-        <div className="max-w-3xl relative z-10">
-          <span className="inline-block px-3 py-1 mb-4 text-xs font-bold tracking-widest text-indigo-500 uppercase bg-indigo-50 rounded-full">
+        <div className="max-w-5xl relative z-10">
+          <span className="inline-block px-6 py-2 mb-8 text-sm font-black tracking-[0.2em] text-indigo-600 uppercase bg-indigo-50 rounded-2xl border border-indigo-100 shadow-sm">
             泉州师范学院专属门户
           </span>
-          <h1 className="text-4xl md:text-6xl font-black mb-5 leading-[1.15] tracking-tight text-slate-900">
+          <h1 className="text-5xl md:text-8xl font-black mb-8 leading-[1.05] tracking-tighter text-slate-900">
             探索核心原理 <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-sky-500">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-sky-500 to-emerald-400">
               计算机网络 + AI
             </span>
           </h1>
-          <p className="mb-8 text-base md:text-lg text-slate-500 font-medium leading-relaxed max-w-2xl mx-auto">
+          <p className="mb-12 text-xl md:text-2xl text-slate-500 font-bold leading-relaxed max-w-3xl mx-auto">
             由物信学院黄志高及专家团队倾力打造。汇集最前沿的网络技术与人工智能结合应用，从底层协议到AI赋能的未来网络架构。
           </p>
         </div>

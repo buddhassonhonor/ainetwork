@@ -121,6 +121,28 @@ const AIAssistant = () => {
               </div>
             </div>
           ))}
+          
+          {messages.length === 1 && (
+            <div className="grid grid-cols-1 gap-2 mt-4">
+              {[
+                '解释一下 OSI 七层模型',
+                '如何配置 Cisco 静态路由？',
+                '什么是 AI 智能路由优化？',
+                'TCP 与 UDP 的主要区别'
+              ].map((q, i) => (
+                <button
+                  key={i}
+                  onClick={() => {
+                    setInputValue(q);
+                  }}
+                  className="text-left p-3 text-xs font-bold text-slate-600 bg-white border border-slate-200 rounded-xl hover:border-indigo-500 hover:text-indigo-600 transition-all shadow-sm"
+                >
+                  {q}
+                </button>
+              ))}
+            </div>
+          )}
+
           {isTyping && (
             <div className="flex justify-start">
               <div className="flex gap-3 max-w-[90%] items-center">

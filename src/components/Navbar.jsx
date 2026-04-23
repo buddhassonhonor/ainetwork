@@ -31,11 +31,11 @@ const Navbar = () => {
       <div className={`max-w-7xl mx-auto px-8 flex items-center justify-between transition-all duration-300 ${isScrolled ? 'h-16' : 'h-20'}`}>
         
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
-          <div className="p-2 bg-indigo-600 rounded-lg">
-            <Network size={22} color="white" />
+        <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+          <div className="p-2.5 bg-indigo-600 rounded-xl">
+            <Network size={28} color="white" />
           </div>
-          <span className="text-xl font-black tracking-tight text-slate-900">NETCORE</span>
+          <span className="text-3xl font-black tracking-tighter text-slate-900">NETCORE</span>
         </Link>
 
         {/* Nav Links - centered */}
