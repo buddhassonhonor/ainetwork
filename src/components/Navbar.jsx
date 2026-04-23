@@ -55,7 +55,7 @@ const Navbar = () => {
         {/* Right Actions - AI Assistant Entry */}
         <div className="hidden md:flex items-center gap-4 w-48 justify-end">
           <button 
-            onClick={() => document.getElementById('ai-assistant-trigger')?.click()}
+            onClick={() => window.dispatchEvent(new CustomEvent('toggle-ai-assistant'))}
             className="flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 font-bold rounded-xl hover:bg-indigo-100 transition-all border border-indigo-100"
           >
             <div className="relative">

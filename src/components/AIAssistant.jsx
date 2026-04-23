@@ -22,6 +22,12 @@ const AIAssistant = () => {
     }
   }, [messages, isOpen]);
 
+  useEffect(() => {
+    const handleToggle = () => setIsOpen(prev => !prev);
+    window.addEventListener('toggle-ai-assistant', handleToggle);
+    return () => window.removeEventListener('toggle-ai-assistant', handleToggle);
+  }, []);
+
   const handleSend = async (e) => {
     e.preventDefault();
     if (!inputValue.trim()) return;
