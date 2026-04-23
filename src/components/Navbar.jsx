@@ -40,14 +40,14 @@ const Navbar = () => {
 
         {/* Nav Links - centered */}
         <div className="hidden md:flex items-center gap-10">
-          <Link to="/" className="text-lg font-bold text-slate-800 hover:text-indigo-600 transition-colors duration-200">首页</Link>
-          <a href="/#courses" className="text-lg font-bold text-slate-800 hover:text-indigo-600 transition-colors duration-200">教学团队</a>
-          <a href="/#resources" className="text-lg font-bold text-slate-800 hover:text-indigo-600 transition-colors duration-200">学习资源</a>
-          <Link to="/tools" className="text-lg font-bold text-slate-800 hover:text-indigo-600 transition-colors duration-200">仿真工具</Link>
-          <Link to="/knowledge-graph" className="text-lg font-bold text-slate-800 hover:text-indigo-600 transition-colors duration-200 flex items-center gap-1.5">
+          <Link to="/" className="text-xl font-bold text-slate-800 hover:text-indigo-600 transition-colors duration-200">首页</Link>
+          <a href="/#courses" className="text-xl font-bold text-slate-800 hover:text-indigo-600 transition-colors duration-200">教学团队</a>
+          <a href="/#resources" className="text-xl font-bold text-slate-800 hover:text-indigo-600 transition-colors duration-200">学习资源</a>
+          <Link to="/tools" className="text-xl font-bold text-slate-800 hover:text-indigo-600 transition-colors duration-200">仿真工具</Link>
+          <Link to="/knowledge-graph" className="text-xl font-bold text-slate-800 hover:text-indigo-600 transition-colors duration-200 flex items-center gap-1.5">
             <span className="text-indigo-600 font-black">AI+</span>知识图谱
           </Link>
-          <Link to="/dashboard" className="text-lg font-bold text-slate-800 hover:text-indigo-600 transition-colors duration-200 flex items-center gap-1">
+          <Link to="/dashboard" className="text-xl font-bold text-slate-800 hover:text-indigo-600 transition-colors duration-200 flex items-center gap-1">
             学业诊断
           </Link>
         </div>
