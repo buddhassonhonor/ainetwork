@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import CourseDetail from './pages/CourseDetail';
 import KnowledgeGraph from './pages/KnowledgeGraph';
 import Dashboard from './pages/Dashboard';
+import Tools from './pages/Tools';
 import AIAssistant from './components/AIAssistant';
 import { Network, MessageCircle, Mail, Share2 } from 'lucide-react';
 
@@ -20,6 +21,7 @@ function App() {
             <Route path="/course/:id" element={<CourseDetail />} />
             <Route path="/knowledge-graph" element={<KnowledgeGraph />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/tools" element={<Tools />} />
           </Routes>
         </main>
 
