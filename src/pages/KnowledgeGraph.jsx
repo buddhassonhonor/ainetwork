@@ -124,8 +124,9 @@ const KnowledgeGraph = () => {
             width={1200}
             height={700}
             d3Force={(d3, force) => {
-              force.link.distance(80);
-              force.charge.strength(-400);
+              force.link.distance(150);
+              force.charge.strength(-800);
+              // force.collide.radius(30); // Optional collision
             }}
             nodeCanvasObject={(node, ctx, globalScale) => {
               const label = node.label;
