@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { courses } from '../data/courses';
 import { ExternalLink, Star } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const CourseGrid = () => {
   return (
@@ -53,9 +54,9 @@ const CourseGrid = () => {
               <p className="text-lg text-slate-500 mb-6 font-bold">{course.school} · {course.lecturer}</p>
               <p className="text-base text-slate-500 mb-8 line-clamp-3 leading-relaxed font-medium">{course.description}</p>
               
-              <button className="w-full py-4 flex items-center justify-center gap-2 bg-slate-50 border border-slate-100 rounded-2xl hover:bg-indigo-50 hover:text-indigo-600 transition-all font-bold text-lg">
+              <Link to={`/course/${course.id}`} className="w-full py-4 flex items-center justify-center gap-2 bg-slate-50 border border-slate-100 rounded-2xl hover:bg-indigo-50 hover:text-indigo-600 transition-all font-bold text-lg">
                 查看详情 <ExternalLink size={18} />
-              </button>
+              </Link>
             </div>
           </motion.div>
         ))}

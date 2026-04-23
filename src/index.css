@@ -119,17 +119,17 @@ h1, h2, h3, h4 { font-family: 'Outfit', sans-serif; font-weight: 800; letter-spa
 .opacity-100 { opacity: 1; }
 
 /* Colors tailored for bright mode */
-.bg-black\/50 { background-color: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
-.bg-black\/60 { background-color: rgba(255, 255, 255, 0.9); }
-.bg-white\/5 { background-color: rgba(0, 0, 0, 0.03); }
-.bg-white\/10 { background-color: rgba(0, 0, 0, 0.06); }
+.bg-black\/50 { background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px); }
+.bg-black\/60 { background-color: rgba(0, 0, 0, 0.6); }
+.bg-white\/5 { background-color: rgba(255, 255, 255, 0.05); }
+.bg-white\/10 { background-color: rgba(255, 255, 255, 0.1); }
 .bg-indigo-500\/10 { background-color: rgba(79, 70, 229, 0.1); }
 .bg-indigo-600 { background-color: #4f46e5; }
 .bg-indigo-500 { background-color: #6366f1; }
-.bg-white { background-color: #0f172a; } /* Inverted for buttons */
-.bg-black { background-color: #ffffff; }
-.text-white { color: #0f172a; }
-.text-black { color: #ffffff; }
+.bg-white { background-color: #ffffff; }
+.bg-black { background-color: #000000; }
+.text-white { color: #ffffff; }
+.text-black { color: #000000; }
 .text-indigo-400 { color: #4f46e5; }
 .text-indigo-500 { color: #6366f1; }
 .text-slate-300 { color: #334155; }
