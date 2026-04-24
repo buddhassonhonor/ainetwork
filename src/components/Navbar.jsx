@@ -3,7 +3,7 @@ import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
 import { Network } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const Navbar = () => {
+const Navbar = ({ isAIOpen, setIsAIOpen }) => {
   const [hidden, setHidden] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { scrollY } = useScroll();
@@ -28,42 +28,95 @@ const Navbar = () => {
         isScrolled ? 'bg-white/90 backdrop-blur-xl shadow-md border-b border-slate-200' : 'bg-white/50 backdrop-blur-sm border-transparent'
       }`}
     >
-      <div className={`max-w-7xl mx-auto px-8 flex items-center justify-between transition-all duration-300 ${isScrolled ? 'h-16' : 'h-20'}`}>
-        
-        {/* Logo */}
-        <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-          <div className="p-2.5 bg-indigo-600 rounded-xl">
-            <Network size={28} color="white" />
+      {/* Three-column layout: Logo | Centered Nav | AI Button */}
+      <div style={{
+        position: 'relative',
+        maxWidth: '1280px',
+        margin: '0 auto',
+        padding: '0 2rem',
+        display: 'flex',
+        alignItems: 'center',
+        height: isScrolled ? '4rem' : '5rem',
+        transition: 'height 0.3s ease'
+      }}>
+
+        {/* Logo — left */}
+        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none', flexShrink: 0, opacity: 1, transition: 'opacity 0.2s' }}
+          onMouseEnter={e => e.currentTarget.style.opacity = '0.8'}
+          onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+        >
+          <div style={{ padding: '0.5rem', background: '#4f46e5', borderRadius: '0.75rem' }}>
+            <Network size={24} color="white" />
           </div>
-          <span className="text-3xl font-black tracking-tighter text-slate-900">NETCORE</span>
+          <span style={{ fontSize: '1.25rem', fontWeight: 900, letterSpacing: '-0.04em', color: '#0f172a' }}>NETCORE</span>
         </Link>
 
-        {/* Nav Links - centered */}
-        <div className="hidden md:flex items-center gap-8">
-          <Link to="/" className="text-xl font-bold text-slate-800 hover:text-indigo-600 transition-colors duration-200 uppercase no-underline">首页</Link>
-          <a href="/#courses" className="text-xl font-bold text-slate-800 hover:text-indigo-600 transition-colors duration-200 uppercase no-underline">教学团队</a>
-          <a href="/#resources" className="text-xl font-bold text-slate-800 hover:text-indigo-600 transition-colors duration-200 uppercase no-underline">学习资源</a>
-          <Link to="/tools" className="text-xl font-bold text-slate-800 hover:text-indigo-600 transition-colors duration-200 uppercase no-underline">仿真工具</Link>
-          <Link to="/knowledge-graph" className="text-xl font-bold text-slate-800 hover:text-indigo-600 transition-colors duration-200 flex items-center gap-1.5 uppercase no-underline">
-            <span className="text-indigo-600 font-black">AI+</span>知识图谱
+        {/* Nav Links — absolutely centered */}
+        <div style={{
+          position: 'absolute',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '1.5rem',
+          whiteSpace: 'nowrap'
+        }}>
+          {[
+            { label: '首页', to: '/', isLink: true },
+            { label: '教学团队', to: '/#courses', isLink: false },
+            { label: '学习资源', to: '/#resources', isLink: false },
+            { label: '仿真工具', to: '/tools', isLink: true },
+          ].map(item => item.isLink ? (
+            <Link key={item.label} to={item.to} style={{ fontSize: '1.15rem', fontWeight: 700, color: '#1e293b', textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.04em', transition: 'color 0.2s' }}
+              onMouseEnter={e => e.currentTarget.style.color = '#4f46e5'}
+              onMouseLeave={e => e.currentTarget.style.color = '#1e293b'}
+            >{item.label}</Link>
+          ) : (
+            <a key={item.label} href={item.to} style={{ fontSize: '1.15rem', fontWeight: 700, color: '#1e293b', textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.04em', transition: 'color 0.2s' }}
+              onMouseEnter={e => e.currentTarget.style.color = '#4f46e5'}
+              onMouseLeave={e => e.currentTarget.style.color = '#1e293b'}
+            >{item.label}</a>
+          ))}
+          <Link to="/knowledge-graph" style={{ fontSize: '1.15rem', fontWeight: 700, color: '#1e293b', textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.04em', display: 'flex', alignItems: 'center', gap: '0.25rem', transition: 'color 0.2s' }}
+            onMouseEnter={e => e.currentTarget.style.color = '#4f46e5'}
+            onMouseLeave={e => e.currentTarget.style.color = '#1e293b'}
+          >
+            <span style={{ color: '#4f46e5', fontWeight: 900 }}>AI+</span>知识图谱
           </Link>
-          <Link to="/dashboard" className="text-xl font-bold text-slate-800 hover:text-indigo-600 transition-colors duration-200 flex items-center gap-1 uppercase no-underline">
-            学业诊断
-          </Link>
+          <Link to="/dashboard" style={{ fontSize: '1.15rem', fontWeight: 700, color: '#1e293b', textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.04em', transition: 'color 0.2s' }}
+            onMouseEnter={e => e.currentTarget.style.color = '#4f46e5'}
+            onMouseLeave={e => e.currentTarget.style.color = '#1e293b'}
+          >学业诊断</Link>
         </div>
 
-        {/* Right Actions - AI Assistant Entry */}
-        <div className="hidden md:flex items-center gap-4 w-48 justify-end">
-          <button 
-            onClick={() => window.dispatchEvent(new CustomEvent('toggle-ai-assistant'))}
-            className="flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 font-bold rounded-xl hover:bg-indigo-100 transition-all border border-indigo-100"
+        {/* AI Assistant button — right */}
+        <div style={{ marginLeft: 'auto', flexShrink: 0 }}>
+          <button
+            onClick={() => setIsAIOpen(!isAIOpen)}
+            style={{
+              display: 'flex', alignItems: 'center',
+              padding: '0.6rem 1.4rem',
+              background: isAIOpen ? 'white' : 'linear-gradient(135deg, #4f46e5 0%, #0ea5e9 100%)',
+              color: isAIOpen ? '#4f46e5' : 'white', fontWeight: 800, fontSize: '1rem',
+              borderRadius: '0.75rem', border: 'none', cursor: 'pointer',
+              boxShadow: isAIOpen ? 'inset 0 0 0 1.5px #c7d2fe, 0 4px 12px rgba(79,70,229,0.1)' : '0 4px 18px rgba(79,70,229,0.35)',
+              transition: 'all 0.25s ease',
+              whiteSpace: 'nowrap',
+              letterSpacing: '0.02em'
+            }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = isAIOpen ? 'inset 0 0 0 1.5px #a5b4fc, 0 6px 16px rgba(79,70,229,0.15)' : '0 8px 24px rgba(79,70,229,0.45)'; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = isAIOpen ? 'inset 0 0 0 1.5px #c7d2fe, 0 4px 12px rgba(79,70,229,0.1)' : '0 4px 18px rgba(79,70,229,0.35)'; }}
           >
-            <div className="relative">
-              <div className="w-2 h-2 bg-sky-400 rounded-full absolute -top-0.5 -right-0.5 animate-ping opacity-75"></div>
-              <div className="w-2 h-2 bg-sky-500 rounded-full absolute -top-0.5 -right-0.5"></div>
-              <span className="text-lg">🤖</span>
+            <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+              {!isAIOpen && (
+                <>
+                  <div style={{ position: 'absolute', top: '-2px', right: '-2px', width: '8px', height: '8px', borderRadius: '50%', background: '#38bdf8', opacity: 0.8, animation: 'ping 1.5s ease-out infinite' }}></div>
+                  <div style={{ position: 'absolute', top: '-2px', right: '-2px', width: '8px', height: '8px', borderRadius: '50%', background: '#0ea5e9' }}></div>
+                </>
+              )}
+              <span style={{ fontSize: '1.2rem', marginRight: '0.4rem' }}>🤖</span>
             </div>
-            <span>AI 助教</span>
+            <span>{isAIOpen ? '收起助教' : 'AI 助教'}</span>
           </button>
         </div>
       </div>

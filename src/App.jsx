@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
@@ -10,10 +10,12 @@ import AIAssistant from './components/AIAssistant';
 import { Network, MessageCircle, Mail, Share2 } from 'lucide-react';
 
 function App() {
+  const [isAIOpen, setIsAIOpen] = useState(false);
+
   return (
     <Router>
       <div className="min-h-screen selection:bg-indigo-500 selection:text-white">
-        <Navbar />
+        <Navbar isAIOpen={isAIOpen} setIsAIOpen={setIsAIOpen} />
         
         <main className="pt-24">
           <Routes>
@@ -26,7 +28,7 @@ function App() {
         </main>
 
         {/* Global AI Assistant */}
-        <AIAssistant />
+        <AIAssistant isOpen={isAIOpen} setIsOpen={setIsAIOpen} />
 
         <footer className="bg-white border-t border-slate-100 py-24">
           <div className="section-container flex flex-col md:flex-row justify-between gap-16">

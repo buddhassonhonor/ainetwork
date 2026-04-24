@@ -3,8 +3,7 @@ import { Bot, X, Send, Sparkles, MessageSquare, Terminal } from 'lucide-react';
 
 const DEEPSEEK_API_KEY = 'sk-5b3bb21e05ae44da9f0e6ac5446eff1b';
 
-const AIAssistant = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const AIAssistant = ({ isOpen, setIsOpen }) => {
   const [messages, setMessages] = useState([
     { id: 1, text: '你好！我是由 DeepSeek 驱动的 AI 网络助教。我可以帮你解答计算机网络原理、协议分析及 Cisco 配置等问题。', isBot: true }
   ]);
@@ -21,12 +20,6 @@ const AIAssistant = () => {
       scrollToBottom();
     }
   }, [messages, isOpen]);
-
-  useEffect(() => {
-    const handleToggle = () => setIsOpen(prev => !prev);
-    window.addEventListener('toggle-ai-assistant', handleToggle);
-    return () => window.removeEventListener('toggle-ai-assistant', handleToggle);
-  }, []);
 
   const handleSend = async (e) => {
     e.preventDefault();
@@ -67,32 +60,26 @@ const AIAssistant = () => {
 
   return (
     <>
-      {/* Prominent Trigger Button in bottom-right */}
-      <div className="fixed bottom-6 right-6 z-[60]">
-        <button
-          id="ai-assistant-trigger"
-          onClick={() => setIsOpen(!isOpen)}
-          className={`flex items-center gap-3 px-6 py-4 bg-indigo-600 border border-indigo-500 text-white font-black rounded-full shadow-2xl hover:bg-indigo-700 transition-all duration-300 transform ${isOpen ? 'scale-0' : 'scale-100'}`}
-        >
-          <div className="relative">
-            <Bot size={24} />
-            <span className="absolute -top-1 -right-1 flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-500 border border-white"></span>
-            </span>
-          </div>
-          AI 网络助教
-        </button>
-      </div>
+      {/* Floating Trigger Button Removed */}
 
       {/* Floating Chat Window */}
-      <div className={`fixed bottom-6 right-6 h-[600px] max-h-[85vh] w-[380px] bg-white rounded-[2rem] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.25)] z-[100] transform transition-all duration-300 ease-in-out border border-slate-200 flex flex-col ${isOpen ? 'scale-100 opacity-100 translate-y-0' : 'scale-95 opacity-0 translate-y-10 pointer-events-none'} origin-bottom-right`}>
+      <div style={{
+        position: 'fixed', top: '5.5rem', right: '2rem',
+        height: '700px', maxHeight: 'calc(100vh - 7rem)', width: '450px',
+        background: 'white', borderRadius: '2rem',
+        boxShadow: '0 20px 50px -12px rgba(0,0,0,0.25)',
+        zIndex: 100,
+        border: '1px solid #e2e8f0',
+        display: 'flex', flexDirection: 'column',
+        transformOrigin: 'top right',
+        transform: isOpen ? 'scale(1) translateY(0)' : 'scale(0.95) translateY(-20px)',
+        opacity: isOpen ? 1 : 0,
+        pointerEvents: isOpen ? 'auto' : 'none',
+        transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease'
+      }}>
         {/* Header */}
         <div className="p-5 border-b border-slate-100 flex justify-between items-center bg-gradient-to-r from-indigo-600 to-sky-500 rounded-t-[2rem] text-white">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-white/20 backdrop-blur-sm rounded-xl text-white shadow-inner">
-              <Bot size={24} />
-            </div>
             <div>
               <h3 className="font-black text-white text-lg flex items-center gap-2">
                 DeepSeek AI <Sparkles className="text-amber-300" size={16} />
@@ -111,13 +98,10 @@ const AIAssistant = () => {
         </div>
 
         {/* Chat Messages */}
-        <div className="flex-1 overflow-y-auto p-5 space-y-5 bg-slate-50 custom-scrollbar">
+        <div style={{ flex: 1, overflowY: 'scroll', padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '1.25rem', background: '#f8fafc' }}>
           {messages.map((msg) => (
             <div key={msg.id} className={`flex ${msg.isBot ? 'justify-start' : 'justify-end'}`}>
               <div className={`flex gap-2.5 max-w-[85%] ${msg.isBot ? 'flex-row' : 'flex-row-reverse'}`}>
-                <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 shadow-sm ${msg.isBot ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-600'}`}>
-                  {msg.isBot ? <Bot size={14} /> : <Terminal size={14} />}
-                </div>
                 <div className={`p-3.5 rounded-2xl text-sm leading-relaxed font-medium shadow-sm border ${
                   msg.isBot 
                     ? 'bg-white border-slate-200 text-slate-800 rounded-tl-none' 
@@ -153,9 +137,6 @@ const AIAssistant = () => {
           {isTyping && (
             <div className="flex justify-start">
               <div className="flex gap-3 max-w-[90%] items-center">
-                <div className="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center">
-                  <Bot size={18} />
-                </div>
                 <div className="bg-slate-50 border border-slate-100 p-4 rounded-3xl rounded-tl-none shadow-sm flex gap-1 items-center h-10">
                   <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
                   <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
@@ -169,13 +150,15 @@ const AIAssistant = () => {
 
         {/* Input Area */}
         <div className="p-5 bg-white border-t border-slate-100 rounded-b-[2rem]">
-          <form onSubmit={handleSend} className="relative">
+          <form onSubmit={handleSend} style={{ position: 'relative' }}>
             <textarea
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              placeholder="问我计网或路由配置问题..."
-              rows={2}
-              className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-5 py-3 pr-14 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all resize-none font-medium text-slate-800"
+              placeholder="有问题，尽管问..."
+              rows={3}
+              style={{ width: '100%', background: '#f8fafc', border: '1.5px solid #e2e8f0', borderRadius: '1.25rem', padding: '1rem 3.5rem 1rem 1.25rem', fontSize: '0.875rem', fontWeight: 500, color: '#1e293b', resize: 'none', outline: 'none', boxSizing: 'border-box', fontFamily: 'inherit', lineHeight: 1.6 }}
+              onFocus={e => e.target.style.borderColor = '#6366f1'}
+              onBlur={e => e.target.style.borderColor = '#e2e8f0'}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
                   e.preventDefault();
@@ -186,9 +169,16 @@ const AIAssistant = () => {
             <button 
               type="submit"
               disabled={!inputValue.trim() || isTyping}
-              className="absolute bottom-3 right-3 bg-indigo-600 text-white p-2.5 rounded-xl hover:bg-indigo-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-indigo-200"
+              style={{
+                position: 'absolute', bottom: '0.6rem', right: '0.6rem',
+                width: '2.25rem', height: '2.25rem',
+                background: !inputValue.trim() || isTyping ? '#cbd5e1' : 'linear-gradient(135deg, #4f46e5, #0ea5e9)',
+                color: 'white', border: 'none', cursor: !inputValue.trim() || isTyping ? 'not-allowed' : 'pointer',
+                borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                boxShadow: '0 2px 8px rgba(79,70,229,0.3)', transition: 'all 0.2s ease'
+              }}
             >
-              <Send size={16} />
+              <Send size={15} style={{ marginLeft: '2px' }} />
             </button>
           </form>
         </div>
