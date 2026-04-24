@@ -15,15 +15,15 @@ export const courses = [
   },
   {
     id: 2,
-    title: "信号处理与物理链路",
+    title: "无线接入与智能物理链路",
     school: "泉州师范学院",
     lecturer: "郑世燕 (副教授, 博士)",
     image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=80&w=800",
-    tags: ["信号处理", "博士团队"],
-    description: "由郑世燕博士团队主讲，聚焦物理层信号处理。探讨编码、调制与 AI 算法在复杂电磁环境下的稳健传输机制。",
+    tags: ["无线网络", "智能链路"],
+    description: "郑世燕博士团队主讲。本课程专注于计算机网络底层的无线接入与智能链路技术。探讨如何利用 AI 算法优化协议机制、实现智能冲突避免与动态频谱管理，提升复杂网络环境下的传输效能。",
     chapters: [
-      { id: 1, title: "第一章：信号分析基础", content: "傅里叶变换及其在网络通信中的重要性。" },
-      { id: 2, title: "第二章：现代调制技术", content: "QAM、OFDM 及其 AI 优化算法。" }
+      { id: 1, title: "第一章：无线协议与智能接入", content: "IEEE 802.11 协议族及基于 AI 的媒体访问控制 (MAC) 优化。" },
+      { id: 2, title: "第二章：网络资源动态调度", content: "利用强化学习实现多用户环境下的信道分配与流量整形。" }
     ]
   },
   {
