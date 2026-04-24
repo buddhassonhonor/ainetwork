@@ -26,18 +26,21 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Initialize server (nginx config)
+      - name: Initialize server (nginx + SSL)
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
+            # 创建部署目录
             mkdir -p /var/www/ainetwork
-            cat > /etc/nginx/sites-available/ainetwork << 'EOF'
+
+            # 写入 Nginx HTTP 配置（Certbot 需要先用 80 端口验证）
+            cat > /etc/nginx/sites-available/ainetwork << 'NGINXEOF'
             server {
                 listen 80;
-                server_name _;
+                server_name baota.pomole.net;
                 root /var/www/ainetwork;
                 index index.html;
                 location / {
@@ -46,11 +49,29 @@ jobs:
                 gzip on;
                 gzip_types text/plain text/css application/json application/javascript text/javascript;
             }
-            EOF
+            NGINXEOF
+
             ln -sf /etc/nginx/sites-available/ainetwork /etc/nginx/sites-enabled/
             rm -f /etc/nginx/sites-enabled/default
             nginx -t && systemctl reload nginx
-            echo "✅ Nginx initialized"
+
+            # 安装 Certbot（如果还没装）
+            if ! command -v certbot &> /dev/null; then
+              apt-get install -y certbot python3-certbot-nginx
+            fi
+
+            # 申请 SSL 证书（非交互式，自动配置 nginx）
+            certbot --nginx -d baota.pomole.net \
+              --non-interactive \
+              --agree-tos \
+              --register-unsafely-without-email \
+              --redirect
+
+            # 设置自动续期（如果 cron 任务不存在）
+            (crontab -l 2>/dev/null | grep -q certbot) || \
+              (crontab -l 2>/dev/null; echo "0 3 * * * certbot renew --quiet") | crontab -
+
+            echo "✅ Nginx + SSL initialized for baota.pomole.net"
 
       - name: Deploy dist to server via SCP
         uses: appleboy/scp-action@v0.1.7
@@ -71,4 +92,4 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
             systemctl reload nginx
-            echo "✅ Deployment complete! Site live at http://${{ secrets.SERVER_HOST }}"
+            echo "✅ Deployment complete! https://baota.pomole.net"
