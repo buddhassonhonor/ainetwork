@@ -30,10 +30,10 @@ export const courses = [
     id: 3,
     title: "网络图像与智能多媒体",
     school: "泉州师范学院",
-    lecturer: "陈木生 (教授, 博士)",
+    lecturer: "李全法 (实验师)",
     image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800",
     tags: ["图像处理", "AI 视觉"],
-    description: "陈木生教授带你进入网络多媒体的世界。研究超高清图像压缩与 AI 增强技术，以及实时视频流的抖动控制算法。",
+    description: "李全法老师带你进入网络多媒体的世界。研究多媒体实验教学与系统维护，专注于实时视频流的物理链路优化。",
     chapters: [
       { id: 1, title: "第一章：多媒体编码", content: "HEVC、AV1 编码原理及 AI 视频增强。" },
       { id: 2, title: "第二章：CDN 分发网络", content: "内容分发网络与智能边缘缓存。" }
