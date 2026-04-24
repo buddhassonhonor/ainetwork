@@ -6,17 +6,20 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview",
-    "test:e2e": "playwright test"
+    "preview": "npm run build && wrangler dev",
+    "test:e2e": "playwright test",
+    "deploy": "npm run build && wrangler deploy"
   },
   "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.33.1",
     "@playwright/test": "^1.44.0",
     "@vitejs/plugin-react-swc": "^4.3.0",
     "autoprefixer": "^10.5.0",
     "postcss": "^8.5.10",
     "tailwindcss": "^4.2.4",
     "typescript": "~6.0.2",
-    "vite": "^8.0.9"
+    "vite": "^8.0.9",
+    "wrangler": "^4.84.1"
   },
   "dependencies": {
     "d3-force": "^3.0.0",
