@@ -61,20 +61,33 @@ const Navbar = ({ isAIOpen, setIsAIOpen }) => {
         }}>
           {[
             { label: '首页', to: '/', isLink: true },
-            { label: '教学团队', to: '/#courses', isLink: false },
-            { label: '学习资源', to: '/#resources', isLink: false },
+            { label: '教学团队', hash: 'courses' },
+            { label: '学习资源', hash: 'resources' },
             { label: '仿真工具', to: '/tools', isLink: true },
-          ].map(item => item.isLink ? (
-            <Link key={item.label} to={item.to} style={{ fontSize: '1.15rem', fontWeight: 700, color: '#1e293b', textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.04em', transition: 'color 0.2s' }}
-              onMouseEnter={e => e.currentTarget.style.color = '#4f46e5'}
-              onMouseLeave={e => e.currentTarget.style.color = '#1e293b'}
-            >{item.label}</Link>
-          ) : (
-            <a key={item.label} href={item.to} style={{ fontSize: '1.15rem', fontWeight: 700, color: '#1e293b', textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.04em', transition: 'color 0.2s' }}
-              onMouseEnter={e => e.currentTarget.style.color = '#4f46e5'}
-              onMouseLeave={e => e.currentTarget.style.color = '#1e293b'}
-            >{item.label}</a>
-          ))}
+          ].map(item => {
+            if (item.isLink) return (
+              <Link key={item.label} to={item.to} style={{ fontSize: '1.15rem', fontWeight: 700, color: '#1e293b', textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.04em', transition: 'color 0.2s' }}
+                onMouseEnter={e => e.currentTarget.style.color = '#4f46e5'}
+                onMouseLeave={e => e.currentTarget.style.color = '#1e293b'}
+              >{item.label}</Link>
+            );
+            return (
+              <a key={item.label} href={`/#${item.hash}`}
+                onClick={e => {
+                  e.preventDefault();
+                  const el = document.getElementById(item.hash);
+                  if (el) {
+                    el.scrollIntoView({ behavior: 'smooth' });
+                  } else {
+                    window.location.href = `/#${item.hash}`;
+                  }
+                }}
+                style={{ fontSize: '1.15rem', fontWeight: 700, color: '#1e293b', textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.04em', transition: 'color 0.2s', cursor: 'pointer' }}
+                onMouseEnter={e => e.currentTarget.style.color = '#4f46e5'}
+                onMouseLeave={e => e.currentTarget.style.color = '#1e293b'}
+              >{item.label}</a>
+            );
+          })}
           <Link to="/knowledge-graph" style={{ fontSize: '1.15rem', fontWeight: 700, color: '#1e293b', textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.04em', display: 'flex', alignItems: 'center', gap: '0.25rem', transition: 'color 0.2s' }}
             onMouseEnter={e => e.currentTarget.style.color = '#4f46e5'}
             onMouseLeave={e => e.currentTarget.style.color = '#1e293b'}
