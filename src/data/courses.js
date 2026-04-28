@@ -43,32 +43,51 @@ export const courses = [
 
 export const resources = [
   {
-    category: "本地精品课件",
+    category: "核心课件 (PPTX)",
     items: [
-      { title: "CH1 概述 - 计算机网络核心概论", type: "PPTX", link: "/courseware/CH1-5ed 概述.pptx" },
-      { title: "CH2 物理层 - 信号与传输媒体", type: "PPTX", link: "/courseware/CH2-5ed 物理层.pptx" },
-      { title: "CH3 数据链路层 - 帧与协议", type: "PPTX", link: "/courseware/CH3-5ed 数据链路层.pptx" },
-      { title: "CH4 网络层 - IP 与路由算法", type: "PPTX", link: "/courseware/CH4-5ed 网络层.pptx" },
-      { title: "CH5 运输层 - TCP/UDP 深度剖析", type: "PPTX", link: "/courseware/CH5-5ed 运输层.pptx" },
-      { title: "CH6 应用层 - 域名与应用协议", type: "PPTX", link: "/courseware/CH6-5ed 应用层.pptx" },
-      { title: "实验1：网线的制作与标准", type: "DOCX", link: "/courseware/实验1 网线的制作.docx" },
-      { title: "实验3：Packet Tracer 入门指南", type: "DOC", link: "/courseware/实验3 --Packet-Tracer-入门.doc" }
+      { id: 101, title: "CH1 概述 - 计算机网络核心概论", type: "pptx", link: "/courseware/CH1-5ed 概述.pptx", desc: "网络体系结构、互联网的组成与演进历程" },
+      { id: 102, title: "CH2 物理层 - 信号与传输媒体", type: "pptx", link: "/courseware/CH2-5ed 物理层.pptx", desc: "信道复用、宽带接入与物理层核心技术" },
+      { id: 103, title: "CH3 数据链路层 - 帧与协议", type: "pptx", link: "/courseware/CH3-5ed 数据链路层.pptx", desc: "CSMA/CD、MAC层机制与以太网交换" },
+      { id: 104, title: "CH4 网络层 - IP 与路由算法", type: "pptx", link: "/courseware/CH4-5ed 网络层.pptx", desc: "IPv4/IPv6、路由选择协议(OSPF/BGP)" },
+      { id: 105, title: "CH5 运输层 - TCP/UDP 深度剖析", type: "pptx", link: "/courseware/CH5-5ed 运输层.pptx", desc: "可靠传输机制、拥塞控制与流量调度" },
+      { id: 106, title: "CH6 应用层 - 域名与应用协议", type: "pptx", link: "/courseware/CH6-5ed 应用层.pptx", desc: "DNS、HTTP、FTP与电子邮件系统" }
     ]
   },
   {
-    category: "理论讲义",
+    category: "Packet Tracer 高阶实验",
     items: [
-      { title: "计算机网络课程大纲 2026", type: "PDF", link: "#" },
-      { title: "黄志高老师：网络与 AI 融合专题课件", type: "PPT", link: "#" },
-      { title: "网络协议精讲笔记（泉师院版）", type: "Markdown", link: "#" }
+      { id: 201, title: "实验2：交换机基本配置与管理", type: "pptx", link: "/courseware/pt-labs/2 交换机的基本配置与管理.pptx", desc: "CLI模式登录、hostname/密码/端口配置" },
+      { id: 202, title: "实验4：交换机划分VLAN配置", type: "pptx", link: "/courseware/pt-labs/4 交换机划分Vlan配置.pptx", desc: "VLAN创建、Trunk端口与跨交换机通信" },
+      { id: 203, title: "实验7：路由器的基本配置", type: "pptx", link: "/courseware/pt-labs/7 路由器的基本配置.pptx", desc: "路由器接口配置、show命令与调试" },
+      { id: 204, title: "实验7.5：静态路由配置", type: "pptx", link: "/courseware/pt-labs/7.5 静态路由配置.pptx", desc: "手动路由表项配置与多跳路径设定" },
+      { id: 205, title: "实验8：RIP动态路由配置", type: "pptx", link: "/courseware/pt-labs/8 思科rip配置实验.pptx", desc: "RIPv1/v2协议配置与路由收敛验证" },
+      { id: 206, title: "实验9：NAT地址转换实验", type: "pptx", link: "/courseware/pt-labs/9 NAT实验.pptx", desc: "静态NAT/动态NAT配置与内外网映射" },
+      { id: 207, title: "实验10：NAPT端口转换实验", type: "pptx", link: "/courseware/pt-labs/10 NAPT配置实验.pptx", desc: "端口地址转换PAT与多对一映射" },
+      { id: 208, title: "实验11：DHCP服务器配置", type: "pptx", link: "/courseware/pt-labs/11 DHCP配置实验.pptx", desc: "DHCP地址池、中继代理ip helper-address" },
+      { id: 209, title: "实验14：三层交换机VLAN间通信", type: "pptx", link: "/courseware/pt-labs/14 三层交换机实现VLAN间通信.pptx", desc: "SVI接口与ip routing跨VLAN三层转发" },
+      { id: 210, title: "实验15：访问控制列表ACL", type: "pptx", link: "/courseware/pt-labs/15 访问控制列表实验.pptx", desc: "标准/扩展ACL规则与流量过滤策略" }
     ]
   },
   {
-    category: "实验案例",
+    category: "基础动手实验",
     items: [
-      { title: "基于 AI 的网络拓扑自动优化实验", type: "GitHub", link: "https://github.com/PKUFlyingPig/Computer-Network-A-Top-Down-Approach" },
-      { title: "Wireshark 抓包分析：三次握手深度剖析", type: "Guide", link: "https://xiaolincoding.com/network/" },
-      { title: "Packet Tracer 校园网组网实验手册", type: "Manual", link: "#" }
+      { id: 211, title: "实验1：网线的制作与标准", type: "docx", link: "/courseware/experiments/实验1 网线的制作.docx", desc: "TIA/EIA 568A/B 标准与 RJ-45 压接实战" },
+      { id: 212, title: "实验2：基于VPS的网站建设", type: "docx", link: "/courseware/experiments/实验2 基于VPS的网站建设.docx", desc: "云服务器配置、LNMP/LAMP 环境搭建" },
+      { id: 213, title: "实验3：Packet Tracer 入门指南", type: "doc", link: "/courseware/experiments/实验3 --Packet-Tracer-入门.doc", desc: "思科模拟器基础组网操作与拓扑绘制" },
+      { id: 214, title: "集线器与交换机的对比实验", type: "docx", link: "/courseware/pt-labs/2-3  集线器与交换机的对比实验.docx", desc: "广播域冲突域分析与抓包验证" },
+      { id: 215, title: "无线局域网配置实验", type: "docx", link: "/courseware/pt-labs/12 无线局域网配置实验.docx", desc: "无线AP/路由器配置与SSID安全设置" },
+      { id: 216, title: "交换机VLAN与广播包实验", type: "docx", link: "/courseware/pt-labs/13 交换机VLAN配置及广播包实验.docx", desc: "VLAN隔离效果验证与广播域分析" }
+    ]
+  },
+  {
+    category: "课堂练习与习题",
+    items: [
+      { id: 301, title: "第一章：概述练习题", type: "doc", link: "/courseware/exercises/第一章概述.doc", desc: "核心概念填空与简答" },
+      { id: 302, title: "第二章：物理层练习题", type: "doc", link: "/courseware/exercises/第二章物理层.doc", desc: "奈氏准则、香农公式计算" },
+      { id: 303, title: "第三章：数据链路层习题", type: "doc", link: "/courseware/exercises/第三章数据链路层习题.doc", desc: "帧结构与 CRC 校验" },
+      { id: 304, title: "第四章：网络层与CIDR", type: "pptx", link: "/courseware/exercises/CIDR网络层练习.pptx", desc: "子网划分、路由表聚合与匹配" },
+      { id: 305, title: "第五章：运输层习题", type: "doc", link: "/courseware/exercises/第五章运输层.doc", desc: "TCP 状态机与窗口计算" },
+      { id: 306, title: "综合期末复习题库", type: "docx", link: "/courseware/exercises/计算机网络习题new .docx", desc: "全书重点题型汇总与详解" }
     ]
   }
 ];

@@ -7,17 +7,14 @@ const Home = () => {
   return (
     <>
       {/* Centered Hero Section */}
-      <section id="home" className="section-container relative z-10 flex flex-col items-center justify-center text-center min-h-[70vh] pt-16">
+      <section id="home" className="section-container relative z-10 flex flex-col items-center justify-center text-center min-h-[50vh] pt-8 pb-0">
         
         {/* Hero Text */}
         <div className="max-w-5xl relative z-10">
-          <span className="inline-block px-6 py-2 mb-8 text-sm font-black tracking-[0.2em] text-indigo-600 uppercase bg-indigo-50 rounded-2xl border border-indigo-100 shadow-sm">
-            泉州师范学院专属门户
-          </span>
           <h1 className="text-5xl md:text-8xl font-black mb-8 leading-[1.05] tracking-tighter text-slate-900">
             探索核心原理 <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-sky-500 to-emerald-400">
-              计算机网络 + AI
+              AI+计算机网络
             </span>
           </h1>
           <p className="mb-12 text-xl md:text-2xl text-slate-500 font-bold leading-relaxed max-w-3xl mx-auto">

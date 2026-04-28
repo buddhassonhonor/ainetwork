@@ -184,12 +184,12 @@ const AIAssistant = ({ isOpen, setIsOpen }) => {
         </div>
       </div>
 
-      {/* Backdrop for mobile */}
+      {/* Backdrop — click outside to close */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-[90] md:hidden"
+          className="fixed inset-0 z-[90]"
           onClick={() => setIsOpen(false)}
-        ></div>
+        />
       )}
     </>
   );

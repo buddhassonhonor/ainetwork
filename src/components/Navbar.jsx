@@ -45,9 +45,7 @@ const Navbar = ({ isAIOpen, setIsAIOpen }) => {
           onMouseEnter={e => e.currentTarget.style.opacity = '0.8'}
           onMouseLeave={e => e.currentTarget.style.opacity = '1'}
         >
-          <div style={{ padding: '0.5rem', background: '#4f46e5', borderRadius: '0.75rem' }}>
-            <Network size={24} color="white" />
-          </div>
+          <img src="/ai-logo.png" alt="AI Logo" style={{ width: '40px', height: '40px', borderRadius: '0.75rem', objectFit: 'cover' }} />
           <span style={{ fontSize: '1.25rem', fontWeight: 900, letterSpacing: '-0.04em', color: '#0f172a' }}>NETCORE</span>
         </Link>
 

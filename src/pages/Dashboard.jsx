@@ -1,495 +1,369 @@
-import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import ForceGraph2D from 'react-force-graph-2d';
 import { forceCollide as d3ForceCollide, forceX as d3ForceX, forceY as d3ForceY } from 'd3-force';
-import { 
-  Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer,
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LineChart, Line
+import {
+  Radar, RadarChart, PolarGrid, PolarAngleAxis, ResponsiveContainer,
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
+  LineChart, Line, PieChart, Pie, Cell
 } from 'recharts';
-import { 
-  User, BookOpen, CheckCircle, Award, 
-  ArrowRight, Brain, Target, Sparkles, TrendingUp, Users, ArrowLeft, MousePointerClick, Activity, Clock
-} from 'lucide-react';
+import { User, BookOpen, Award, ArrowRight, Brain, Target, Sparkles,
+  TrendingUp, Users, ArrowLeft, Activity, GraduationCap, BarChart3, Clock, Zap, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { classStudents, generateStudentData } from '../data/students';
+import { classStudents, classStats, generateStudentData } from '../data/students';
 
-const Dashboard = () => {
-  const [selectedStudent, setSelectedStudent] = useState(null);
-  const [hoveredStudent, setHoveredStudent] = useState(null);
-  
-  // For Force Graph dimensions
-  const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
-  const containerRef = useRef(null);
+/* ─── Stat Card ─── */
+const StatCard = ({ icon, label, value, color }) => (
+  <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 flex items-center gap-3 shrink-0 min-w-[140px] flex-1">
+    <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: color + '18', color }}>{icon}</div>
+    <div>
+      <div className="text-xl font-black text-slate-900 leading-none">{value}</div>
+      <div className="text-[11px] font-bold text-slate-400 mt-0.5">{label}</div>
+    </div>
+  </div>
+);
+
+/* ─── Class Overview ─── */
+const ClassOverview = ({ onSelect }) => {
+  const [hovered, setHovered] = useState(null);
+  const [dims, setDims] = useState({ w: 900, h: 480 });
+  const cRef = useRef(null);
   const fgRef = useRef();
 
   useEffect(() => {
-    if (!selectedStudent && containerRef.current) {
-      setDimensions({
-        width: containerRef.current.offsetWidth,
-        height: containerRef.current.offsetHeight
-      });
-    }
-    const handleResize = () => {
-      if (!selectedStudent && containerRef.current) {
-        setDimensions({
-          width: containerRef.current.offsetWidth,
-          height: containerRef.current.offsetHeight
-        });
-      }
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [selectedStudent]);
-
-  // Graph Data Memoization
-  const graphData = useMemo(() => {
-    const nodes = [];
-    const links = [];
-    classStudents.forEach(student => {
-      let color = '#818cf8'; // indigo-400
-      if (student.score >= 90) color = '#34d399'; // emerald-400
-      else if (student.score < 70) color = '#fbbf24'; // amber-400
-      
-      nodes.push({
-        id: student.id,
-        name: student.name,
-        val: Math.max(30, student.progress), // Size based on progress, ensure min size
-        color: color,
-        group: 1,
-        student: student
-      });
-    });
-    return { nodes, links };
+    const r = () => { if (cRef.current) setDims({ w: cRef.current.offsetWidth, h: cRef.current.offsetHeight }); };
+    window.addEventListener('resize', r); r();
+    return () => window.removeEventListener('resize', r);
   }, []);
 
-  const handleNodeClick = useCallback(node => {
-    if (node) {
-      setSelectedStudent(generateStudentData(node.student));
-    }
-  }, []);
-
-  const handleNodeHover = useCallback(node => {
-    if (node) {
-      setHoveredStudent(node.student);
-    } else {
-      setHoveredStudent(null);
-    }
-  }, []);
+  const gData = useMemo(() => ({
+    nodes: classStudents.map(s => ({
+      id: s.id, name: s.name,
+      val: 5 + (s.score - 55) / 45 * 10,
+      color: s.score >= 90 ? '#34d399' : s.score >= 80 ? '#818cf8' : s.score >= 70 ? '#fbbf24' : '#f87171',
+      student: s,
+    })),
+    links: [],
+  }), []);
 
   useEffect(() => {
-    if (fgRef.current) {
-      // Tweak physics forces for floating bubbles layout
-      fgRef.current.d3Force('charge').strength(-30); // Gentle repulsion
-      fgRef.current.d3Force('link', null); // Remove links to let them float
-      fgRef.current.d3Force('center', null); // Remove rigid center gravity
-      fgRef.current.d3Force('x', d3ForceX(0).strength(0.02)); // Soft pull to X center
-      fgRef.current.d3Force('y', d3ForceY(0).strength(0.02)); // Soft pull to Y center
-      // Collision force to prevent heavy overlap but allow bumping
-      fgRef.current.d3Force('collide', d3ForceCollide().radius(node => Math.sqrt(node.val) * 2.8 + 15).iterations(3));
-    }
-  }, [graphData]);
-
-  // Class Overview View
-  if (!selectedStudent) {
-    return (
-      <div className="pt-24 min-h-screen bg-slate-50 pb-16">
-        <div className="section-container">
-          <div className="mb-10 text-center md:text-left flex flex-col md:flex-row justify-between items-end gap-6">
-            <div>
-              <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 flex items-center gap-3">
-                <Users className="text-indigo-600" size={40} />
-                班级学业全景视图
-              </h1>
-              <p className="text-lg text-slate-500 font-medium max-w-2xl">
-                基于图谱化数据的智能学情分析。探索 2024 级每位同学的学业宇宙，点击进入专属诊断报告。
-              </p>
-            </div>
-            
-            <div className="flex gap-4">
-              <div className="bg-white px-6 py-3 rounded-2xl shadow-sm border border-slate-200 flex flex-col items-center">
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">班级均分</span>
-                <span className="text-2xl font-black text-indigo-600">82.5</span>
-              </div>
-              <div className="bg-white px-6 py-3 rounded-2xl shadow-sm border border-slate-200 flex flex-col items-center">
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">进度中位数</span>
-                <span className="text-2xl font-black text-emerald-500">76%</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-12">
-            {/* Universe/Galaxy View using ForceGraph */}
-            <div className="lg:col-span-3 bg-slate-900 p-1 rounded-[2.5rem] shadow-2xl shadow-indigo-900/10 relative overflow-hidden h-[600px] md:h-[700px] border border-slate-800 flex flex-col">
-              <div className="absolute top-6 left-6 z-20 flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md text-white rounded-2xl text-sm font-bold border border-white/10 shadow-lg">
-                <Sparkles size={16} className="text-sky-400" /> 
-                <span className="opacity-90">学业星系图谱 - 点击星球查看详情</span>
-              </div>
-              
-              <div className="flex-1 w-full h-full relative" ref={containerRef}>
-                <ForceGraph2D
-                  ref={fgRef}
-                  width={dimensions.width}
-                  height={dimensions.height}
-                  graphData={graphData}
-                  nodeLabel=""
-                  nodeColor="color"
-                  nodeRelSize={1}
-                  nodeVal="val"
-                  onNodeClick={handleNodeClick}
-                  onNodeHover={handleNodeHover}
-                  linkColor={() => 'rgba(255,255,255,0.1)'}
-                  linkWidth={2}
-                  backgroundColor="#0f172a"
-                  nodeCanvasObject={(node, ctx, globalScale) => {
-                    const label = node.name;
-                    const fontSize = 14/globalScale;
-                    ctx.font = `bold ${fontSize}px Sans-Serif`;
-                    
-                    const radius = Math.sqrt(node.val) * 2.8;
-                    
-                    // Draw node glow
-                    ctx.shadowColor = node.color;
-                    ctx.shadowBlur = 15;
-                    ctx.beginPath();
-                    ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI, false);
-                    ctx.fillStyle = node.color;
-                    ctx.fill();
-                    ctx.shadowBlur = 0; // reset
-                    
-                    // Draw text label
-                    const textWidth = ctx.measureText(label).width;
-                    
-                    ctx.fillStyle = '#f8fafc';
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.fillText(label, node.x, node.y + radius + fontSize + 2);
-                  }}
-                />
-              </div>
-
-              {/* Hover Tooltip/Card */}
-              <AnimatePresence>
-                {hoveredStudent && (
-                  <motion.div 
-                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                    className="absolute bottom-6 right-6 z-50 bg-white/10 backdrop-blur-xl border border-white/20 p-6 rounded-3xl w-72 shadow-2xl text-white pointer-events-none"
-                  >
-                    <div className="flex justify-between items-start mb-4">
-                      <div>
-                        <h3 className="text-2xl font-black">{hoveredStudent.name}</h3>
-                        <p className="text-sky-300 text-sm font-bold mt-1">全省排名 Top {hoveredStudent.rank}</p>
-                      </div>
-                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-black text-xl shadow-lg ${
-                        hoveredStudent.score >= 90 ? 'bg-emerald-500 shadow-emerald-500/50' : 
-                        hoveredStudent.score < 70 ? 'bg-amber-500 shadow-amber-500/50' : 
-                        'bg-indigo-500 shadow-indigo-500/50'
-                      }`}>
-                        {hoveredStudent.score}
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-4">
-                      <div>
-                        <div className="flex justify-between items-center text-sm font-medium mb-1.5">
-                          <span className="text-slate-300">课程进度</span>
-                          <span className="font-bold">{hoveredStudent.progress}%</span>
-                        </div>
-                        <div className="w-full bg-white/10 rounded-full h-2 overflow-hidden">
-                          <motion.div 
-                            initial={{ width: 0 }}
-                            animate={{ width: `${hoveredStudent.progress}%` }}
-                            className={`h-full rounded-full ${
-                              hoveredStudent.progress >= 80 ? 'bg-emerald-400' : 
-                              hoveredStudent.progress < 60 ? 'bg-amber-400' : 
-                              'bg-sky-400'
-                            }`} 
-                          />
-                        </div>
-                      </div>
-                      
-                      <div className="grid grid-cols-2 gap-3 pt-2">
-                        <div className="bg-white/5 p-3 rounded-xl border border-white/5">
-                          <div className="text-xs text-slate-400 mb-1">在线时长</div>
-                          <div className="font-bold text-lg">{hoveredStudent.hours}h</div>
-                        </div>
-                        <div className="bg-white/5 p-3 rounded-xl border border-white/5">
-                          <div className="text-xs text-slate-400 mb-1">活跃度</div>
-                          <div className="font-bold text-lg text-emerald-400">High</div>
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            {/* Class Stats Sidebar */}
-            <div className="flex flex-col gap-6">
-              {/* Leaderboard */}
-              <div className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-slate-200 flex-1 flex flex-col">
-                <h3 className="text-lg font-black text-slate-900 mb-6 flex items-center gap-2">
-                  <Award className="text-amber-500" /> 学业风云榜
-                </h3>
-                <div className="flex-1 space-y-4">
-                  {classStudents.sort((a,b) => b.score - a.score).slice(0, 5).map((student, i) => (
-                    <div key={student.id} 
-                         onClick={() => setSelectedStudent(generateStudentData(student))}
-                         className="flex items-center gap-4 p-3 rounded-2xl hover:bg-slate-50 cursor-pointer transition-colors border border-transparent hover:border-slate-100 group">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-sm ${
-                        i === 0 ? 'bg-amber-100 text-amber-600' : 
-                        i === 1 ? 'bg-slate-100 text-slate-500' : 
-                        i === 2 ? 'bg-orange-100 text-orange-700' : 
-                        'bg-slate-50 text-slate-400'
-                      }`}>
-                        {i + 1}
-                      </div>
-                      <div className="flex-1">
-                        <div className="font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">{student.name}</div>
-                        <div className="text-xs text-slate-500">综合得分 {student.score}</div>
-                      </div>
-                      <div className="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-sm">
-                        {student.progress}%
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              
-              {/* Activity Trend Mini */}
-              <div className="bg-indigo-600 p-6 rounded-[2.5rem] shadow-lg shadow-indigo-200 text-white relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none"></div>
-                <h3 className="text-lg font-black mb-2 flex items-center gap-2 relative z-10">
-                  <Activity size={20} /> 本周学习热度
-                </h3>
-                <p className="text-indigo-200 text-sm mb-6 relative z-10">全班累计在线 420 小时，较上周增长 12%</p>
-                
-                <div className="h-24 relative z-10">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={[
-                      { name: 'Mon', val: 30 }, { name: 'Tue', val: 45 }, { name: 'Wed', val: 38 },
-                      { name: 'Thu', val: 65 }, { name: 'Fri', val: 55 }, { name: 'Sat', val: 85 }, { name: 'Sun', val: 95 }
-                    ]}>
-                      <Line type="monotone" dataKey="val" stroke="#ffffff" strokeWidth={3} dot={{r:4, fill:"#4f46e5", strokeWidth: 2}} />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Individual Student Dashboard View
-  const mockData = selectedStudent;
+    if (!fgRef.current) return;
+    fgRef.current.d3Force('charge').strength(-60);
+    fgRef.current.d3Force('link', null);
+    fgRef.current.d3Force('center', null);
+    fgRef.current.d3Force('x', d3ForceX(0).strength(0.12));
+    fgRef.current.d3Force('y', d3ForceY(0).strength(0.12));
+    fgRef.current.d3Force('collide', d3ForceCollide().radius(n => n.val + 16).iterations(4));
+  }, [gData]);
 
   return (
-    <div className="pt-24 min-h-screen bg-slate-50 pb-16">
+    <div className="pt-24 min-h-screen bg-slate-50 pb-12">
       <div className="section-container">
-        
-        <button 
-          onClick={() => setSelectedStudent(null)}
-          className="inline-flex items-center gap-2 text-indigo-600 font-bold mb-8 hover:text-indigo-800 transition-colors"
-        >
-          <ArrowLeft size={20} /> 返回班级全景
-        </button>
-
-        {/* Header Section */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
-          <div className="flex items-center gap-6">
-            <div className="w-20 h-20 bg-indigo-600 rounded-3xl flex items-center justify-center text-white shadow-xl shadow-indigo-200">
-              <User size={40} />
-            </div>
-            <div>
-              <h1 className="text-3xl font-black text-slate-900 mb-1">{mockData.studentName}的学业看板</h1>
-              <p className="text-slate-500 font-bold">{mockData.major} · 2024级</p>
-            </div>
-          </div>
-          <div className="flex gap-4">
-            <div className="px-6 py-3 bg-white border border-slate-200 rounded-2xl shadow-sm">
-              <p className="text-xs font-black text-slate-400 uppercase mb-1">当前学分</p>
-              <p className="text-2xl font-black text-indigo-600">3.5 / 4.0</p>
-            </div>
-            <div className="px-6 py-3 bg-indigo-600 text-white rounded-2xl shadow-lg shadow-indigo-200">
-              <p className="text-xs font-black text-white/70 uppercase mb-1">全省排名</p>
-              <p className="text-2xl font-black">Top 15%</p>
-            </div>
-          </div>
+        {/* ── Title ── */}
+        <div className="mb-6">
+          <h1 className="text-3xl font-black text-slate-900 mb-1 flex items-center gap-3">
+            <GraduationCap className="text-indigo-600" size={32}/>
+            2023级通信工程
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">学业诊断</span>
+          </h1>
+          <p className="text-sm text-slate-500 font-bold">AI 智能学情分析 · 点击星球进入专属报告</p>
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 mb-8">
-          {/* Progress Card */}
-          <div className="bg-white p-6 md:p-8 rounded-[3rem] border border-slate-100 shadow-sm flex flex-col justify-between">
-            <div>
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-black text-slate-900 flex items-center gap-2">
-                  <BookOpen className="text-indigo-600" /> 课程进度
-                </h3>
-                <span className="px-3 py-1 bg-green-50 text-green-600 text-xs font-bold rounded-full">进行中</span>
-              </div>
-              <div className="relative h-4 w-full bg-slate-100 rounded-full mb-4 overflow-hidden">
-                <div 
-                  className="absolute top-0 left-0 h-full bg-indigo-600 rounded-full transition-all duration-1000"
-                  style={{ width: `${mockData.progress}%` }}
-                ></div>
-              </div>
-              <p className="text-slate-500 font-bold mb-8">已完成 {mockData.progress}% 的理论课时学习</p>
+        {/* ── KPI Row ── */}
+        <div className="flex gap-3 mb-6 overflow-x-auto pb-1 justify-center">
+          <StatCard icon={<Users size={18}/>}        label="班级人数" value={classStats.total}                color="#6366f1"/>
+          <StatCard icon={<BarChart3 size={18}/>}    label="班级均分" value={classStats.avgScore}            color="#10b981"/>
+          <StatCard icon={<CheckCircle2 size={18}/>} label="及格率"   value={classStats.passRate + '%'}      color="#0ea5e9"/>
+          <StatCard icon={<Award size={18}/>}        label="优秀率"   value={classStats.excellentRate + '%'} color="#f59e0b"/>
+          <StatCard icon={<Clock size={18}/>}        label="累计学时" value={classStats.totalHours + 'h'}    color="#8b5cf6"/>
+        </div>
+
+        {/* ── Galaxy (full width) + Right Panel ── */}
+        <div className="grid grid-cols-1 xl:grid-cols-4 gap-5 mb-5">
+          {/* Galaxy - wider */}
+          <div className="xl:col-span-3 bg-slate-900 rounded-3xl shadow-xl overflow-hidden relative" style={{ height: 480, clipPath: 'inset(0 round 1.5rem)' }} ref={cRef}>
+            <div className="absolute top-4 left-4 z-20 flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-md text-white rounded-xl text-xs font-bold border border-white/10">
+              <Sparkles size={13} className="text-sky-400"/> 学业星系 · 点击星球查看报告
             </div>
-            
-            <div className="grid grid-cols-2 gap-4">
-              <div className="p-4 bg-slate-50 rounded-2xl">
-                <p className="text-2xl font-black text-slate-900">{mockData.experiments}</p>
-                <p className="text-xs font-bold text-slate-400 uppercase">已完实验</p>
-              </div>
-              <div className="p-4 bg-slate-50 rounded-2xl">
-                <p className="text-2xl font-black text-slate-900">12h</p>
-                <p className="text-xs font-bold text-slate-400 uppercase">在线时长</p>
-              </div>
+            <div className="absolute top-4 right-4 z-20 flex gap-2 text-[10px] font-bold text-white/70">
+              {[['#34d399','≥90'],['#818cf8','80-89'],['#fbbf24','70-79'],['#f87171','<70']].map(([c,l])=>(
+                <span key={l} className="flex items-center gap-1"><span className="w-2 h-2 rounded-full" style={{background:c}}/>{l}</span>
+              ))}
             </div>
+            <ForceGraph2D
+              ref={fgRef} width={dims.w} height={dims.h}
+              graphData={gData} nodeLabel="" nodeColor="color" nodeRelSize={1} nodeVal="val"
+              onNodeClick={n => n && onSelect(generateStudentData(n.student))}
+              onNodeHover={n => setHovered(n?.student || null)}
+              backgroundColor="#0f172a"
+              nodeCanvasObject={(node, ctx, gs) => {
+                const r = node.val;
+                ctx.shadowColor = node.color; ctx.shadowBlur = 14;
+                ctx.beginPath(); ctx.arc(node.x, node.y, r, 0, Math.PI * 2);
+                ctx.fillStyle = node.color; ctx.fill(); ctx.shadowBlur = 0;
+                const fs = Math.max(9 / gs, 2.5);
+                ctx.font = `600 ${fs}px Inter,sans-serif`;
+                ctx.fillStyle = '#e2e8f0'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+                ctx.fillText(node.name, node.x, node.y + r + fs + 1);
+              }}
+            />
+            <AnimatePresence>
+              {hovered && (
+                <motion.div initial={{opacity:0,y:8}} animate={{opacity:1,y:0}} exit={{opacity:0}}
+                  className="absolute bottom-4 right-4 z-50 bg-white/10 backdrop-blur-xl border border-white/20 p-4 rounded-2xl w-52 text-white pointer-events-none">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="font-black text-sm">{hovered.name}</span>
+                    <span className={`text-xs font-black px-2 py-0.5 rounded-full ${hovered.score>=90?'bg-emerald-500/30 text-emerald-300':hovered.score>=80?'bg-indigo-500/30 text-indigo-300':hovered.score>=70?'bg-amber-500/30 text-amber-300':'bg-red-500/30 text-red-300'}`}>{hovered.score}分</span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-1.5 text-center text-[10px]">
+                    {[[hovered.progress+'%','进度'],[hovered.hours+'h','学时'],[hovered.labCount,'实验']].map(([v,l])=>(
+                      <div key={l} className="bg-white/5 p-1.5 rounded-lg"><div className="font-black text-xs">{v}</div>{l}</div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
-          {/* AI Diagnostic Report (Radar Chart) */}
-          <div className="xl:col-span-2 bg-white p-6 md:p-8 rounded-[3rem] border border-slate-100 shadow-sm relative overflow-hidden flex flex-col">
-            <div className="flex justify-between items-center mb-8">
-              <h3 className="text-xl font-black text-slate-900 flex items-center gap-2">
-                <Brain className="text-indigo-600" /> AI 学业诊断报告
+          {/* Right panel */}
+          <div className="flex flex-col gap-4">
+            {/* Leaderboard */}
+            <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-5 flex-1">
+              <h3 className="text-xs font-black text-slate-500 uppercase tracking-wider mb-4 flex items-center gap-1.5">
+                <Award size={14} className="text-amber-500"/> 学业风云榜
               </h3>
-              <div className="hidden sm:flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 rounded-2xl text-sm font-bold border border-indigo-100">
-                <Sparkles size={16} /> AI 智能评估
+              <div className="space-y-1">
+                {[...classStudents].sort((a,b)=>b.score-a.score).slice(0,8).map((s,i)=>(
+                  <div key={s.id} onClick={()=>onSelect(generateStudentData(s))}
+                    className="flex items-center gap-2 px-2 py-2 rounded-xl hover:bg-slate-50 cursor-pointer group transition-colors">
+                    <div className={`w-5 h-5 rounded-md flex items-center justify-center text-[10px] font-black shrink-0 ${
+                      i===0?'bg-amber-400 text-white':i===1?'bg-slate-400 text-white':i===2?'bg-orange-400 text-white':'bg-slate-100 text-slate-400'}`}>{i+1}</div>
+                    <span className="flex-1 text-sm font-bold text-slate-800 truncate group-hover:text-indigo-600 transition-colors">{s.name}</span>
+                    <span className="text-xs font-black text-slate-600">{s.score}</span>
+                  </div>
+                ))}
               </div>
             </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center flex-1">
-              <div className="h-[250px] md:h-full w-full min-h-[250px]">
+            {/* Trend mini */}
+            <div className="bg-gradient-to-br from-indigo-600 to-indigo-700 rounded-3xl p-5 text-white shadow-lg shadow-indigo-200 relative overflow-hidden">
+              <div className="absolute -top-6 -right-6 w-20 h-20 bg-white/10 rounded-full blur-xl"/>
+              <div className="flex justify-between items-center mb-2 relative z-10">
+                <span className="text-xs font-black flex items-center gap-1.5 uppercase tracking-wider"><Activity size={13}/> 周学时趋势</span>
+                <span className="text-[10px] text-indigo-200">{classStats.totalHours}h累计</span>
+              </div>
+              <div className="h-20 relative z-10">
                 <ResponsiveContainer width="100%" height="100%">
-                  <RadarChart cx="50%" cy="50%" outerRadius="70%" data={mockData.diagnosticData}>
-                    <PolarGrid stroke="#e2e8f0" />
-                    <PolarAngleAxis dataKey="subject" tick={{ fill: '#64748b', fontSize: 12, fontWeight: 700 }} />
-                    <Radar
-                      name="能力值"
-                      dataKey="A"
-                      stroke="#4f46e5"
-                      fill="#4f46e5"
-                      fillOpacity={0.4}
-                    />
-                  </RadarChart>
+                  <LineChart data={classStats.weeklyTrend}>
+                    <Line type="monotone" dataKey="hours" stroke="rgba(255,255,255,0.9)" strokeWidth={2.5} dot={{r:3,fill:'#4f46e5',strokeWidth:2}}/>
+                  </LineChart>
                 </ResponsiveContainer>
               </div>
-              
-              <div className="space-y-6">
-                <div className="p-6 bg-indigo-50/50 rounded-3xl border border-indigo-100 h-full flex flex-col justify-center">
-                  <h4 className="font-bold text-indigo-900 mb-3 flex items-center gap-2">
-                    <Target size={18} /> 诊断结论
-                  </h4>
-                  <p className="text-indigo-700/80 text-sm leading-relaxed font-medium">
-                    你在“物理层”和“运输层”表现优异，但“网络层”与“AI融合应用”部分存在薄弱环节，建议加强对 IP 路由算法及神经网络在流量预测中应用的复习。
-                  </p>
-                </div>
-                <button className="w-full py-4 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 flex items-center justify-center gap-2">
-                  查看 AI 补课方案 <ArrowRight size={18} />
-                </button>
-              </div>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 mb-8">
-          {/* Weekly Activity */}
-          <div className="xl:col-span-2 bg-white p-6 md:p-8 rounded-[3rem] border border-slate-100 shadow-sm">
-            <h3 className="text-xl font-black text-slate-900 mb-8 flex items-center gap-2">
-              <TrendingUp className="text-indigo-600" /> 学习活跃度
-            </h3>
-            <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={mockData.weeklyProgress}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                  <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontWeight: 600 }} />
-                  <YAxis axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontWeight: 600 }} />
-                  <Tooltip 
-                    contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }}
-                    cursor={{ fill: '#f8fafc' }}
-                  />
-                  <Bar dataKey="hours" fill="#4f46e5" radius={[10, 10, 10, 10]} barSize={40} />
-                </BarChart>
-              </ResponsiveContainer>
+        {/* ── Bottom Charts ── */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {/* Distribution */}
+          <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
+            <h3 className="text-xs font-black text-slate-500 uppercase tracking-wider mb-5 flex items-center gap-1.5"><BarChart3 size={14} className="text-indigo-500"/> 成绩分布</h3>
+            <div className="flex items-center gap-6">
+              <div className="w-28 h-28 shrink-0">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart><Pie data={classStats.distribution} dataKey="count" cx="50%" cy="50%" innerRadius={24} outerRadius={50} paddingAngle={3}>
+                    {classStats.distribution.map((d,i)=><Cell key={i} fill={d.color}/>)}
+                  </Pie></PieChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="space-y-2.5 flex-1">
+                {classStats.distribution.map((d,i)=>(
+                  <div key={i} className="flex items-center gap-2 text-xs">
+                    <span className="w-2 h-2 rounded-sm shrink-0" style={{background:d.color}}/>
+                    <span className="font-bold text-slate-600 w-12">{d.range}</span>
+                    <div className="flex-1 bg-slate-100 rounded-full h-2 overflow-hidden">
+                      <div className="h-full rounded-full" style={{width:`${d.count/30*100}%`,background:d.color}}/>
+                    </div>
+                    <span className="font-black text-slate-900 w-5 text-right">{d.count}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* Next Steps */}
-          <div className="bg-indigo-900 p-8 rounded-[3rem] text-white shadow-2xl shadow-indigo-200">
-            <h3 className="text-xl font-black mb-8 flex items-center gap-2">
-              <Sparkles className="text-sky-400" /> 下一步建议
-            </h3>
-            <div className="space-y-4">
-              {[
-                { title: '复习网络层路由算法', time: '预计 45min', level: '高优先级' },
-                { title: '完成实验 3：Packet Tracer 入门', time: '预计 60min', level: '必做' },
-                { title: '阅读 AI 赋能网络白皮书', time: '预计 20min', level: '拓展' },
-              ].map((item, i) => (
-                <div key={i} className="p-5 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 hover:bg-white/20 transition-colors cursor-pointer group">
-                  <div className="flex justify-between items-start mb-2">
-                    <h4 className="font-bold group-hover:text-sky-300 transition-colors">{item.title}</h4>
-                    <span className="text-[10px] font-black bg-sky-500/20 text-sky-300 px-2 py-0.5 rounded-full uppercase tracking-tighter">{item.level}</span>
+          {/* Chapter mastery */}
+          <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
+            <h3 className="text-xs font-black text-slate-500 uppercase tracking-wider mb-5 flex items-center gap-1.5"><Target size={14} className="text-indigo-500"/> 各章节掌握度</h3>
+            <div className="space-y-3">
+              {classStats.chapterMastery.map((ch,i)=>(
+                <div key={i} className="flex items-center gap-3">
+                  <span className="text-xs font-bold text-slate-600 w-20 shrink-0">{ch.chapter}</span>
+                  <div className="flex-1 bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                    <div className="h-full rounded-full" style={{width:`${ch.mastery}%`,background:ch.mastery>=85?'#10b981':ch.mastery>=70?'#6366f1':'#f59e0b'}}/>
                   </div>
-                  <p className="text-xs text-white/50 font-bold uppercase tracking-wider">{item.time}</p>
+                  <span className="text-xs font-black w-8 text-right" style={{color:ch.mastery>=85?'#10b981':ch.mastery>=70?'#6366f1':'#f59e0b'}}>{ch.mastery}%</span>
                 </div>
               ))}
             </div>
           </div>
         </div>
-
-        {/* New Section: Recent Labs */}
-        <div className="bg-white p-6 md:p-8 rounded-[3rem] border border-slate-100 shadow-sm">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="text-xl font-black text-slate-900 flex items-center gap-2">
-              <Award className="text-indigo-600" /> 最新实验实训记录
-            </h3>
-            <button className="text-sm font-bold text-indigo-600 hover:text-indigo-800 transition-colors">
-              查看全部
-            </button>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse min-w-[600px]">
-              <thead>
-                <tr className="border-b border-slate-100 text-sm text-slate-400">
-                  <th className="pb-4 font-bold">实验名称</th>
-                  <th className="pb-4 font-bold">涉及层级</th>
-                  <th className="pb-4 font-bold">AI 评分</th>
-                  <th className="pb-4 font-bold">状态</th>
-                  <th className="pb-4 font-bold text-right">操作</th>
-                </tr>
-              </thead>
-              <tbody className="text-sm">
-                {[
-                  { name: '实验3 --Packet-Tracer-入门', layer: '链路层/网络层', score: 92, status: '优秀' },
-                  { name: '实验1 网线的制作', layer: '物理层', score: 88, status: '良好' },
-                  { name: 'AI 辅助 OSPF 路由配置', layer: '网络层', score: 76, status: '需改进' },
-                ].map((lab, i) => (
-                  <tr key={i} className="border-b border-slate-50 last:border-0 hover:bg-slate-50 transition-colors group">
-                    <td className="py-5 font-bold text-slate-800">{lab.name}</td>
-                    <td className="py-5 text-slate-500 font-medium">{lab.layer}</td>
-                    <td className="py-5 font-black text-indigo-600">{lab.score}</td>
-                    <td className="py-5">
-                      <span className={`px-3 py-1.5 rounded-full text-xs font-bold ${lab.status === '优秀' ? 'bg-green-100 text-green-700' : lab.status === '良好' ? 'bg-blue-100 text-blue-700' : 'bg-amber-100 text-amber-700'}`}>
-                        {lab.status}
-                      </span>
-                    </td>
-                    <td className="py-5 text-right">
-                      <button className="px-4 py-2 bg-white border border-slate-200 text-slate-600 rounded-xl text-xs font-bold hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 transition-all shadow-sm">
-                        查看报告
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
       </div>
     </div>
   );
+};
+
+/* ─── Student Detail ─── */
+const StudentDetail = ({ data, onBack }) => (
+  <div className="pt-24 min-h-screen bg-slate-50 pb-12">
+    <div className="section-container">
+      <button onClick={onBack} className="inline-flex items-center gap-2 text-indigo-600 font-bold mb-6 hover:text-indigo-800 bg-white px-4 py-2 rounded-full shadow-sm border border-indigo-50 hover:shadow-md text-sm transition-all">
+        <ArrowLeft size={16}/> 返回班级全景
+      </button>
+
+      {/* Header */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-7 gap-4">
+        <div className="flex items-center gap-4">
+          <div className="w-13 h-13 w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center text-white shadow-lg">
+            <User size={24}/>
+          </div>
+          <div>
+            <h1 className="text-2xl font-black text-slate-900 leading-tight">{data.studentName} 的学业看板</h1>
+            <p className="text-xs text-slate-500 font-bold mt-0.5">{data.grade} {data.major} · 班级第 {data.classRank} / {data.totalStudents} 名</p>
+          </div>
+        </div>
+        <div className="flex gap-2">
+          {[{l:'GPA',v:data.gpa,cls:'bg-white border border-slate-200',vc:'text-indigo-600'},
+            {l:'综合分',v:data.score,cls:'bg-white border border-slate-200',vc:'text-emerald-600'},
+            {l:'排名',v:`Top ${data.rank}`,cls:'bg-indigo-600 shadow-lg shadow-indigo-200',vc:'text-white'}
+          ].map((b,i)=>(
+            <div key={i} className={`px-4 py-2.5 rounded-xl text-center ${b.cls}`}>
+              <p className="text-[10px] font-black uppercase mb-0.5" style={{color: i===2 ? 'rgba(255,255,255,.65)' : '#94a3b8'}}>{b.l}</p>
+              <p className={`text-lg font-black ${b.vc}`}>{b.v}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Row 1: Progress + Radar */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-5 mb-5">
+        <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+          <h3 className="text-xs font-black text-slate-500 uppercase tracking-wider mb-4 flex items-center gap-1.5"><BookOpen size={14} className="text-indigo-500"/> 课程进度</h3>
+          <div className="h-2.5 w-full bg-slate-100 rounded-full mb-2 overflow-hidden">
+            <div className="h-full bg-indigo-600 rounded-full transition-all" style={{width:`${data.progress}%`}}/>
+          </div>
+          <p className="text-xs text-slate-500 font-bold mb-5">已完成 {data.progress}% 理论课时</p>
+          <div className="grid grid-cols-3 gap-2">
+            {[{v:data.experiments,l:'实验'},{v:data.hours+'h',l:'学时'},{v:data.avgQuiz,l:'测验均分'}].map((x,i)=>(
+              <div key={i} className="p-3 bg-slate-50 rounded-xl text-center">
+                <p className="text-base font-black text-slate-900">{x.v}</p>
+                <p className="text-[9px] font-bold text-slate-400 uppercase mt-0.5">{x.l}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="xl:col-span-2 bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+          <div className="flex justify-between items-center mb-3">
+            <h3 className="text-xs font-black text-slate-500 uppercase tracking-wider flex items-center gap-1.5"><Brain size={14} className="text-indigo-500"/> AI 学业诊断</h3>
+            <span className="flex items-center gap-1 px-2.5 py-1 bg-indigo-50 text-indigo-600 rounded-full text-[10px] font-bold border border-indigo-100"><Sparkles size={11}/> AI 评估</span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+            <div style={{height:200}}>
+              <ResponsiveContainer width="100%" height="100%">
+                <RadarChart cx="50%" cy="50%" outerRadius="70%" data={data.diagnosticData}>
+                  <PolarGrid stroke="#e2e8f0"/>
+                  <PolarAngleAxis dataKey="subject" tick={{fill:'#64748b',fontSize:11,fontWeight:700}}/>
+                  <Radar dataKey="A" stroke="#4f46e5" fill="#4f46e5" fillOpacity={0.3}/>
+                </RadarChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="p-4 bg-indigo-50/60 rounded-2xl border border-indigo-100">
+              <h4 className="font-bold text-indigo-900 mb-2 flex items-center gap-1.5 text-xs"><Target size={13}/> 诊断结论</h4>
+              <p className="text-indigo-700/80 text-xs leading-relaxed">
+                {data.score>=85?`${data.studentName}综合表现优异，各层均衡发展，建议向AI融合方向深入拓展。`:
+                 data.score>=70?`基础扎实，网络层与AI融合部分有提升空间，建议强化路由算法与流量预测。`:
+                 `需加强基础巩固，优先回顾CH1-CH3并重做基础实验。`}
+              </p>
+              <button className="mt-3 w-full py-2 bg-indigo-600 text-white text-xs font-bold rounded-xl hover:bg-indigo-700 transition-colors flex items-center justify-center gap-1">
+                查看 AI 补课方案 <ArrowRight size={13}/>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Row 2: Weekly Bar + Suggestions */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-5 mb-5">
+        <div className="xl:col-span-2 bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+          <h3 className="text-xs font-black text-slate-500 uppercase tracking-wider mb-4 flex items-center gap-1.5"><TrendingUp size={14} className="text-indigo-500"/> 每周学习时长</h3>
+          <div style={{height:180}}>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={data.weeklyProgress}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9"/>
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill:'#94a3b8',fontWeight:600,fontSize:11}}/>
+                <YAxis axisLine={false} tickLine={false} tick={{fill:'#94a3b8',fontWeight:600,fontSize:11}}/>
+                <Tooltip contentStyle={{borderRadius:'10px',border:'none',boxShadow:'0 4px 12px rgba(0,0,0,.08)',fontSize:12}} cursor={{fill:'#f8fafc'}}/>
+                <Bar dataKey="hours" fill="#4f46e5" radius={[6,6,6,6]} barSize={26} name="学时(h)"/>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        <div className="bg-slate-900 p-6 rounded-3xl text-white shadow-xl relative overflow-hidden">
+          <div className="absolute -top-6 -right-6 w-20 h-20 bg-indigo-500/20 rounded-full blur-xl"/>
+          <h3 className="text-xs font-black mb-4 flex items-center gap-1.5 uppercase tracking-wider relative z-10"><Zap size={13} className="text-sky-400"/> AI 个性化建议</h3>
+          <div className="space-y-2 relative z-10">
+            {data.aiSuggestions.map((item,i)=>(
+              <div key={i} className="p-3 bg-white/8 rounded-xl border border-white/10 hover:bg-white/15 transition-colors cursor-pointer group">
+                <div className="flex justify-between items-start gap-2 mb-1">
+                  <h4 className="font-bold text-xs group-hover:text-sky-300 transition-colors leading-snug">{item.title}</h4>
+                  <span className="text-[8px] font-black bg-sky-500/20 text-sky-300 px-1.5 py-0.5 rounded-full uppercase shrink-0">{item.level}</span>
+                </div>
+                <p className="text-[10px] text-white/40">{item.time}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Lab Table */}
+      <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-xs font-black text-slate-500 uppercase tracking-wider flex items-center gap-1.5"><Award size={14} className="text-indigo-500"/> PT 实验记录</h3>
+          <span className="text-[10px] font-bold text-slate-400">{data.experiments} / {data.totalExperiments} 完成</span>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left min-w-[520px]">
+            <thead>
+              <tr className="border-b border-slate-100 text-[10px] text-slate-400 font-black uppercase tracking-wider">
+                <th className="pb-3">实验名称</th><th className="pb-3">层级</th><th className="pb-3">AI评分</th><th className="pb-3">状态</th><th className="pb-3 text-right">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.labRecords.map((lab,i)=>(
+                <tr key={i} className="border-b border-slate-50 last:border-0 hover:bg-slate-50/60 transition-colors">
+                  <td className="py-3 font-bold text-slate-800 text-xs">{lab.name}</td>
+                  <td className="py-3 text-xs text-slate-500">{lab.layer}</td>
+                  <td className="py-3 font-black text-indigo-600 text-sm">{lab.score}</td>
+                  <td className="py-3">
+                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${lab.status==='优秀'?'bg-emerald-50 text-emerald-700':lab.status==='良好'?'bg-blue-50 text-blue-700':'bg-amber-50 text-amber-700'}`}>{lab.status}</span>
+                  </td>
+                  <td className="py-3 text-right">
+                    <button className="px-3 py-1.5 bg-white border border-slate-200 text-slate-600 rounded-lg text-[10px] font-bold hover:bg-indigo-50 hover:text-indigo-600 transition-all">查看报告</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+/* ─── Main ─── */
+const Dashboard = () => {
+  const [sel, setSel] = useState(null);
+  if (sel) return <StudentDetail data={sel} onBack={() => setSel(null)}/>;
+  return <ClassOverview onSelect={setSel}/>;
 };
 
 export default Dashboard;
