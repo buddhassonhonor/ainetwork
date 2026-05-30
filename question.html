@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>T-S 报文交换题评分</title>
+    <style>
+      :root {
+        --bg: #f5f7fb;
+        --panel: #ffffff;
+        --line: #d8e0ef;
+        --text: #14213d;
+        --muted: #5b6b8a;
+        --primary: #315efb;
+        --primary-soft: #eef3ff;
+        --success: #0f9d58;
+        --danger: #d93025;
+        --shadow: 0 20px 50px rgba(17, 24, 39, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      .page {
+        width: min(1120px, calc(100vw - 32px));
+        margin: 32px auto 48px;
+      }
+
+      .hero,
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+      }
+
+      .hero {
+        padding: 28px;
+        margin-bottom: 24px;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: var(--primary-soft);
+        color: var(--primary);
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      h1,
+      h2,
+      h3 {
+        margin: 0;
+      }
+
+      h1 {
+        margin-top: 14px;
+        font-size: clamp(28px, 4vw, 42px);
+        line-height: 1.15;
+      }
+
+      .hero p {
+        margin: 12px 0 0;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .stack {
+        display: grid;
+        gap: 24px;
+      }
+
+      .panel {
+        padding: 24px;
+      }
+
+      .image-wrap {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        overflow: hidden;
+        background: #fff;
+      }
+
+      .image-wrap img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      .tip {
+        margin-top: 14px;
+        padding: 14px 16px;
+        border-radius: 12px;
+        background: #f8fbff;
+        border: 1px solid #dce8ff;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .tip strong {
+        color: var(--text);
+      }
+
+      .meta-grid,
+      .answer-grid {
+        display: grid;
+        gap: 14px;
+      }
+
+      .meta-grid {
+        grid-template-columns: 1fr 1fr;
+        margin-bottom: 18px;
+      }
+
+      .answer-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      input {
+        width: 100%;
+        height: 44px;
+        padding: 0 14px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        font-size: 16px;
+        color: var(--text);
+        background: #fff;
+      }
+
+      input:focus {
+        outline: 2px solid rgba(49, 94, 251, 0.15);
+        border-color: var(--primary);
+      }
+
+      .actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 20px;
+        flex-wrap: wrap;
+      }
+
+      button {
+        height: 44px;
+        padding: 0 18px;
+        border: 0;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .primary {
+        background: var(--primary);
+        color: #fff;
+      }
+
+      .secondary {
+        background: #eef2f8;
+        color: var(--text);
+      }
+
+      .result {
+        margin-top: 18px;
+        padding: 16px;
+        border-radius: 12px;
+        background: #f8fafc;
+        border: 1px solid var(--line);
+      }
+
+      .hidden,
+      .result.hidden,
+      .feedback.hidden,
+      .empty.hidden {
+        display: none;
+      }
+
+      .score-line {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px 20px;
+        margin-bottom: 10px;
+        font-weight: 600;
+      }
+
+      .score {
+        color: var(--primary);
+      }
+
+      .feedback {
+        margin-top: 16px;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .feedback-item {
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        background: #fff;
+      }
+
+      .feedback-item.ok {
+        border-color: rgba(15, 157, 88, 0.25);
+        background: rgba(15, 157, 88, 0.06);
+      }
+
+      .feedback-item.bad {
+        border-color: rgba(217, 48, 37, 0.2);
+        background: rgba(217, 48, 37, 0.05);
+      }
+
+      .feedback-item strong {
+        display: block;
+        margin-bottom: 6px;
+      }
+
+      .ok .status {
+        color: var(--success);
+      }
+
+      .bad .status {
+        color: var(--danger);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 14px;
+        font-size: 14px;
+      }
+
+      th,
+      td {
+        padding: 12px 10px;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+      }
+
+      th {
+        color: var(--muted);
+        font-weight: 600;
+      }
+
+      .empty {
+        margin-top: 14px;
+        padding: 16px;
+        border-radius: 12px;
+        color: var(--muted);
+        background: #f8fafc;
+        border: 1px dashed var(--line);
+      }
+
+      .table-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      @media (max-width: 640px) {
+        .page {
+          width: min(100vw - 20px, 1120px);
+          margin: 20px auto 36px;
+        }
+
+        .hero,
+        .panel {
+          padding: 18px;
+          border-radius: 14px;
+        }
+
+        .meta-grid,
+        .answer-grid,
+        .feedback {
+          grid-template-columns: 1fr;
+        }
+
+        h1 {
+          font-size: 28px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <section class="hero">
+        <span class="eyebrow">自动评分页面</span>
+        <h1>T-S 数字交换题在线作答</h1>
+        <p>
+          当前页面只针对 <strong>第一题</strong> 自动评分。学生填写学号、姓名和 8 个空的答案后，
+          页面会立即给出得分，并在当前浏览器中保存汇总记录。
+        </p>
+      </section>
+
+      <div class="stack">
+        <section class="panel">
+          <h2>题目</h2>
+          <div class="image-wrap" style="margin-top: 16px;">
+            <img src="./Q1.png" alt="T-S 报文交换网第一题题目图片" />
+          </div>
+          <div class="tip">
+            <strong>本次只批改第一题。</strong>
+            标准答案为：① 4，② 8，③ 4，④ 8，⑤ 2，⑥ 18，⑦ 8，⑧ 18。
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>学生作答</h2>
+          <form id="quiz-form">
+            <div class="meta-grid" style="margin-top: 16px;">
+              <div>
+                <label for="studentId">学号</label>
+                <input id="studentId" name="studentId" type="text" placeholder="请输入学号" required />
+              </div>
+              <div>
+                <label for="studentName">姓名</label>
+                <input id="studentName" name="studentName" type="text" placeholder="请输入姓名" required />
+              </div>
+            </div>
+
+            <div class="answer-grid">
+              <div>
+                <label for="a1">①</label>
+                <input id="a1" name="a1" type="text" inputmode="numeric" required />
+              </div>
+              <div>
+                <label for="a2">②</label>
+                <input id="a2" name="a2" type="text" inputmode="numeric" required />
+              </div>
+              <div>
+                <label for="a3">③</label>
+                <input id="a3" name="a3" type="text" inputmode="numeric" required />
+              </div>
+              <div>
+                <label for="a4">④</label>
+                <input id="a4" name="a4" type="text" inputmode="numeric" required />
+              </div>
+              <div>
+                <label for="a5">⑤</label>
+                <input id="a5" name="a5" type="text" inputmode="numeric" required />
+              </div>
+              <div>
+                <label for="a6">⑥</label>
+                <input id="a6" name="a6" type="text" inputmode="numeric" required />
+              </div>
+              <div>
+                <label for="a7">⑦</label>
+                <input id="a7" name="a7" type="text" inputmode="numeric" required />
+              </div>
+              <div>
+                <label for="a8">⑧</label>
+                <input id="a8" name="a8" type="text" inputmode="numeric" required />
+              </div>
+            </div>
+
+            <div class="actions">
+              <button class="primary" type="submit">提交并评分</button>
+              <button class="secondary" type="button" id="reset-form">清空本次作答</button>
+            </div>
+          </form>
+
+          <div id="result" class="result hidden"></div>
+          <div id="feedback" class="feedback hidden"></div>
+        </section>
+
+        <section class="panel">
+          <div class="table-head">
+            <div>
+              <h2>成绩汇总</h2>
+              <p class="muted" style="margin: 8px 0 0;">同一学号再次提交时，会覆盖为最新成绩。</p>
+            </div>
+            <div class="actions" style="margin-top: 0;">
+              <button class="secondary" type="button" id="export-csv">导出 CSV</button>
+              <button class="secondary" type="button" id="clear-records">清空汇总</button>
+            </div>
+          </div>
+
+          <div id="empty-records" class="empty">当前还没有提交记录。</div>
+          <table id="records-table" class="hidden">
+            <thead>
+              <tr>
+                <th>学号</th>
+                <th>姓名</th>
+                <th>得分</th>
+                <th>答对数</th>
+                <th>提交时间</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </section>
+      </div>
+    </div>
+
+    <script>
+      const STORAGE_KEY = "ts-question-records-v1";
+      const ANSWER_KEY = ["4", "8", "4", "8", "2", "18", "8", "18"];
+
+      const form = document.getElementById("quiz-form");
+      const resultBox = document.getElementById("result");
+      const feedbackBox = document.getElementById("feedback");
+      const table = document.getElementById("records-table");
+      const tbody = table.querySelector("tbody");
+      const emptyRecords = document.getElementById("empty-records");
+      const resetButton = document.getElementById("reset-form");
+      const exportButton = document.getElementById("export-csv");
+      const clearRecordsButton = document.getElementById("clear-records");
+
+      function normalize(value) {
+        return String(value || "")
+          .trim()
+          .replace(/[０-９]/g, (char) => String(char.charCodeAt(0) - 65248))
+          .replace(/\s+/g, "");
+      }
+
+      function scoreAnswers(answers) {
+        const details = answers.map((value, index) => {
+          const expected = ANSWER_KEY[index];
+          const actual = normalize(value);
+          return {
+            index: index + 1,
+            expected,
+            actual,
+            correct: actual === expected,
+          };
+        });
+
+        const correctCount = details.filter((item) => item.correct).length;
+        const score = Number(((correctCount / ANSWER_KEY.length) * 100).toFixed(2));
+
+        return { details, correctCount, score };
+      }
+
+      function readRecords() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          const parsed = raw ? JSON.parse(raw) : [];
+          return Array.isArray(parsed) ? parsed : [];
+        } catch {
+          return [];
+        }
+      }
+
+      function saveRecords(records) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+      }
+
+      function upsertRecord(record) {
+        const records = readRecords();
+        const next = records.filter((item) => item.studentId !== record.studentId);
+        next.push(record);
+        next.sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+        saveRecords(next);
+        renderRecords();
+      }
+
+      function renderRecords() {
+        const records = readRecords();
+        tbody.innerHTML = "";
+
+        if (!records.length) {
+          table.classList.add("hidden");
+          emptyRecords.classList.remove("hidden");
+          return;
+        }
+
+        table.classList.remove("hidden");
+        emptyRecords.classList.add("hidden");
+
+        records.forEach((record) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${escapeHtml(record.studentId)}</td>
+            <td>${escapeHtml(record.studentName)}</td>
+            <td>${record.score}</td>
+            <td>${record.correctCount}/${ANSWER_KEY.length}</td>
+            <td>${formatTime(record.submittedAt)}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      }
+
+      function escapeHtml(value) {
+        return String(value)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function formatTime(isoString) {
+        const date = new Date(isoString);
+        if (Number.isNaN(date.getTime())) {
+          return isoString;
+        }
+        return date.toLocaleString("zh-CN", { hour12: false });
+      }
+
+      function renderResult(studentName, correctCount, score) {
+        resultBox.classList.remove("hidden");
+        resultBox.innerHTML = `
+          <div class="score-line">
+            <span>姓名：${escapeHtml(studentName)}</span>
+            <span>答对：${correctCount}/${ANSWER_KEY.length}</span>
+            <span class="score">得分：${score}</span>
+          </div>
+          <div class="muted">评分规则：每空 12.5 分，满分 100 分。</div>
+        `;
+      }
+
+      function renderFeedback(details) {
+        feedbackBox.classList.remove("hidden");
+        feedbackBox.innerHTML = details
+          .map((item) => {
+            const stateClass = item.correct ? "ok" : "bad";
+            const stateText = item.correct ? "正确" : "错误";
+            return `
+              <div class="feedback-item ${stateClass}">
+                <strong>第 ${item.index} 空</strong>
+                <div>你的答案：${escapeHtml(item.actual || "未填写")}</div>
+                <div>标准答案：${escapeHtml(item.expected)}</div>
+                <div class="status">${stateText}</div>
+              </div>
+            `;
+          })
+          .join("");
+      }
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+        const studentId = normalize(formData.get("studentId"));
+        const studentName = normalize(formData.get("studentName"));
+
+        if (!studentId || !studentName) {
+          alert("请先填写学号和姓名。");
+          return;
+        }
+
+        const answers = ANSWER_KEY.map((_, index) => formData.get(`a${index + 1}`));
+        const { details, correctCount, score } = scoreAnswers(answers);
+
+        renderResult(studentName, correctCount, score);
+        renderFeedback(details);
+
+        upsertRecord({
+          studentId,
+          studentName,
+          answers: answers.map((item) => normalize(item)),
+          correctCount,
+          score,
+          submittedAt: new Date().toISOString(),
+        });
+      });
+
+      resetButton.addEventListener("click", () => {
+        form.reset();
+        resultBox.classList.add("hidden");
+        feedbackBox.classList.add("hidden");
+        document.getElementById("studentId").focus();
+      });
+
+      clearRecordsButton.addEventListener("click", () => {
+        const confirmed = window.confirm("确定清空所有汇总记录吗？");
+        if (!confirmed) {
+          return;
+        }
+        localStorage.removeItem(STORAGE_KEY);
+        renderRecords();
+      });
+
+      exportButton.addEventListener("click", () => {
+        const records = readRecords();
+        if (!records.length) {
+          alert("当前没有可导出的记录。");
+          return;
+        }
+
+        const header = ["学号", "姓名", "得分", "答对数", "提交时间"];
+        const rows = records.map((record) => [
+          record.studentId,
+          record.studentName,
+          record.score,
+          `${record.correctCount}/${ANSWER_KEY.length}`,
+          formatTime(record.submittedAt),
+        ]);
+
+        const csv = [header, ...rows]
+          .map((row) =>
+            row
+              .map((cell) => `"${String(cell).replace(/"/g, '""')}"`)
+              .join(",")
+          )
+          .join("\n");
+
+        const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "question-scores.csv";
+        link.click();
+        URL.revokeObjectURL(url);
+      });
+
+      renderRecords();
+    </script>
+  </body>
+  </html>
