@@ -98,6 +98,13 @@ const Navbar = ({ isAIOpen, setIsAIOpen }) => {
             onMouseEnter={e => e.currentTarget.style.color = '#4f46e5'}
             onMouseLeave={e => e.currentTarget.style.color = '#1e293b'}
           >学业诊断</Link>
+          <Link to="/quiz" style={{ fontSize: '1.15rem', fontWeight: 700, color: '#4f46e5', textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.04em', display: 'flex', alignItems: 'center', gap: '0.35rem', transition: 'all 0.2s', padding: '0.25rem 0.75rem', borderRadius: '0.6rem', background: 'rgba(79, 70, 229, 0.08)' }}
+            onMouseEnter={e => e.currentTarget.style.background = 'rgba(79, 70, 229, 0.16)'}
+            onMouseLeave={e => e.currentTarget.style.background = 'rgba(79, 70, 229, 0.08)'}
+          >
+            <span>随堂测验</span>
+            <span style={{ fontSize: '0.75rem', fontWeight: 800, background: '#4f46e5', color: '#fff', padding: '0.1rem 0.4rem', borderRadius: '999px' }}>24通</span>
+          </Link>
         </div>
 
         {/* AI Assistant button — right */}
