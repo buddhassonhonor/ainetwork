@@ -894,11 +894,11 @@ export default function Quiz() {
                   </h1>
                   <button
                     onClick={handleBackToPortal}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-black bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200/80 transition-all cursor-pointer shadow-2xs"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-black bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200/80 transition-all cursor-pointer shadow-2xs"
                     title="点击返回统一入口切换班级"
                   >
                     <span>{classConfig.shortName}</span>
-                    <span className="text-[10px] text-indigo-500 bg-white/80 px-1.5 py-0.2 rounded-md font-bold">切换</span>
+                    <span className="text-[11px] text-indigo-600 bg-white/90 px-1.5 py-0.5 rounded-md font-bold border border-indigo-100">切换</span>
                   </button>
                 </div>
                 <p className="hidden lg:block text-[11px] text-slate-500 font-medium mt-1">
@@ -1261,27 +1261,33 @@ export default function Quiz() {
                   >
                     {/* Question Header */}
                     <div className="flex items-center justify-between gap-4 mb-4 pb-3 border-b border-slate-100">
-                      <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-                        <span className="px-3 py-1 rounded-xl bg-indigo-600 text-white text-xs font-black font-mono shadow-xs">
-                          第 {q.id} 题
+                      <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap">
+                        {/* Question Index Badge - Soft harmonious background with ample breathing room */}
+                        <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-100/90 text-slate-800 border border-slate-200/90 text-xs sm:text-sm font-extrabold font-mono tracking-tight shadow-2xs">
+                          <span className="w-1.5 h-1.5 rounded-full bg-indigo-600"></span>
+                          <span>第 {q.id} 题</span>
                         </span>
-                        <span className="px-3 py-1 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-100">
+
+                        {/* Chapter Badge */}
+                        <span className="inline-flex items-center px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-indigo-50 text-indigo-700 border border-indigo-100/90">
                           {q.chapter}
                         </span>
-                        <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200">
+
+                        {/* Scoring Rule Badge */}
+                        <span className="inline-flex items-center px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-50 text-slate-500 border border-slate-200/70">
                           按比例折算 · 百分制
                         </span>
                       </div>
 
                       {selectedOption ? (
-                        <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/80 flex items-center gap-1.5 shadow-xs">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 stroke-[2.5]" />
-                          已选 [ {selectedOption} ]
+                        <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/80 shadow-2xs">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-600 stroke-[2.5]" />
+                          <span>已选 [ {selectedOption} ]</span>
                         </span>
                       ) : (
-                        <span className="px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200/60 flex items-center gap-1.5">
-                          <HelpCircle className="w-3.5 h-3.5 text-amber-600" />
-                          待作答
+                        <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-amber-50 text-amber-700 border border-amber-200/70 shadow-2xs">
+                          <HelpCircle className="w-4 h-4 text-amber-500" />
+                          <span>待作答</span>
                         </span>
                       )}
                     </div>
@@ -1555,17 +1561,18 @@ export default function Quiz() {
                       }`}
                     >
                       <div className="flex items-start justify-between gap-4 mb-4">
-                        <div className="flex items-center gap-2.5">
+                        <div className="flex items-center gap-2.5 flex-wrap">
                           <span
-                            className={`w-8 h-8 rounded-xl text-xs font-black font-mono flex items-center justify-center ${
+                            className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-extrabold font-mono border shadow-2xs ${
                               isCorrect
-                                ? 'bg-emerald-600 text-white'
-                                : 'bg-rose-600 text-white'
+                                ? 'bg-emerald-50 text-emerald-800 border-emerald-200/90'
+                                : 'bg-rose-50 text-rose-800 border-rose-200/90'
                             }`}
                           >
-                            {q.id}
+                            <span className={`w-1.5 h-1.5 rounded-full ${isCorrect ? 'bg-emerald-500' : 'bg-rose-500'}`}></span>
+                            <span>第 {q.id} 题</span>
                           </span>
-                          <span className="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-600">
+                          <span className="inline-flex items-center px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-slate-100 text-slate-600 border border-slate-200/70">
                             {q.chapter}
                           </span>
                         </div>
