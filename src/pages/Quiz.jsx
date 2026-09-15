@@ -38,6 +38,9 @@ import * as XLSX from 'xlsx';
 import studentsData from '../data/students.json';
 import quizQuestions from '../data/quizQuestions.json';
 
+// Exclude test accounts from class roster / statistics / exports
+const realStudentsData = studentsData.filter((s) => !s.isTest);
+
 // Multi-Quiz Modules definition
 const QUIZ_MODULES = [
   {
@@ -450,12 +453,13 @@ export default function Quiz() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Class Statistics Calculations (for selected quiz)
+  // Class Statistics Calculations (for selected quiz) — excludes test accounts
   const classStats = useMemo(() => {
-    const totalStudents = studentsData.length; // 43
+    const totalStudents = realStudentsData.length; // real students only
     const targetRecords = records.filter((r) => {
       const qid = r.quizId || 'quiz_ch1_ch2';
-      return selectedQuizId === 'all' || qid === selectedQuizId;
+      const isTestRecord = studentsData.find((s) => s.id === r.studentId)?.isTest;
+      return !isTestRecord && (selectedQuizId === 'all' || qid === selectedQuizId);
     });
 
     const submittedStudentIds = new Set(targetRecords.map((r) => r.studentId));
@@ -515,9 +519,9 @@ export default function Quiz() {
     };
   }, [records, selectedQuizId]);
 
-  // Merged Class Roster (all 43 students with submission status for selected quiz)
+  // Merged Class Roster (real students only — excludes test accounts)
   const fullRoster = useMemo(() => {
-    return studentsData.map((s) => {
+    return realStudentsData.map((s) => {
       const studentAttempts = records.filter((r) => {
         const qid = r.quizId || 'quiz_ch1_ch2';
         return r.studentId === s.id && (selectedQuizId === 'all' || qid === selectedQuizId);
@@ -1713,7 +1717,7 @@ export default function Quiz() {
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                   }`}
                 >
-                  全部学生 ({studentsData.length})
+                  全部学生 ({realStudentsData.length})
                 </button>
                 <button
                   onClick={() => setTableStatus('submitted')}
@@ -1723,7 +1727,7 @@ export default function Quiz() {
                       : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
                   }`}
                 >
-                  已完成 ({records.length})
+                  已完成 ({classStats.submittedCount})
                 </button>
                 <button
                   onClick={() => setTableStatus('unsubmitted')}
@@ -1733,7 +1737,7 @@ export default function Quiz() {
                       : 'bg-amber-50 text-amber-700 hover:bg-amber-100'
                   }`}
                 >
-                  未交卷 ({studentsData.length - records.length})
+                  未交卷 ({realStudentsData.length - classStats.submittedCount})
                 </button>
               </div>
             </div>

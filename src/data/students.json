@@ -385,5 +385,15 @@
     "major": "通信工程",
     "grade": "24级",
     "class": "24级通信"
+  },
+  {
+    "id": "test",
+    "name": "test",
+    "gender": "男",
+    "college": "测试账号",
+    "major": "测试账号",
+    "grade": "测试",
+    "class": "测试账号",
+    "isTest": true
   }
 ]
