@@ -106,7 +106,7 @@ const Navbar = ({ isAIOpen, setIsAIOpen }) => {
             onMouseLeave={e => e.currentTarget.style.background = 'rgba(79, 70, 229, 0.08)'}
           >
             <span>随堂测验</span>
-            <span style={{ fontSize: '0.75rem', fontWeight: 800, background: '#4f46e5', color: '#fff', padding: '0.1rem 0.4rem', borderRadius: '999px' }}>24通</span>
+            <span style={{ fontSize: '0.75rem', fontWeight: 800, background: '#4f46e5', color: '#fff', padding: '0.1rem 0.4rem', borderRadius: '999px' }}>多班级</span>
           </Link>
           <Link to="/attendance" style={{ fontSize: '1.05rem', fontWeight: 800, color: '#059669', textDecoration: 'none', letterSpacing: '0.04em', display: 'flex', alignItems: 'center', gap: '0.35rem', transition: 'all 0.2s', padding: '0.25rem 0.85rem', borderRadius: '0.6rem', background: 'rgba(5,150,105,0.08)', border: '1px solid rgba(5,150,105,0.2)' }}
             onMouseEnter={e => { e.currentTarget.style.background = 'rgba(5,150,105,0.18)'; e.currentTarget.style.color = '#047857'; }}

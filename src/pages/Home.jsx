@@ -29,7 +29,7 @@ const Home = () => {
               className="px-8 py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-sky-600 hover:from-indigo-500 hover:to-sky-500 text-white font-bold text-lg shadow-xl shadow-indigo-500/25 transition-all flex items-center gap-2 group"
             >
               <GraduationCap className="w-5 h-5 text-sky-200" />
-              <span>24通信随堂测验入口</span>
+              <span>随堂测验统一入口</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
 

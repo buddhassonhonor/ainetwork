@@ -35,38 +35,14 @@ import {
   FileSpreadsheet
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
-import studentsData from '../data/students.json';
-import quizQuestions from '../data/quizQuestions.json';
+import QuizPortal from '../components/QuizPortal';
+import {
+  CLASSES_CONFIG,
+  getClassConfig,
+  getStudentsForClass,
+  getQuestionsForClass
+} from '../data/classesConfig';
 
-// Exclude test accounts from class roster / statistics / exports
-const realStudentsData = studentsData.filter((s) => !s.isTest);
-
-// Multi-Quiz Modules definition
-const QUIZ_MODULES = [
-  {
-    id: 'quiz_ch1_ch2',
-    title: '随堂测验 1：第1-2章 概述与物理层',
-    shortTitle: '第1次测验_第1-2章',
-    chapters: '第1章 概述 · 第2章 物理层',
-    totalQuestions: 28,
-  },
-  {
-    id: 'quiz_ch3',
-    title: '随堂测验 2：第3章 数据链路层',
-    shortTitle: '第2次测验_第3章',
-    chapters: '第3章 数据链路层与局域网',
-    totalQuestions: 20,
-  },
-  {
-    id: 'quiz_ch4',
-    title: '随堂测验 3：第4章 网络层与IP协议',
-    shortTitle: '第3次测验_第4章',
-    chapters: '第4章 网络层与IP编址路由',
-    totalQuestions: 25,
-  },
-];
-
-const STORAGE_KEY = 'ainetwork_quiz_records_v2';
 const CURRENT_STUDENT_KEY = 'ainetwork_quiz_current_student';
 const DRAFT_ANSWERS_KEY = 'ainetwork_quiz_draft_answers_';
 
@@ -77,41 +53,71 @@ const DRAFT_ANSWERS_KEY = 'ainetwork_quiz_draft_answers_';
 const MASTER_PASSWORD = '5163'; // Teacher authorization password — NEVER shown in UI
 const DEVICE_LOCK_PREFIX = 'ainetwork_device_lock_'; // key: DEVICE_LOCK_PREFIX + quizId
 
-const getDeviceLock = (quizId) => {
+const getDeviceLock = (classId, quizId) => {
   try {
-    const raw = localStorage.getItem(DEVICE_LOCK_PREFIX + quizId);
+    const raw = localStorage.getItem(`${DEVICE_LOCK_PREFIX}${classId}_${quizId}`);
     return raw ? JSON.parse(raw) : null;
   } catch {
     return null;
   }
 };
 
-const saveDeviceLock = (quizId, lockData) => {
+const saveDeviceLock = (classId, quizId, lockData) => {
   try {
-    localStorage.setItem(DEVICE_LOCK_PREFIX + quizId, JSON.stringify(lockData));
-    // Mirror in cookie so clearing localStorage alone doesn't trivially bypass
-    document.cookie = `${DEVICE_LOCK_PREFIX}${quizId}=${encodeURIComponent(JSON.stringify(lockData))};path=/;max-age=604800`; // 7 days
+    localStorage.setItem(`${DEVICE_LOCK_PREFIX}${classId}_${quizId}`, JSON.stringify(lockData));
+    document.cookie = `${DEVICE_LOCK_PREFIX}${classId}_${quizId}=${encodeURIComponent(JSON.stringify(lockData))};path=/;max-age=604800`;
   } catch {
-    // ignore storage errors
+    // ignore
   }
 };
 
-const clearDeviceLock = (quizId) => {
+const clearDeviceLock = (classId, quizId) => {
   try {
-    localStorage.removeItem(DEVICE_LOCK_PREFIX + quizId);
-    document.cookie = `${DEVICE_LOCK_PREFIX}${quizId}=;path=/;max-age=0`;
+    localStorage.removeItem(`${DEVICE_LOCK_PREFIX}${classId}_${quizId}`);
+    document.cookie = `${DEVICE_LOCK_PREFIX}${classId}_${quizId}=;path=/;max-age=0`;
   } catch {
     // ignore
   }
 };
 
 export default function Quiz() {
-  // Navigation / views: 'login' | 'testing' | 'review' | 'records'
-  const [view, setView] = useState('login');
+  const getInitialClassId = () => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const qClass = params.get('class');
+      if (qClass && CLASSES_CONFIG.some((c) => c.id === qClass)) {
+        return qClass;
+      }
+      const saved = localStorage.getItem('ainetwork_quiz_selected_class_id');
+      if (saved && CLASSES_CONFIG.some((c) => c.id === saved)) {
+        return saved;
+      }
+    } catch {}
+    return '24-1';
+  };
+
+  const [currentClassId, setCurrentClassId] = useState(getInitialClassId);
+
+  // Navigation / views: 'portal' | 'login' | 'testing' | 'review' | 'records'
+  const [view, setView] = useState(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('class')) return 'login';
+      const hasPicked = sessionStorage.getItem('ainetwork_class_picked');
+      if (!hasPicked) return 'portal';
+    } catch {}
+    return 'login';
+  });
+
+  const classConfig = useMemo(() => getClassConfig(currentClassId), [currentClassId]);
+  const studentsData = useMemo(() => getStudentsForClass(currentClassId), [currentClassId]);
+  const realStudentsData = useMemo(() => studentsData.filter((s) => !s.isTest), [studentsData]);
+  const quizQuestions = useMemo(() => getQuestionsForClass(currentClassId), [currentClassId]);
+  const QUIZ_MODULES = classConfig.quizModules;
 
   // Multi-quiz state
-  const [currentQuizId, setCurrentQuizId] = useState('quiz_ch1_ch2');
-  const [selectedQuizId, setSelectedQuizId] = useState('quiz_ch1_ch2');
+  const [currentQuizId, setCurrentQuizId] = useState(() => QUIZ_MODULES[0]?.id || 'quiz_ch1_ch2');
+  const [selectedQuizId, setSelectedQuizId] = useState(() => QUIZ_MODULES[0]?.id || 'quiz_ch1_ch2');
 
   // Login inputs
   const [inputName, setInputName] = useState('');
@@ -125,15 +131,16 @@ export default function Quiz() {
 
   // Device Lock modal state
   const [showDeviceLockModal, setShowDeviceLockModal] = useState(false);
-  const [deviceLockInfo, setDeviceLockInfo] = useState(null); // existing lock info
+  const [deviceLockInfo, setDeviceLockInfo] = useState(null);
   const [deviceUnlockPasswordInput, setDeviceUnlockPasswordInput] = useState('');
   const [deviceUnlockError, setDeviceUnlockError] = useState('');
-  const [pendingLoginStudent, setPendingLoginStudent] = useState(null); // student who triggered the lock check
+  const [pendingLoginStudent, setPendingLoginStudent] = useState(null);
 
   // Current authenticated student
   const [currentStudent, setCurrentStudent] = useState(() => {
     try {
-      const saved = localStorage.getItem(CURRENT_STUDENT_KEY);
+      const initialCls = getInitialClassId();
+      const saved = localStorage.getItem(`${CURRENT_STUDENT_KEY}_${initialCls}`) || localStorage.getItem(CURRENT_STUDENT_KEY);
       return saved ? JSON.parse(saved) : null;
     } catch {
       return null;
@@ -147,40 +154,72 @@ export default function Quiz() {
   const [showConfirmSubmit, setShowConfirmSubmit] = useState(false);
 
   // Review state
-  const [reviewFilter, setReviewFilter] = useState('all'); // 'all' | 'wrong' | 'correct'
+  const [reviewFilter, setReviewFilter] = useState('all');
   const [activeReviewRecord, setActiveReviewRecord] = useState(null);
 
   // Records state
-  const [records, setRecords] = useState(() => {
+  const getClassStorageKey = (clsId) => `ainetwork_quiz_records_${clsId}_v2`;
+
+  const loadClassRecords = (clsId) => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
+      const key = getClassStorageKey(clsId);
+      const saved = localStorage.getItem(key);
+      if (saved) return JSON.parse(saved);
+      if (clsId === '24-1') {
+        const legacy = localStorage.getItem('ainetwork_quiz_records_v2');
+        if (legacy) return JSON.parse(legacy);
+      }
+    } catch {}
+    return [];
+  };
+
+  const [records, setRecords] = useState(() => loadClassRecords(getInitialClassId()));
 
   // Table filters for records
   const [tableSearch, setTableSearch] = useState('');
-  const [tableStatus, setTableStatus] = useState('all'); // 'all' | 'submitted' | 'unsubmitted'
+  const [tableStatus, setTableStatus] = useState('all');
 
-  // Timer interval
+  // Handle selecting a class from Portal
+  const handleSelectClass = (clsId) => {
+    setCurrentClassId(clsId);
+    localStorage.setItem('ainetwork_quiz_selected_class_id', clsId);
+    sessionStorage.setItem('ainetwork_class_picked', 'true');
+    setView('login');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Switch class effect
   useEffect(() => {
-    let interval = null;
-    if (timerActive) {
-      interval = setInterval(() => {
-        setTimerSeconds((prev) => prev + 1);
-      }, 1000);
-    } else {
-      clearInterval(interval);
+    const loaded = loadClassRecords(currentClassId);
+    setRecords(loaded);
+    const cfg = getClassConfig(currentClassId);
+    if (cfg && cfg.quizModules && cfg.quizModules.length > 0) {
+      setCurrentQuizId(cfg.quizModules[0].id);
+      setSelectedQuizId(cfg.quizModules[0].id);
     }
-    return () => clearInterval(interval);
-  }, [timerActive]);
+    const studentSaved = localStorage.getItem(`${CURRENT_STUDENT_KEY}_${currentClassId}`);
+    if (studentSaved) {
+      try {
+        setCurrentStudent(JSON.parse(studentSaved));
+      } catch {
+        setCurrentStudent(null);
+      }
+    } else {
+      setCurrentStudent(null);
+    }
+    setInputName('');
+    setInputId('');
+    setLoginError('');
+  }, [currentClassId]);
 
   // Sync records to localStorage
   const saveRecords = (newRecords) => {
     setRecords(newRecords);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(newRecords));
+    const key = getClassStorageKey(currentClassId);
+    localStorage.setItem(key, JSON.stringify(newRecords));
+    if (currentClassId === '24-1') {
+      localStorage.setItem('ainetwork_quiz_records_v2', JSON.stringify(newRecords));
+    }
   };
 
   const currentQuizModule = useMemo(() => {
@@ -250,15 +289,16 @@ export default function Quiz() {
     );
 
     if (!matched) {
+      const sample = realStudentsData[0] || { id: '240307001', name: '高鹏远' };
       setLoginError(
-        `未在 2024级通信工程1班 名单中匹配到此信息。请核对学号（例如 240307001）与姓名（例如 高鹏远）是否准确！`
+        `未在【${classConfig.name}】名单中匹配到此信息。请核对学号（例如 ${sample.id}）与姓名（例如 ${sample.name}）是否准确！`
       );
       return;
     }
 
     // ===== DEVICE LOCK CHECK =====
     // Check if this machine is already locked to a DIFFERENT student
-    const lock = getDeviceLock(currentQuizId);
+    const lock = getDeviceLock(currentClassId, currentQuizId);
     if (lock && lock.studentId !== matched.id) {
       // Machine locked by another student — trigger device lock modal
       setDeviceLockInfo(lock);
@@ -271,7 +311,7 @@ export default function Quiz() {
 
     // Either no lock, or same student logging in again — proceed normally
     setCurrentStudent(matched);
-    localStorage.setItem(CURRENT_STUDENT_KEY, JSON.stringify(matched));
+    localStorage.setItem(`${CURRENT_STUDENT_KEY}_${currentClassId}`, JSON.stringify(matched));
 
     // Check if previously submitted
     const existing = records.find(
@@ -292,7 +332,7 @@ export default function Quiz() {
     if (e) e.preventDefault();
     if (deviceUnlockPasswordInput.trim() === MASTER_PASSWORD) {
       // Unlock: rebind device lock to the new student
-      saveDeviceLock(currentQuizId, {
+      saveDeviceLock(currentClassId, currentQuizId, {
         studentId: pendingLoginStudent.id,
         studentName: pendingLoginStudent.name,
         lockedAt: new Date().toISOString(),
@@ -308,7 +348,7 @@ export default function Quiz() {
       setDeviceLockInfo(null);
 
       setCurrentStudent(student);
-      localStorage.setItem(CURRENT_STUDENT_KEY, JSON.stringify(student));
+      localStorage.setItem(`${CURRENT_STUDENT_KEY}_${currentClassId}`, JSON.stringify(student));
 
       const existing = records.find(
         (r) => r.studentId === student.id && (r.quizId || 'quiz_ch1_ch2') === currentQuizId
@@ -442,7 +482,7 @@ export default function Quiz() {
 
     // ===== SAVE DEVICE LOCK =====
     // Lock this machine to the current student for this quiz
-    saveDeviceLock(currentQuizId, {
+    saveDeviceLock(currentClassId, currentQuizId, {
       studentId: currentStudent.id,
       studentName: currentStudent.name,
       lockedAt: new Date().toISOString(),
@@ -660,7 +700,7 @@ export default function Quiz() {
   const handleExportExcel = () => {
     const dateStr = new Date().toISOString().slice(0, 10);
     const cleanTitle = (selectedQuizModule.shortTitle || '全课程测验').replace(/[()（）]/g, '_');
-    const fileName = `2024级通信1班_${cleanTitle}_成绩单_${dateStr}.xlsx`;
+    const fileName = `${classConfig.shortName}_${cleanTitle}_成绩单_${dateStr}.xlsx`;
 
     // 1. Sheet 1: Best score per student
     const sheet1Data = fullRoster.map((item) => ({
@@ -688,7 +728,7 @@ export default function Quiz() {
       '测验场次': r.quizTitle || selectedQuizModule.title,
       '学号': r.studentId,
       '姓名': r.studentName,
-      '班级': r.class || '2024级通信工程1班',
+      '班级': r.class || classConfig.name,
       '作答轮次': `第 ${r.attempt || 1} 次作答`,
       '得分(满分100)': r.score,
       '答对题数': `${r.correctCount}/${r.totalQuestions}`,
@@ -804,13 +844,21 @@ export default function Quiz() {
   const totalCount = quizQuestions.length;
   const progressPercent = Math.round((answeredCount / totalCount) * 100);
 
+  if (view === 'portal') {
+    return (
+      <QuizPortal
+        onSelectClass={handleSelectClass}
+        selectedClassId={currentClassId}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-100 via-slate-50 to-indigo-50/20 text-slate-900 pb-24 relative selection:bg-indigo-500 selection:text-white">
       {/* Decorative Ambient Lighting in Background */}
       <div className="fixed top-12 left-1/4 w-[480px] h-[480px] bg-indigo-500/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
       <div className="fixed bottom-12 right-1/4 w-[480px] h-[480px] bg-sky-400/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
 
-      {/* DEDICATED QUIZ SYSTEM NAVBAR (REPLACES ORIGINAL SITE MENU) */}
       {/* DEDICATED QUIZ SYSTEM NAVBAR (REPLACES ORIGINAL SITE MENU) */}
       <header className="sticky top-0 z-50 bg-white/98 backdrop-blur-xl border-b border-slate-200/90 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-18 flex items-center justify-between gap-3">
@@ -823,14 +871,19 @@ export default function Quiz() {
               <div>
                 <div className="flex items-center gap-2">
                   <h1 className="text-sm sm:text-base md:text-lg font-black text-slate-900 tracking-tight leading-none whitespace-nowrap">
-                    计算机网络 · 随堂测验系统
+                    {classConfig.courseShortName} · 随堂测验
                   </h1>
-                  <span className="hidden md:inline-block px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-indigo-50 text-indigo-700 border border-indigo-200/80">
-                    24级通信工程1班
-                  </span>
+                  <button
+                    onClick={() => setView('portal')}
+                    className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-black bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200/80 transition-all cursor-pointer shadow-2xs"
+                    title="点击返回统一入口切换班级"
+                  >
+                    <span>{classConfig.shortName}</span>
+                    <span className="text-[10px] text-indigo-500 bg-white/80 px-1.5 py-0.2 rounded-md font-bold">切换</span>
+                  </button>
                 </div>
                 <p className="hidden lg:block text-[11px] text-slate-500 font-medium mt-1">
-                  范围：第1章 概述（体系结构/性能指标）+ 第2章 物理层（信道/调制/介质）
+                  {classConfig.name} · {classConfig.courseName}
                 </p>
               </div>
             </div>
@@ -838,6 +891,14 @@ export default function Quiz() {
 
           {/* Right Action Switchers */}
           <div className="flex items-center gap-2.5">
+            <button
+              onClick={() => setView('portal')}
+              className="px-3 py-2 rounded-xl text-xs sm:text-sm font-bold bg-indigo-50 text-indigo-600 hover:bg-indigo-100 border border-indigo-100/80 flex items-center gap-1.5 transition-all cursor-pointer"
+              title="返回统一入口选择班级"
+            >
+              <Layers className="w-4 h-4 text-indigo-600" />
+              <span className="hidden md:inline">班级大厅</span>
+            </button>
             {view === 'testing' && currentStudent && (
               <>
                 {/* Real-time Clock */}
@@ -992,14 +1053,24 @@ export default function Quiz() {
                   <User className="w-8 h-8" />
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-                  学生身份验证登录
+                  {classConfig.name}
                 </h2>
                 <p className="text-sm text-slate-500 mt-2 leading-relaxed">
-                  请输入您的姓名与学号，验证后立即开始计算机网络随堂单选题测验
+                  请输入您的姓名与学号，验证后立即开始【{classConfig.courseShortName}】随堂测验
                 </p>
-                <div className="mt-4 inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-bold">
-                  <ShieldCheck className="w-4 h-4 text-indigo-600" />
-                  核验库：2024级通信工程1班（共43名选课学生）
+                <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+                  <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-bold">
+                    <ShieldCheck className="w-4 h-4 text-indigo-600" />
+                    核验库：{classConfig.shortName}（共 {realStudentsData.length} 名在籍学生）
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setView('portal')}
+                    className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 text-xs font-bold transition-all cursor-pointer border border-slate-200"
+                  >
+                    <span>切换班级</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
                 </div>
               </div>
 
@@ -1033,7 +1104,7 @@ export default function Quiz() {
                       defaultValue=""
                     >
                       <option value="" disabled>
-                        点选名单快速填入 (43人)...
+                        点选名单快速填入 ({realStudentsData.length}人)...
                       </option>
                       {studentsData.map((s) => (
                         <option key={s.id} value={s.id}>
@@ -1047,7 +1118,7 @@ export default function Quiz() {
                     type="text"
                     value={inputName}
                     onChange={(e) => setInputName(e.target.value)}
-                    placeholder="请输入姓名，例如：高鹏远 或 吴佳浩"
+                    placeholder={`请输入姓名，例如：${realStudentsData[0]?.name || '姓名'}`}
                     className="w-full px-4.5 py-3.5 rounded-2xl border-2 border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 outline-none text-slate-900 font-bold transition-all text-sm bg-slate-50/50 focus:bg-white"
                     required
                   />
@@ -1062,7 +1133,7 @@ export default function Quiz() {
                     type="text"
                     value={inputId}
                     onChange={(e) => setInputId(e.target.value)}
-                    placeholder="请输入学号，例如：240307001 或 230801062"
+                    placeholder={`请输入学号，例如：${realStudentsData[0]?.id || '学号'}`}
                     className="w-full px-4.5 py-3.5 rounded-2xl border-2 border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 outline-none text-slate-900 font-mono font-bold transition-all text-sm bg-slate-50/50 focus:bg-white"
                     required
                   />
@@ -1527,10 +1598,10 @@ export default function Quiz() {
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
               <div>
                 <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
-                  2024级通信工程1班 · 测验成绩总榜
+                  {classConfig.name} · 测验成绩总榜
                 </h2>
                 <p className="text-xs text-slate-500 mt-1">
-                  物理与信息工程学院
+                  物理与信息工程学院 · {classConfig.courseName}
                 </p>
               </div>
 
