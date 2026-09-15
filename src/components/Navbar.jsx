@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
 import { Network } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Navbar = ({ isAIOpen, setIsAIOpen }) => {
   const [hidden, setHidden] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { scrollY } = useScroll();
+  const location = useLocation();
+  const isAttendancePage = location.pathname.startsWith('/attendance');
+  if (isAttendancePage) return null;
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = scrollY.getPrevious();
@@ -104,6 +107,13 @@ const Navbar = ({ isAIOpen, setIsAIOpen }) => {
           >
             <span>随堂测验</span>
             <span style={{ fontSize: '0.75rem', fontWeight: 800, background: '#4f46e5', color: '#fff', padding: '0.1rem 0.4rem', borderRadius: '999px' }}>24通</span>
+          </Link>
+          <Link to="/attendance" style={{ fontSize: '1.05rem', fontWeight: 800, color: '#059669', textDecoration: 'none', letterSpacing: '0.04em', display: 'flex', alignItems: 'center', gap: '0.35rem', transition: 'all 0.2s', padding: '0.25rem 0.85rem', borderRadius: '0.6rem', background: 'rgba(5,150,105,0.08)', border: '1px solid rgba(5,150,105,0.2)' }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(5,150,105,0.18)'; e.currentTarget.style.color = '#047857'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(5,150,105,0.08)'; e.currentTarget.style.color = '#059669'; }}
+          >
+            <span>📋</span>
+            <span>统计登录</span>
           </Link>
         </div>
 

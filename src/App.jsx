@@ -7,6 +7,7 @@ import KnowledgeGraph from './pages/KnowledgeGraph';
 import Dashboard from './pages/Dashboard';
 import Tools from './pages/Tools';
 import Quiz from './pages/Quiz';
+import Attendance from './pages/Attendance';
 import AIAssistant from './components/AIAssistant';
 import { Network, MessageCircle, Mail, Share2 } from 'lucide-react';
 
@@ -17,7 +18,8 @@ function AppContent() {
   const isQuizPage =
     location.pathname.startsWith('/quiz') ||
     location.pathname.startsWith('/exam') ||
-    location.pathname.startsWith('/test');
+    location.pathname.startsWith('/test') ||
+    location.pathname.startsWith('/attendance');
 
   return (
     <div className="min-h-screen selection:bg-indigo-500 selection:text-white">
@@ -33,6 +35,7 @@ function AppContent() {
           <Route path="/quiz" element={<Quiz />} />
           <Route path="/exam" element={<Quiz />} />
           <Route path="/test" element={<Quiz />} />
+          <Route path="/attendance" element={<Attendance />} />
         </Routes>
       </main>
 

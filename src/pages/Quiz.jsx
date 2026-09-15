@@ -1535,11 +1535,11 @@ export default function Quiz() {
             {/* Header / Actions */}
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
               <div>
-                <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+                <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
                   2024级通信工程1班 · 测验成绩总榜
                 </h2>
                 <p className="text-xs text-slate-500 mt-1">
-                  物理与信息工程学院 · 数据实时自动持久化 · 支持多次测验与历次作答追溯
+                  物理与信息工程学院
                 </p>
               </div>
 
@@ -1573,17 +1573,6 @@ export default function Quiz() {
                 >
                   <FileSpreadsheet className="w-4 h-4" />
                   <span>导出 Excel 成绩单 (.xlsx)</span>
-                </button>
-
-                {/* Export CSV (.csv) */}
-                <button
-                  id="btn-export-csv"
-                  onClick={handleExportCSV}
-                  className="px-3.5 py-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-bold text-xs sm:text-sm shadow-xs flex items-center gap-1.5 transition-all cursor-pointer"
-                  title="导出标准 UTF-8 CSV 格式"
-                >
-                  <Download className="w-4 h-4 text-slate-500" />
-                  <span>导出 CSV</span>
                 </button>
 
                 <button
