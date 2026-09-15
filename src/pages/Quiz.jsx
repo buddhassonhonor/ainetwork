@@ -42,7 +42,9 @@ import Attendance from './Attendance';
 import {
   fetchQuizRecords,
   saveSingleQuizRecord,
-  recordStudentLogin
+  recordStudentLogin,
+  fetchOfficialScores,
+  saveOfficialScores
 } from '../utils/syncStorage';
 import {
   CLASSES_CONFIG,
@@ -204,25 +206,67 @@ export default function Quiz() {
   const [serverSyncStatus, setServerSyncStatus] = useState({ online: true, lastSync: null });
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  // Synchronize records from central server API
-  const refreshRecordsFromServer = useCallback(async (clsId = currentClassId) => {
+  // Official Master Score Sheet State ("唯一成绩单")
+  const [officialSheet, setOfficialSheet] = useState(null);
+  const [showOfficialModal, setShowOfficialModal] = useState(false);
+  const [officialPasswordInput, setOfficialPasswordInput] = useState('');
+  const [officialModalError, setOfficialModalError] = useState('');
+  const [isSavingOfficial, setIsSavingOfficial] = useState(false);
+  const [officialSuccessToast, setOfficialSuccessToast] = useState(null);
+
+  // Synchronize records and official master score sheet from central server API
+  const refreshRecordsFromServer = useCallback(async (clsId = currentClassId, qId = selectedQuizId) => {
     setIsRefreshing(true);
     try {
+      // 1. Fetch live quiz records from central server
       const serverRecords = await fetchQuizRecords(clsId);
-      if (serverRecords && Array.isArray(serverRecords)) {
-        setRecords(serverRecords);
-        setServerSyncStatus({
-          online: true,
-          lastSync: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })
+
+      // 2. Fetch official archived score sheet for the selected quiz
+      const actualQid = qId === 'all' ? (QUIZ_MODULES[0]?.id || 'quiz_ch1_ch2') : qId;
+      const officialData = await fetchOfficialScores(clsId, actualQid);
+      setOfficialSheet(officialData || null);
+
+      // 3. Merging strategy:
+      // If official scores exist, ensure those records are included in the active records
+      // so opening in a new computer or fresh browser NEVER presents a blank scoreboard!
+      let finalRecords = Array.isArray(serverRecords) ? [...serverRecords] : [];
+      if (officialData && Array.isArray(officialData.records) && officialData.records.length > 0) {
+        const keyMap = new Map();
+        finalRecords.forEach((r) => {
+          const k = `${r.studentId}_${r.quizId || 'quiz_ch1_ch2'}_${r.attempt || 1}`;
+          keyMap.set(k, r);
         });
+        officialData.records.forEach((r) => {
+          const k = `${r.studentId}_${r.quizId || 'quiz_ch1_ch2'}_${r.attempt || 1}`;
+          if (!keyMap.has(k)) {
+            keyMap.set(k, r);
+          }
+        });
+        finalRecords = Array.from(keyMap.values());
       }
+
+      if (finalRecords.length > 0 || (serverRecords && Array.isArray(serverRecords))) {
+        setRecords(finalRecords);
+        const key = getClassStorageKey(clsId);
+        try {
+          localStorage.setItem(key, JSON.stringify(finalRecords));
+          if (clsId === '24-1') {
+            localStorage.setItem('ainetwork_quiz_records_v2', JSON.stringify(finalRecords));
+          }
+        } catch {}
+      }
+
+      setServerSyncStatus({
+        online: true,
+        lastSync: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })
+      });
     } catch (e) {
       console.error('Failed to sync records from server:', e);
       setServerSyncStatus(prev => ({ ...prev, online: false }));
     } finally {
       setIsRefreshing(false);
     }
-  }, [currentClassId]);
+  }, [currentClassId, selectedQuizId, QUIZ_MODULES]);
 
   // Table filters for records
   const [tableSearch, setTableSearch] = useState('');
@@ -269,15 +313,15 @@ export default function Quiz() {
     setLoginError('');
   }, [currentClassId, refreshRecordsFromServer]);
 
-  // Periodic auto-sync on scoreboard page
+  // Periodic auto-sync on scoreboard page & when selectedQuizId changes
   useEffect(() => {
     if (view !== 'records') return;
-    refreshRecordsFromServer(currentClassId);
+    refreshRecordsFromServer(currentClassId, selectedQuizId);
     const interval = setInterval(() => {
-      refreshRecordsFromServer(currentClassId);
+      refreshRecordsFromServer(currentClassId, selectedQuizId);
     }, 6000);
     return () => clearInterval(interval);
-  }, [view, currentClassId, refreshRecordsFromServer]);
+  }, [view, currentClassId, selectedQuizId, refreshRecordsFromServer]);
 
   // Sync records to localStorage
   const saveRecords = (newRecords) => {
@@ -669,6 +713,17 @@ export default function Quiz() {
     };
   }, [records, selectedQuizId]);
 
+  // Official sheet student lookup map
+  const officialMap = useMemo(() => {
+    const map = new Map();
+    if (officialSheet && Array.isArray(officialSheet.records)) {
+      officialSheet.records.forEach((r) => {
+        map.set(r.studentId, r);
+      });
+    }
+    return map;
+  }, [officialSheet]);
+
   // Merged Class Roster (real students only — excludes test accounts)
   const fullRoster = useMemo(() => {
     return realStudentsData.map((s) => {
@@ -687,15 +742,97 @@ export default function Quiz() {
             )
           : null;
 
+      const isArchived = officialMap.has(s.id);
+      const offRecord = officialMap.get(s.id);
+      const isUnmerged = Boolean(
+        attemptsCount > 0 &&
+        (!isArchived ||
+          (bestRecord && offRecord && (bestRecord.score > offRecord.score || (bestRecord.attempt || 1) > (offRecord.attempt || 1))))
+      );
+
       return {
         ...s,
         hasSubmitted: attemptsCount > 0,
         attemptsCount,
         allAttempts: studentAttempts,
         record: bestRecord,
+        isOfficiallyArchived: isArchived,
+        isUnmerged,
+        officialRecord: offRecord,
       };
     });
-  }, [records, selectedQuizId]);
+  }, [realStudentsData, records, selectedQuizId, officialMap]);
+
+  // Detect students who submitted or retook after official sheet was locked
+  const unmergedSubmissions = useMemo(() => {
+    if (!officialSheet) return [];
+    const diffs = [];
+    fullRoster.forEach((student) => {
+      if (!student.hasSubmitted || !student.record) return;
+      const off = officialMap.get(student.id);
+      if (!off) {
+        diffs.push({ student, reason: 'new', currentRecord: student.record });
+      } else if (
+        student.record.score > off.score ||
+        (student.record.attempt || 1) > (off.attempt || 1) ||
+        student.record.submittedAt !== off.submittedAt
+      ) {
+        diffs.push({ student, reason: 'retake', currentRecord: student.record, officialRecord: off });
+      }
+    });
+    return diffs;
+  }, [officialSheet, fullRoster, officialMap]);
+
+  // Handle opening official score modal
+  const handleOpenOfficialModal = () => {
+    setOfficialPasswordInput('');
+    setOfficialModalError('');
+    setShowOfficialModal(true);
+  };
+
+  // Handle teacher confirmation with password 5163 to archive official master score sheet
+  const handleConfirmOfficialScores = async (e) => {
+    if (e) e.preventDefault();
+    const cleanPwd = officialPasswordInput.trim();
+    if (cleanPwd !== MASTER_PASSWORD) {
+      setOfficialModalError('授权密码错误，请输入任课教师管理密码 5163！');
+      return;
+    }
+
+    const actualQid = selectedQuizId === 'all' ? (QUIZ_MODULES[0]?.id || 'quiz_ch1_ch2') : selectedQuizId;
+
+    // Collect best submitted record for each submitted real student for this quiz
+    const recordsToArchive = fullRoster
+      .filter((s) => s.hasSubmitted && s.record)
+      .map((s) => s.record);
+
+    if (recordsToArchive.length === 0) {
+      setOfficialModalError('当前尚无学生交卷记录，无法归档为空成绩单！');
+      return;
+    }
+
+    setIsSavingOfficial(true);
+    setOfficialModalError('');
+
+    try {
+      const res = await saveOfficialScores(currentClassId, actualQid, recordsToArchive, cleanPwd);
+      if (res && res.success) {
+        setOfficialSheet(res.official);
+        setShowOfficialModal(false);
+        setOfficialPasswordInput('');
+        setOfficialSuccessToast(`✅ 官方唯一成绩单已成功确认并锁定归档！（共 ${recordsToArchive.length} 人，时间：${res.official.savedAt}）`);
+        setTimeout(() => setOfficialSuccessToast(null), 6000);
+        // Sync latest records
+        refreshRecordsFromServer(currentClassId, actualQid);
+      } else {
+        setOfficialModalError(res?.error || '保存官方成绩单失败，请检查网络或服务器');
+      }
+    } catch (err) {
+      setOfficialModalError('保存失败：' + err.message);
+    } finally {
+      setIsSavingOfficial(false);
+    }
+  };
 
   // Filtered Roster for Table
   const filteredRoster = useMemo(() => {
@@ -1890,6 +2027,113 @@ export default function Quiz() {
               </div>
             </div>
 
+            {/* Official Master Score Sheet Status Banner */}
+            <div className="space-y-3">
+              {officialSuccessToast && (
+                <div className="p-4 rounded-2xl bg-emerald-50 border-2 border-emerald-300 text-emerald-900 font-bold text-xs sm:text-sm flex items-center justify-between shadow-sm">
+                  <div className="flex items-center gap-2.5">
+                    <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                    <span>{officialSuccessToast}</span>
+                  </div>
+                  <button
+                    onClick={() => setOfficialSuccessToast(null)}
+                    className="text-xs text-emerald-700 hover:text-emerald-900 font-extrabold cursor-pointer"
+                  >
+                    ✕
+                  </button>
+                </div>
+              )}
+
+              {officialSheet ? (
+                <div className="p-5 sm:p-6 rounded-3xl bg-gradient-to-br from-emerald-50/90 via-white to-slate-50 border-2 border-emerald-300/90 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-emerald-600/30">
+                      <ShieldCheck className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <h3 className="text-base sm:text-lg font-black text-slate-900">
+                          🏆 官方唯一成绩单已确认归档
+                        </h3>
+                        <span className="text-[11px] font-black text-emerald-800 bg-emerald-100 border border-emerald-300 px-2.5 py-0.5 rounded-full">
+                          任课教师密码已锁定 · 权威最终结果
+                        </span>
+                      </div>
+                      <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                        归档时间：<span className="font-mono font-bold text-slate-800">{officialSheet.savedAt}</span> · 官方在册交卷人数：<span className="font-mono font-bold text-emerald-700">{officialSheet.count} 人</span> · 换任何电脑或浏览器均以此成绩单为准，永不空白
+                      </p>
+
+                      {unmergedSubmissions.length > 0 && (
+                        <div className="mt-2.5 inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 text-xs font-bold">
+                          <AlertCircle className="w-4 h-4 text-amber-600 flex-shrink-0 animate-bounce" />
+                          <span>
+                            检测到有 <strong className="text-rose-600">{unmergedSubmissions.length}</strong> 名同学新交卷/补做（如：{unmergedSubmissions.slice(0, 3).map((u) => u.student.name).join('、')}{unmergedSubmissions.length > 3 ? '等' : ''}），尚未正式合入官方成绩单。
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-2.5 self-stretch md:self-auto justify-end">
+                    {unmergedSubmissions.length > 0 ? (
+                      <button
+                        id="btn-update-official-scores"
+                        onClick={handleOpenOfficialModal}
+                        className="w-full sm:w-auto px-4.5 py-2.5 rounded-2xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white font-black text-xs sm:text-sm shadow-md shadow-amber-600/25 flex items-center justify-center gap-2 transition-all cursor-pointer hover:scale-102"
+                        title="教师输入密码5163，将补做学生的最新成绩合入官方成绩单"
+                      >
+                        <Lock className="w-4 h-4" />
+                        <span>输入密码 5163 确认更新官方成绩单 ({unmergedSubmissions.length}人待合入)</span>
+                      </button>
+                    ) : (
+                      <button
+                        id="btn-rearchive-official-scores"
+                        onClick={handleOpenOfficialModal}
+                        className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs hover:border-emerald-400"
+                        title="教师重新核定并更新归档官方成绩单"
+                      >
+                        <Lock className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>重新核定/更新官方成绩单 (密码5163)</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className="p-5 sm:p-6 rounded-3xl bg-gradient-to-br from-indigo-50/90 via-sky-50/40 to-white border-2 border-indigo-200 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-indigo-600/30">
+                      <ShieldAlert className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <h3 className="text-base sm:text-lg font-black text-slate-900">
+                          ⚠️ 本测验尚未锁定官方唯一成绩单
+                        </h3>
+                        <span className="text-[11px] font-black text-indigo-800 bg-indigo-100 border border-indigo-300 px-2.5 py-0.5 rounded-full">
+                          当前为实时提交榜单 · 待教师归档确认
+                        </span>
+                      </div>
+                      <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                        为保证成绩永久有效，防止更换浏览器或电脑时榜单为空，请任课教师核实学生交卷后，输入管理密码 <strong className="text-indigo-700 font-mono">5163</strong> 确认成绩榜单并保存为本卷唯一成绩单。
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="self-stretch md:self-auto flex justify-end">
+                    <button
+                      id="btn-archive-official-scores"
+                      onClick={handleOpenOfficialModal}
+                      className="w-full sm:w-auto px-5 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs sm:text-sm shadow-md shadow-indigo-600/25 flex items-center justify-center gap-2 transition-all cursor-pointer hover:scale-102"
+                      title="教师输入密码5163，确认成绩榜单并保存记录为本测试卷的唯一成绩单"
+                    >
+                      <Lock className="w-4 h-4" />
+                      <span>确认成绩榜单并保存为唯一成绩单 (密码5163)</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
             {/* Metrics Overview Cards */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="bg-white rounded-3xl p-5 border-2 border-slate-200/80 shadow-sm">
@@ -2081,10 +2325,21 @@ export default function Quiz() {
                           </td>
                           <td className="px-4 py-3.5">
                             {student.hasSubmitted ? (
-                              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200/70">
-                                <Check className="w-3 h-3 stroke-[3]" />
-                                已完成
-                              </span>
+                              <div className="flex flex-col gap-1 items-start">
+                                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200/70">
+                                  <Check className="w-3 h-3 stroke-[3]" />
+                                  已完成
+                                </span>
+                                {student.isUnmerged ? (
+                                  <span className="text-[10px] font-bold text-amber-700 bg-amber-100/90 border border-amber-300 px-1.5 py-0.5 rounded-md inline-block animate-pulse" title="该生有补做或新交卷成绩，待教师输入5163合入官方成绩单">
+                                    待确认合入
+                                  </span>
+                                ) : student.isOfficiallyArchived ? (
+                                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100/90 border border-emerald-300 px-1.5 py-0.5 rounded-md inline-block" title="该成绩已锁定在官方唯一成绩单">
+                                    官方在册
+                                  </span>
+                                ) : null}
+                              </div>
                             ) : (
                               <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-400">
                                 未交卷
@@ -2381,6 +2636,124 @@ export default function Quiz() {
                 >
                   <Lock className="w-4 h-4" />
                   教师授权解锁
+                </button>
+              </div>
+            </form>
+          </motion.div>
+        </div>
+      )}
+
+      {/* OFFICIAL MASTER SCORE SHEET CONFIRMATION MODAL (TEACHER PASSWORD: 5163) */}
+      {showOfficialModal && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
+          <motion.div
+            initial={{ scale: 0.92, opacity: 0, y: 10 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            className="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl border-2 border-emerald-200"
+          >
+            <div className="flex items-start gap-4 mb-5">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/30">
+                <ShieldCheck className="w-7 h-7" />
+              </div>
+              <div>
+                <h3 className="text-xl font-black text-slate-900 leading-tight">
+                  教师密码授权 · 归档官方唯一成绩单
+                </h3>
+                <p className="text-xs text-emerald-700 font-bold mt-1">
+                  任课教师权威核定 · 持久化归档到中央服务器
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 mb-4 text-xs space-y-2 text-slate-700">
+              <div className="flex justify-between">
+                <span className="text-slate-500">归档班级：</span>
+                <span className="font-black text-slate-900">{classConfig.name}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">归档测试卷：</span>
+                <span className="font-black text-indigo-700">
+                  {QUIZ_MODULES.find((m) => m.id === (selectedQuizId === 'all' ? QUIZ_MODULES[0]?.id : selectedQuizId))?.title || selectedQuizId}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">当前已交卷人数：</span>
+                <span className="font-mono font-bold text-emerald-700">
+                  {fullRoster.filter((s) => s.hasSubmitted).length} / {realStudentsData.length} 人
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">当前班级平均分：</span>
+                <span className="font-mono font-bold text-slate-900">{classStats.avgScore} 分</span>
+              </div>
+            </div>
+
+            {unmergedSubmissions.length > 0 && (
+              <div className="bg-amber-50 border border-amber-200 rounded-2xl p-3.5 mb-4 text-xs text-amber-900">
+                <div className="font-bold flex items-center gap-1.5 mb-1.5 text-amber-800">
+                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                  <span>本次将合入以下 {unmergedSubmissions.length} 名补做/新提交学生成绩：</span>
+                </div>
+                <div className="max-h-24 overflow-y-auto space-y-1 font-mono text-[11px] text-amber-950 pl-2">
+                  {unmergedSubmissions.map((u, i) => (
+                    <div key={u.student.id}>
+                      {i + 1}. {u.student.name} ({u.student.id}) · {u.currentRecord?.score}分 (第{u.currentRecord?.attempt || 1}次作答)
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <p className="text-xs text-slate-500 leading-relaxed mb-4">
+              🔒 确认后，当前成绩单将作为本测试卷在服务器上的<strong>唯一官方最终结果</strong>永久存储。后续换任何电脑、手机或其它浏览器打开，榜单都将完整呈现，绝不会出现空白。
+            </p>
+
+            <form onSubmit={handleConfirmOfficialScores} className="space-y-4">
+              <div>
+                <label className="block text-xs font-black text-slate-700 uppercase tracking-wider mb-1.5">
+                  请输入任课教师管理密码：
+                </label>
+                <input
+                  id="official-password-input"
+                  type="password"
+                  value={officialPasswordInput}
+                  onChange={(e) => {
+                    setOfficialPasswordInput(e.target.value);
+                    if (officialModalError) setOfficialModalError('');
+                  }}
+                  placeholder="请输入教师管理密码 (5163)"
+                  autoFocus
+                  className="w-full px-4.5 py-3.5 rounded-2xl border-2 border-slate-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none text-slate-900 font-bold transition-all text-sm bg-slate-50/50 focus:bg-white"
+                />
+                {officialModalError && (
+                  <p className="text-xs font-bold text-rose-600 mt-2 flex items-center gap-1">
+                    <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
+                    <span>{officialModalError}</span>
+                  </p>
+                )}
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-2">
+                <button
+                  id="btn-cancel-official-confirm"
+                  type="button"
+                  onClick={() => {
+                    setShowOfficialModal(false);
+                    setOfficialPasswordInput('');
+                    setOfficialModalError('');
+                  }}
+                  className="px-5 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 font-bold text-sm transition-all cursor-pointer"
+                >
+                  取消
+                </button>
+                <button
+                  id="btn-submit-official-confirm"
+                  type="submit"
+                  disabled={isSavingOfficial}
+                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-sm transition-all shadow-md shadow-emerald-600/20 cursor-pointer flex items-center gap-2 disabled:opacity-50"
+                >
+                  <ShieldCheck className="w-4 h-4" />
+                  <span>{isSavingOfficial ? '正在归档保存...' : '确认并保存为唯一成绩单'}</span>
                 </button>
               </div>
             </form>

@@ -79,7 +79,7 @@ export function getServerStatus() {
 /**
  * Generic helper to make API requests with graceful local fallback
  */
-async function apiRequest(action, classId, method = 'GET', body = null) {
+async function apiRequest(action, classId, method = 'GET', body = null, extraParams = {}) {
   const endpoint = await detectApiEndpoint();
   if (!endpoint) {
     return { ok: false, offline: true };
@@ -89,6 +89,11 @@ async function apiRequest(action, classId, method = 'GET', body = null) {
     const url = new URL(endpoint, window.location.origin);
     url.searchParams.set('action', action);
     if (classId) url.searchParams.set('class', classId);
+    if (extraParams && typeof extraParams === 'object') {
+      Object.entries(extraParams).forEach(([k, v]) => {
+        if (v !== undefined && v !== null) url.searchParams.set(k, String(v));
+      });
+    }
 
     const options = {
       method,
@@ -120,7 +125,7 @@ async function apiRequest(action, classId, method = 'GET', body = null) {
 }
 
 // ==========================================
-// 1. QUIZ RECORDS SYNC
+// 1. QUIZ RECORDS & OFFICIAL ARCHIVED SCORES
 // ==========================================
 
 export async function fetchQuizRecords(classId) {
@@ -143,14 +148,14 @@ export async function fetchQuizRecords(classId) {
     // Create map of server records by unique studentId + quizId + attempt (or submittedAt)
     const recordMap = new Map();
     serverRecords.forEach((r) => {
-      const key = `${r.studentId}_${r.quizId || 'quiz_ch1_ch2'}_${r.attempt || 1}_${r.submittedAt || ''}`;
+      const key = `${r.studentId}_${r.quizId || 'quiz_ch1_ch2'}_${r.attempt || 1}`;
       recordMap.set(key, r);
     });
 
     // If local has records not yet on server, keep them and push to server in background
     const unpushed = [];
     localRecords.forEach((r) => {
-      const key = `${r.studentId}_${r.quizId || 'quiz_ch1_ch2'}_${r.attempt || 1}_${r.submittedAt || ''}`;
+      const key = `${r.studentId}_${r.quizId || 'quiz_ch1_ch2'}_${r.attempt || 1}`;
       if (!recordMap.has(key)) {
         recordMap.set(key, r);
         unpushed.push(r);
@@ -158,7 +163,7 @@ export async function fetchQuizRecords(classId) {
     });
 
     const merged = Array.from(recordMap.values());
-    // Sort chronologically or by submittedAt descending
+    // Sort chronologically by submittedAt
     merged.sort((a, b) => new Date(a.submittedAt || 0) - new Date(b.submittedAt || 0));
 
     try {
@@ -168,7 +173,7 @@ export async function fetchQuizRecords(classId) {
       }
     } catch {}
 
-    // Asynchronously push unpushed local records to server
+    // Asynchronously push unpushed local records to server so they are NEVER lost
     if (unpushed.length > 0) {
       apiRequest('batch_save_records', classId, 'POST', { records: merged });
     }
@@ -187,7 +192,21 @@ export async function saveSingleQuizRecord(classId, record) {
     if (raw) currentRecords = JSON.parse(raw);
   } catch {}
 
-  const updated = [...currentRecords, record];
+  // Match and update existing or append
+  const matchIdx = currentRecords.findIndex(
+    (r) =>
+      r.studentId === record.studentId &&
+      (r.quizId || 'quiz_ch1_ch2') === (record.quizId || 'quiz_ch1_ch2') &&
+      (r.attempt || 1) === (record.attempt || 1)
+  );
+
+  let updated = [...currentRecords];
+  if (matchIdx >= 0) {
+    updated[matchIdx] = record;
+  } else {
+    updated.push(record);
+  }
+
   try {
     localStorage.setItem(localKey, JSON.stringify(updated));
     if (classId === '24-1') {
@@ -195,12 +214,79 @@ export async function saveSingleQuizRecord(classId, record) {
     }
   } catch {}
 
-  // Sync to server
+  // Await Sync to server!
   try {
-    apiRequest('save_record', classId, 'POST', { record });
+    const res = await apiRequest('save_record', classId, 'POST', { record });
+    if (res.ok && res.data && Array.isArray(res.data.records)) {
+      try {
+        localStorage.setItem(localKey, JSON.stringify(res.data.records));
+      } catch {}
+      return res.data.records;
+    }
   } catch {}
 
   return updated;
+}
+
+/**
+ * Fetch official teacher-archived score sheet for a specific class & quiz
+ */
+export async function fetchOfficialScores(classId, quizId = 'quiz_ch1_ch2') {
+  const localKey = `ainetwork_official_scores_${classId}_${quizId}`;
+  let localSheet = null;
+  try {
+    const raw = localStorage.getItem(localKey);
+    if (raw) localSheet = JSON.parse(raw);
+  } catch {}
+
+  const res = await apiRequest('get_official_scores', classId, 'GET', null, { quizId });
+  if (res.ok && res.data && res.data.official) {
+    const serverSheet = res.data.official;
+    try {
+      localStorage.setItem(localKey, JSON.stringify(serverSheet));
+    } catch {}
+    return serverSheet;
+  }
+
+  return localSheet;
+}
+
+/**
+ * Teacher confirms and permanently saves official master score sheet (Requires password 5163)
+ */
+export async function saveOfficialScores(classId, quizId = 'quiz_ch1_ch2', records, password = '5163') {
+  const localKey = `ainetwork_official_scores_${classId}_${quizId}`;
+  const nowStr = new Date().toLocaleString('zh-CN', { hour12: false });
+  const sheet = {
+    classId,
+    quizId,
+    savedAt: nowStr,
+    teacherConfirmed: true,
+    count: records?.length || 0,
+    records: records || [],
+  };
+
+  // 1. Save locally
+  try {
+    localStorage.setItem(localKey, JSON.stringify(sheet));
+  } catch {}
+
+  // 2. Save centrally to server
+  const res = await apiRequest('save_official_scores', classId, 'POST', {
+    quizId,
+    records,
+    password,
+  }, { quizId });
+
+  if (res.ok && res.data && res.data.official) {
+    return { success: true, official: res.data.official };
+  }
+
+  if (res.status === 403 || res.error?.includes('密码')) {
+    return { success: false, error: '密码错误，请输入教师授权密码 5163' };
+  }
+
+  return { success: true, official: sheet, offline: true };
 }
 
 // ==========================================

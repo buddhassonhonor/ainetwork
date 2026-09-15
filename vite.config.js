@@ -130,6 +130,49 @@ function quizDataApiPlugin() {
                 break;
               }
 
+              case 'get_official_scores': {
+                const quizId = (params.get('quizId') || body?.quizId || 'quiz_ch1_ch2').replace(/[^a-zA-Z0-9_-]/g, '');
+                const officialFile = resolve(dataDir, `official_scores_${classId}_${quizId}.json`);
+                const official = readJson(officialFile, null);
+                res.end(JSON.stringify({ success: true, class: classId, quizId, official }));
+                break;
+              }
+
+              case 'save_official_scores': {
+                const pwd = body?.password;
+                if (pwd !== '5163') {
+                  res.statusCode = 403;
+                  res.end(JSON.stringify({ success: false, error: '密码错误，请输入教师授权密码 5163' }));
+                  return;
+                }
+                const quizId = (params.get('quizId') || body?.quizId || 'quiz_ch1_ch2').replace(/[^a-zA-Z0-9_-]/g, '');
+                const officialFile = resolve(dataDir, `official_scores_${classId}_${quizId}.json`);
+                const sheet = {
+                  classId,
+                  quizId,
+                  savedAt: new Date().toLocaleString('zh-CN', { hour12: false }),
+                  teacherConfirmed: true,
+                  count: body?.records?.length || 0,
+                  records: body?.records || []
+                };
+                writeJson(officialFile, sheet);
+
+                // Also update master records
+                const recs = readJson(recordsFile, []);
+                const keyMap = new Set(recs.map(r => `${r.studentId}_${r.quizId || 'quiz_ch1_ch2'}_${r.attempt || 1}`));
+                (sheet.records || []).forEach(r => {
+                  const k = `${r.studentId}_${r.quizId || 'quiz_ch1_ch2'}_${r.attempt || 1}`;
+                  if (!keyMap.has(k)) {
+                    recs.push(r);
+                    keyMap.add(k);
+                  }
+                });
+                writeJson(recordsFile, recs);
+
+                res.end(JSON.stringify({ success: true, official: sheet }));
+                break;
+              }
+
               case 'save_record': {
                 const newRecord = body?.record;
                 if (!newRecord || !newRecord.studentId) {
@@ -138,7 +181,17 @@ function quizDataApiPlugin() {
                   return;
                 }
                 const recs = readJson(recordsFile, []);
-                recs.push(newRecord);
+                const matchIdx = recs.findIndex(
+                  (r) =>
+                    r.studentId === newRecord.studentId &&
+                    (r.quizId || 'quiz_ch1_ch2') === (newRecord.quizId || 'quiz_ch1_ch2') &&
+                    (r.attempt || 1) === (newRecord.attempt || 1)
+                );
+                if (matchIdx >= 0) {
+                  recs[matchIdx] = newRecord;
+                } else {
+                  recs.push(newRecord);
+                }
                 writeJson(recordsFile, recs);
                 res.end(JSON.stringify({ success: true, count: recs.length, records: recs }));
                 break;

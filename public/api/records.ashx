@@ -58,6 +58,43 @@ public class QuizApiHandler : IHttpHandler {
                     res.Write("{\"success\":true,\"class\":\"" + classId + "\",\"records\":" + content + "}");
                     break;
 
+                case "get_official_scores":
+                    string qId = req.QueryString["quizId"] ?? "quiz_ch1_ch2";
+                    string officialFile = Path.Combine(dataDir, "official_scores_" + classId + "_" + qId + ".json");
+                    string offContent = File.Exists(officialFile) ? File.ReadAllText(officialFile, Encoding.UTF8) : "null";
+                    res.Write("{\"success\":true,\"class\":\"" + classId + "\",\"quizId\":\"" + qId + "\",\"official\":" + offContent + "}");
+                    break;
+
+                case "save_official_scores":
+                    if (!body.Contains("\"password\":\"5163\"") && !body.Contains("\"password\": \"5163\"")) {
+                        res.StatusCode = 403;
+                        res.Write("{\"success\":false,\"error\":\"密码错误，请输入教师授权密码 5163\"}");
+                        break;
+                    }
+                    string saveQid = req.QueryString["quizId"] ?? "quiz_ch1_ch2";
+                    int qIdx = body.IndexOf("\"quizId\":");
+                    if (qIdx >= 0) {
+                        int qValStart = body.IndexOf("\"", qIdx + 9) + 1;
+                        int qValEnd = body.IndexOf("\"", qValStart);
+                        if (qValStart > 0 && qValEnd > qValStart) {
+                            saveQid = body.Substring(qValStart, qValEnd - qValStart);
+                        }
+                    }
+                    string saveOffFile = Path.Combine(dataDir, "official_scores_" + classId + "_" + saveQid + ".json");
+                    string recListJson = "[]";
+                    int rIdx = body.IndexOf("\"records\":");
+                    if (rIdx >= 0) {
+                        int bStart = body.IndexOf("[", rIdx);
+                        int bEnd = body.LastIndexOf("]");
+                        if (bStart >= 0 && bEnd > bStart) {
+                            recListJson = body.Substring(bStart, bEnd - bStart + 1);
+                        }
+                    }
+                    string fullSheet = "{\"classId\":\"" + classId + "\",\"quizId\":\"" + saveQid + "\",\"savedAt\":\"" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "\",\"teacherConfirmed\":true,\"records\":" + recListJson + "}";
+                    File.WriteAllText(saveOffFile, fullSheet, Encoding.UTF8);
+                    res.Write("{\"success\":true,\"official\":" + fullSheet + "}");
+                    break;
+
                 case "save_record":
                     // Parse single record from body and append
                     try {

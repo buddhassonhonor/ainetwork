@@ -100,6 +100,53 @@ switch ($action) {
         echo json_encode(['success' => true, 'class' => $classId, 'count' => count($records), 'records' => $records]);
         break;
 
+    case 'get_official_scores':
+        $rawQid = isset($_GET['quizId']) ? $_GET['quizId'] : (isset($inputBody['quizId']) ? $inputBody['quizId'] : 'quiz_ch1_ch2');
+        $quizId = preg_replace('/[^a-zA-Z0-9_-]/', '', $rawQid);
+        $officialFile = $dataDir . DIRECTORY_SEPARATOR . "official_scores_{$classId}_{$quizId}.json";
+        $official = readJsonFile($officialFile, null);
+        echo json_encode(['success' => true, 'class' => $classId, 'quizId' => $quizId, 'official' => $official]);
+        break;
+
+    case 'save_official_scores':
+        $pwd = isset($inputBody['password']) ? $inputBody['password'] : '';
+        if ($pwd !== '5163') {
+            http_response_code(403);
+            echo json_encode(['success' => false, 'error' => '密码错误，请输入教师授权密码 5163']);
+            break;
+        }
+        $rawQid = isset($_GET['quizId']) ? $_GET['quizId'] : (isset($inputBody['quizId']) ? $inputBody['quizId'] : 'quiz_ch1_ch2');
+        $quizId = preg_replace('/[^a-zA-Z0-9_-]/', '', $rawQid);
+        $officialFile = $dataDir . DIRECTORY_SEPARATOR . "official_scores_{$classId}_{$quizId}.json";
+        $sheet = [
+            'classId' => $classId,
+            'quizId' => $quizId,
+            'savedAt' => date('Y-m-d H:i:s'),
+            'teacherConfirmed' => true,
+            'count' => isset($inputBody['records']) && is_array($inputBody['records']) ? count($inputBody['records']) : 0,
+            'records' => isset($inputBody['records']) && is_array($inputBody['records']) ? $inputBody['records'] : []
+        ];
+        $saved = writeJsonFile($officialFile, $sheet);
+
+        // Also merge into master records file
+        if (!empty($sheet['records'])) {
+            $allRecords = readJsonFile($recordsFile, []);
+            $keyMap = [];
+            foreach ($allRecords as $r) {
+                $k = $r['studentId'] . '_' . (isset($r['quizId']) ? $r['quizId'] : '') . '_' . (isset($r['attempt']) ? $r['attempt'] : 1);
+                $keyMap[$k] = true;
+            }
+            foreach ($sheet['records'] as $r) {
+                $k = $r['studentId'] . '_' . (isset($r['quizId']) ? $r['quizId'] : '') . '_' . (isset($r['attempt']) ? $r['attempt'] : 1);
+                if (!isset($keyMap[$k])) {
+                    $allRecords[] = $r;
+                }
+            }
+            writeJsonFile($recordsFile, $allRecords);
+        }
+        echo json_encode(['success' => $saved, 'official' => $sheet]);
+        break;
+
     case 'save_record':
         $newRecord = isset($inputBody['record']) ? $inputBody['record'] : null;
         if (!$newRecord || !is_array($newRecord) || empty($newRecord['studentId'])) {
@@ -108,8 +155,20 @@ switch ($action) {
             break;
         }
         $records = readJsonFile($recordsFile, []);
-        // Append or update attempt
-        $records[] = $newRecord;
+        $foundIdx = -1;
+        foreach ($records as $i => $r) {
+            if ($r['studentId'] === $newRecord['studentId'] && 
+                (isset($r['quizId']) ? $r['quizId'] : '') === (isset($newRecord['quizId']) ? $newRecord['quizId'] : '') &&
+                (isset($r['attempt']) ? $r['attempt'] : 1) === (isset($newRecord['attempt']) ? $newRecord['attempt'] : 1)) {
+                $foundIdx = $i;
+                break;
+            }
+        }
+        if ($foundIdx >= 0) {
+            $records[$foundIdx] = $newRecord;
+        } else {
+            $records[] = $newRecord;
+        }
         $saved = writeJsonFile($recordsFile, $records);
         echo json_encode(['success' => $saved, 'count' => count($records), 'records' => $records]);
         break;
