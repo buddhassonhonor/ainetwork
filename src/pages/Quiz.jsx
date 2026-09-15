@@ -816,15 +816,6 @@ export default function Quiz() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-18 flex items-center justify-between gap-3">
           {/* Brand & Course info */}
           <div className="flex items-center gap-3 sm:gap-4">
-            <Link
-              to="/"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 text-xs font-bold transition-all"
-              title="返回课程主站"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">返回主站</span>
-            </Link>
-
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-sky-500 flex items-center justify-center text-white shadow-md shadow-indigo-500/20 flex-shrink-0">
                 <GraduationCap className="w-5 h-5" />
@@ -868,13 +859,13 @@ export default function Quiz() {
             <button
               id="btn-nav-records"
               onClick={() => setView('records')}
-              className={`px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+              className={`px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-all cursor-pointer border ${
                 view === 'records'
-                  ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/25'
-                  : 'bg-slate-100/90 text-slate-700 hover:bg-slate-200'
+                  ? 'bg-indigo-50 text-indigo-700 border-indigo-200/90 shadow-xs'
+                  : 'bg-indigo-50/70 text-indigo-600 hover:bg-indigo-100 border-indigo-100/80'
               }`}
             >
-              <BarChart3 className="w-4 h-4 text-indigo-500" />
+              <BarChart3 className="w-4 h-4 text-indigo-600" />
               <span className="hidden sm:inline">全班成绩单与统计</span>
               <span className="sm:hidden">成绩榜</span>
             </button>
@@ -930,10 +921,10 @@ export default function Quiz() {
               view !== 'login' && (
                 <button
                   onClick={() => setView('login')}
-                  className="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-indigo-50 text-indigo-600 hover:bg-indigo-100 flex items-center gap-1.5 transition-all cursor-pointer"
+                  className="px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-indigo-50 text-indigo-600 hover:bg-indigo-100 border border-indigo-100/80 flex items-center gap-1.5 transition-all cursor-pointer"
                 >
-                  <User className="w-4 h-4" />
-                  学生登录
+                  <User className="w-4 h-4 text-indigo-600" />
+                  <span>学生登录</span>
                 </button>
               )
             )}
