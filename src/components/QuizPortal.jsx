@@ -33,8 +33,8 @@ export default function QuizPortal({ onSelectClass, selectedClassId }) {
             课程随堂测验与学业测评中心
           </h1>
 
-          <p className="text-slate-500 text-sm sm:text-base md:text-lg max-w-2xl mx-auto font-medium">
-            请选择您所在的专业班级进入对应课程的随堂测验系统。各班级测验题目、成绩榜单与作答记录独立归档管理。
+          <p className="text-center text-slate-500 text-sm sm:text-base md:text-lg max-w-2xl mx-auto font-medium leading-relaxed">
+            请选择您所在的专业班级进入对应课程的随堂测验系统。<br className="hidden sm:inline" />各班级测验题目、成绩榜单与作答记录独立归档管理。
           </p>
 
           {/* Quick Metrics */}

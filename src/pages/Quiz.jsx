@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   CheckCircle2,
@@ -81,12 +81,13 @@ const clearDeviceLock = (classId, quizId) => {
 };
 
 export default function Quiz() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const urlClassId = searchParams.get('class');
+
   const getInitialClassId = () => {
     try {
-      const params = new URLSearchParams(window.location.search);
-      const qClass = params.get('class');
-      if (qClass && CLASSES_CONFIG.some((c) => c.id === qClass)) {
-        return qClass;
+      if (urlClassId && CLASSES_CONFIG.some((c) => c.id === urlClassId)) {
+        return urlClassId;
       }
       const saved = localStorage.getItem('ainetwork_quiz_selected_class_id');
       if (saved && CLASSES_CONFIG.some((c) => c.id === saved)) {
@@ -99,15 +100,26 @@ export default function Quiz() {
   const [currentClassId, setCurrentClassId] = useState(getInitialClassId);
 
   // Navigation / views: 'portal' | 'login' | 'testing' | 'review' | 'records'
+  // When visiting /quiz (no ?class=...), ALWAYS display the unified portal
   const [view, setView] = useState(() => {
-    try {
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('class')) return 'login';
-      const hasPicked = sessionStorage.getItem('ainetwork_class_picked');
-      if (!hasPicked) return 'portal';
-    } catch {}
-    return 'login';
+    if (urlClassId && CLASSES_CONFIG.some((c) => c.id === urlClassId)) {
+      return 'login';
+    }
+    return 'portal';
   });
+
+  // Keep view and classId synchronized with URL searchParams
+  useEffect(() => {
+    if (urlClassId && CLASSES_CONFIG.some((c) => c.id === urlClassId)) {
+      setCurrentClassId(urlClassId);
+      localStorage.setItem('ainetwork_quiz_selected_class_id', urlClassId);
+      if (view === 'portal') {
+        setView('login');
+      }
+    } else if (!urlClassId) {
+      setView('portal');
+    }
+  }, [urlClassId]);
 
   const classConfig = useMemo(() => getClassConfig(currentClassId), [currentClassId]);
   const studentsData = useMemo(() => getStudentsForClass(currentClassId), [currentClassId]);
@@ -136,11 +148,11 @@ export default function Quiz() {
   const [deviceUnlockError, setDeviceUnlockError] = useState('');
   const [pendingLoginStudent, setPendingLoginStudent] = useState(null);
 
-  // Current authenticated student
+  // Current authenticated student (strictly scoped to current class)
   const [currentStudent, setCurrentStudent] = useState(() => {
     try {
       const initialCls = getInitialClassId();
-      const saved = localStorage.getItem(`${CURRENT_STUDENT_KEY}_${initialCls}`) || localStorage.getItem(CURRENT_STUDENT_KEY);
+      const saved = localStorage.getItem(`${CURRENT_STUDENT_KEY}_${initialCls}`);
       return saved ? JSON.parse(saved) : null;
     } catch {
       return null;
@@ -179,11 +191,18 @@ export default function Quiz() {
   const [tableSearch, setTableSearch] = useState('');
   const [tableStatus, setTableStatus] = useState('all');
 
+  // Handle returning to unified portal
+  const handleBackToPortal = () => {
+    setSearchParams({});
+    setView('portal');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   // Handle selecting a class from Portal
   const handleSelectClass = (clsId) => {
     setCurrentClassId(clsId);
     localStorage.setItem('ainetwork_quiz_selected_class_id', clsId);
-    sessionStorage.setItem('ainetwork_class_picked', 'true');
+    setSearchParams({ class: clsId });
     setView('login');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -874,7 +893,7 @@ export default function Quiz() {
                     {classConfig.courseShortName} · 随堂测验
                   </h1>
                   <button
-                    onClick={() => setView('portal')}
+                    onClick={handleBackToPortal}
                     className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-black bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200/80 transition-all cursor-pointer shadow-2xs"
                     title="点击返回统一入口切换班级"
                   >
@@ -890,10 +909,10 @@ export default function Quiz() {
           </div>
 
           {/* Right Action Switchers */}
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2 sm:gap-2.5 flex-shrink-0">
             <button
-              onClick={() => setView('portal')}
-              className="px-3 py-2 rounded-xl text-xs sm:text-sm font-bold bg-indigo-50 text-indigo-600 hover:bg-indigo-100 border border-indigo-100/80 flex items-center gap-1.5 transition-all cursor-pointer"
+              onClick={handleBackToPortal}
+              className="px-3 py-2 rounded-xl text-xs sm:text-sm font-bold bg-indigo-50 text-indigo-600 hover:bg-indigo-100 border border-indigo-100/80 flex items-center gap-1.5 transition-all cursor-pointer flex-shrink-0"
               title="返回统一入口选择班级"
             >
               <Layers className="w-4 h-4 text-indigo-600" />
@@ -902,7 +921,7 @@ export default function Quiz() {
             {view === 'testing' && currentStudent && (
               <>
                 {/* Real-time Clock */}
-                <div className="flex items-center gap-1.5 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200/80">
+                <div className="flex items-center gap-1.5 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200/80 flex-shrink-0">
                   <Clock className="w-4 h-4 text-indigo-600 animate-pulse" />
                   <span className="font-mono text-xs sm:text-sm font-black text-slate-800 tracking-wider">
                     {formatTime(timerSeconds)}
@@ -910,7 +929,7 @@ export default function Quiz() {
                 </div>
 
                 {/* Progress pill */}
-                <div className="hidden sm:flex items-center gap-1.5 bg-indigo-50 px-3 py-1.5 rounded-xl border border-indigo-100 text-xs font-bold text-indigo-900">
+                <div className="hidden sm:flex items-center gap-1.5 bg-indigo-50 px-3 py-1.5 rounded-xl border border-indigo-100 text-xs font-bold text-indigo-900 flex-shrink-0">
                   <span>进度</span>
                   <span className="font-mono text-indigo-600">{answeredCount}/{totalCount}</span>
                 </div>
@@ -920,7 +939,7 @@ export default function Quiz() {
             <button
               id="btn-nav-records"
               onClick={() => setView('records')}
-              className={`px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-all cursor-pointer border ${
+              className={`px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-all cursor-pointer border flex-shrink-0 ${
                 view === 'records'
                   ? 'bg-indigo-50 text-indigo-700 border-indigo-200/90 shadow-xs'
                   : 'bg-indigo-50/70 text-indigo-600 hover:bg-indigo-100 border-indigo-100/80'
@@ -950,30 +969,35 @@ export default function Quiz() {
             )}
 
             {currentStudent ? (
-              <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
-                <div className="text-right hidden md:block">
-                  <div className="text-xs font-black text-slate-900 leading-tight">
-                    {currentStudent.name}
+              <div className="flex items-center gap-2 pl-2 sm:pl-3 border-l border-slate-200 flex-shrink-0">
+                <div className="hidden sm:flex items-center gap-2 bg-slate-100/90 hover:bg-slate-100 px-2.5 py-1 rounded-xl border border-slate-200/80">
+                  <div className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold text-xs flex-shrink-0">
+                    {currentStudent.name.slice(0, 1)}
                   </div>
-                  <div className="text-[11px] text-slate-400 font-mono">
-                    {currentStudent.id}
+                  <div className="text-left leading-tight">
+                    <div className="text-xs font-black text-slate-800 whitespace-nowrap">
+                      {currentStudent.name}
+                    </div>
+                    <div className="text-[10px] text-slate-400 font-mono whitespace-nowrap">
+                      {currentStudent.id}
+                    </div>
                   </div>
                 </div>
 
                 {view !== 'testing' && (
                   <button
                     onClick={currentStudentExistingRecord ? requestRetakeTest : handleStartTest}
-                    className="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white flex items-center gap-1.5 transition-all shadow-md shadow-emerald-600/20 cursor-pointer"
+                    className="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white flex items-center gap-1.5 transition-all shadow-md shadow-emerald-600/20 cursor-pointer flex-shrink-0 whitespace-nowrap"
                   >
-                    <BookOpen className="w-4 h-4" />
-                    {currentStudentExistingRecord ? '重新测验' : '进入测验'}
+                    <BookOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                    <span>{currentStudentExistingRecord ? '重新测验' : '进入测验'}</span>
                   </button>
                 )}
 
                 <button
                   onClick={handleLogout}
                   title="退出登录"
-                  className="p-2 rounded-xl bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-500 transition-all cursor-pointer"
+                  className="p-1.5 sm:p-2 rounded-xl bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-500 transition-all cursor-pointer flex-shrink-0"
                 >
                   <LogOut className="w-4 h-4" />
                 </button>
@@ -982,7 +1006,7 @@ export default function Quiz() {
               view !== 'login' && (
                 <button
                   onClick={() => setView('login')}
-                  className="px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-indigo-50 text-indigo-600 hover:bg-indigo-100 border border-indigo-100/80 flex items-center gap-1.5 transition-all cursor-pointer"
+                  className="px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-indigo-50 text-indigo-600 hover:bg-indigo-100 border border-indigo-100/80 flex items-center gap-1.5 transition-all cursor-pointer flex-shrink-0"
                 >
                   <User className="w-4 h-4 text-indigo-600" />
                   <span>学生登录</span>
@@ -1042,129 +1066,177 @@ export default function Quiz() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
         {/* VIEW 1: STUDENT LOGIN */}
         {view === 'login' && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="max-w-lg mx-auto"
-          >
-            <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-xl shadow-slate-200/60 border border-slate-200/90 p-8 sm:p-10 relative overflow-hidden">
-              <div className="text-center mb-8">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-600 to-sky-500 text-white flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-500/25">
-                  <User className="w-8 h-8" />
-                </div>
-                <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-                  {classConfig.name}
-                </h2>
-                <p className="text-sm text-slate-500 mt-2 leading-relaxed">
-                  请输入您的姓名与学号，验证后立即开始【{classConfig.courseShortName}】随堂测验
-                </p>
-                <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-                  <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-bold">
-                    <ShieldCheck className="w-4 h-4 text-indigo-600" />
-                    核验库：{classConfig.shortName}（共 {realStudentsData.length} 名在籍学生）
+          <div className="w-full flex justify-center items-center py-4 sm:py-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="w-full max-w-lg mx-auto"
+            >
+              <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-xl shadow-slate-200/60 border border-slate-200/90 p-8 sm:p-10 relative overflow-hidden">
+                <div className="text-center mb-8">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-600 to-sky-500 text-white flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-500/25">
+                    <User className="w-8 h-8" />
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => setView('portal')}
-                    className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 text-xs font-bold transition-all cursor-pointer border border-slate-200"
-                  >
-                    <span>切换班级</span>
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-
-              {loginError && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  className="mb-6 p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-start gap-3 leading-relaxed shadow-xs"
-                >
-                  <AlertCircle className="w-5 h-5 flex-shrink-0 text-rose-500 mt-0.5" />
-                  <div>{loginError}</div>
-                </motion.div>
-              )}
-
-              <form onSubmit={handleLogin} className="space-y-5">
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <label className="text-xs font-black text-slate-700 uppercase tracking-wider">
-                      学生姓名
-                    </label>
-                    <select
-                      id="quick-select-student"
-                      className="text-xs text-indigo-600 bg-indigo-50 border border-indigo-200 rounded-lg px-2.5 py-1 outline-none font-bold cursor-pointer hover:bg-indigo-100 transition-colors"
-                      onChange={(e) => {
-                        const found = studentsData.find((s) => s.id === e.target.value);
-                        if (found) {
-                          setInputName(found.name);
-                          setInputId(found.id);
-                        }
-                      }}
-                      defaultValue=""
+                  <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+                    {classConfig.name}
+                  </h2>
+                  <p className="text-sm text-slate-500 mt-2 leading-relaxed text-center max-w-md mx-auto">
+                    请输入您的姓名与学号，验证后立即开始【{classConfig.courseShortName}】随堂测验
+                  </p>
+                  <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+                    <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-bold">
+                      <ShieldCheck className="w-4 h-4 text-indigo-600" />
+                      核验库：{classConfig.shortName}（共 {realStudentsData.length} 名在籍学生）
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleBackToPortal}
+                      className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 text-xs font-bold transition-all cursor-pointer border border-slate-200"
                     >
-                      <option value="" disabled>
-                        点选名单快速填入 ({realStudentsData.length}人)...
-                      </option>
-                      {studentsData.map((s) => (
-                        <option key={s.id} value={s.id}>
-                          {s.name} ({s.id})
-                        </option>
-                      ))}
-                    </select>
+                      <span>切换班级</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
                   </div>
-                  <input
-                    id="student-name-input"
-                    type="text"
-                    value={inputName}
-                    onChange={(e) => setInputName(e.target.value)}
-                    placeholder={`请输入姓名，例如：${realStudentsData[0]?.name || '姓名'}`}
-                    className="w-full px-4.5 py-3.5 rounded-2xl border-2 border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 outline-none text-slate-900 font-bold transition-all text-sm bg-slate-50/50 focus:bg-white"
-                    required
-                  />
                 </div>
 
-                <div>
-                  <label className="block text-xs font-black text-slate-700 mb-2 uppercase tracking-wider">
-                    学号
-                  </label>
-                  <input
-                    id="student-id-input"
-                    type="text"
-                    value={inputId}
-                    onChange={(e) => setInputId(e.target.value)}
-                    placeholder={`请输入学号，例如：${realStudentsData[0]?.id || '学号'}`}
-                    className="w-full px-4.5 py-3.5 rounded-2xl border-2 border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 outline-none text-slate-900 font-mono font-bold transition-all text-sm bg-slate-50/50 focus:bg-white"
-                    required
-                  />
-                </div>
+                {/* If student already authenticated for this class, display a quick continue banner */}
+                {currentStudent && (
+                  <div className="mb-6 p-4 rounded-2xl bg-indigo-50/90 border border-indigo-200/90 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-black text-sm flex-shrink-0 shadow-sm shadow-indigo-600/20">
+                        {currentStudent.name.slice(0, 1)}
+                      </div>
+                      <div className="text-left">
+                        <div className="text-[11px] text-indigo-600 font-extrabold tracking-wide uppercase">
+                          已验证在籍学生
+                        </div>
+                        <div className="text-sm font-black text-slate-900 leading-tight">
+                          {currentStudent.name}
+                          <span className="text-xs font-mono font-normal text-slate-500 ml-1.5">
+                            ({currentStudent.id})
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 w-full sm:w-auto flex-shrink-0">
+                      <button
+                        type="button"
+                        onClick={currentStudentExistingRecord ? requestRetakeTest : handleStartTest}
+                        className="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black shadow-md shadow-emerald-600/20 flex items-center justify-center gap-1.5 transition-all cursor-pointer whitespace-nowrap"
+                      >
+                        <BookOpen className="w-4 h-4" />
+                        <span>{currentStudentExistingRecord ? '查看/重测' : '直接进入测验'}</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleLogout}
+                        className="px-3 py-2 rounded-xl bg-white hover:bg-rose-50 hover:text-rose-600 text-slate-600 border border-slate-200 text-xs font-bold transition-all cursor-pointer whitespace-nowrap"
+                      >
+                        更换账号
+                      </button>
+                    </div>
+                  </div>
+                )}
 
-                <div className="pt-3">
-                  <button
-                    id="btn-login-submit"
-                    type="submit"
-                    className="w-full py-4 rounded-2xl bg-gradient-to-r from-indigo-600 via-indigo-700 to-sky-600 hover:from-indigo-500 hover:to-sky-500 text-white font-extrabold text-base shadow-xl shadow-indigo-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                {loginError && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    className="mb-6 p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-start gap-3 leading-relaxed shadow-xs"
                   >
-                    <span>验证身份并进入测验</span>
-                    <ArrowRight className="w-5 h-5" />
+                    <AlertCircle className="w-5 h-5 flex-shrink-0 text-rose-500 mt-0.5" />
+                    <div>{loginError}</div>
+                  </motion.div>
+                )}
+
+                <form onSubmit={handleLogin} className="space-y-5">
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="text-xs font-black text-slate-700 uppercase tracking-wider">
+                        学生姓名
+                      </label>
+                      <select
+                        id="quick-select-student"
+                        className="text-xs text-indigo-600 bg-indigo-50 border border-indigo-200 rounded-lg px-2.5 py-1 outline-none font-bold cursor-pointer hover:bg-indigo-100 transition-colors"
+                        onChange={(e) => {
+                          const found = studentsData.find((s) => s.id === e.target.value);
+                          if (found) {
+                            setInputName(found.name);
+                            setInputId(found.id);
+                            setLoginError('');
+                          }
+                        }}
+                        defaultValue=""
+                      >
+                        <option value="" disabled>
+                          点选名单快速填入 ({realStudentsData.length}人)...
+                        </option>
+                        {realStudentsData.map((s) => (
+                          <option key={s.id} value={s.id}>
+                            {s.name} ({s.id})
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <input
+                      id="student-name-input"
+                      type="text"
+                      value={inputName}
+                      onChange={(e) => {
+                        setInputName(e.target.value);
+                        if (loginError) setLoginError('');
+                      }}
+                      placeholder={`请输入姓名，例如：${realStudentsData[0]?.name || '姓名'}`}
+                      className="w-full px-4.5 py-3.5 rounded-2xl border-2 border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 outline-none text-slate-900 font-bold transition-all text-sm bg-slate-50/50 focus:bg-white"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-black text-slate-700 mb-2 uppercase tracking-wider">
+                      学号
+                    </label>
+                    <input
+                      id="student-id-input"
+                      type="text"
+                      value={inputId}
+                      onChange={(e) => {
+                        setInputId(e.target.value);
+                        if (loginError) setLoginError('');
+                      }}
+                      placeholder={`请输入学号，例如：${realStudentsData[0]?.id || '学号'}`}
+                      className="w-full px-4.5 py-3.5 rounded-2xl border-2 border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 outline-none text-slate-900 font-mono font-bold transition-all text-sm bg-slate-50/50 focus:bg-white"
+                      required
+                    />
+                  </div>
+
+                  <div className="pt-3">
+                    <button
+                      id="btn-login-submit"
+                      type="submit"
+                      className="w-full py-4 rounded-2xl bg-gradient-to-r from-indigo-600 via-indigo-700 to-sky-600 hover:from-indigo-500 hover:to-sky-500 text-white font-extrabold text-base shadow-xl shadow-indigo-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                      <span>验证身份并进入测验</span>
+                      <ArrowRight className="w-5 h-5" />
+                    </button>
+                  </div>
+                </form>
+
+                {/* Quick Jump to Class Records */}
+                <div className="mt-8 pt-6 border-t border-slate-100 text-center">
+                  <button
+                    id="btn-login-view-records"
+                    type="button"
+                    onClick={() => setView('records')}
+                    className="text-xs font-bold text-indigo-600 hover:text-indigo-800 hover:underline inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <BarChart3 className="w-4 h-4" />
+                    教师/助教免密查看全班成绩统计看板 →
                   </button>
                 </div>
-              </form>
-
-              {/* Quick Jump to Class Records */}
-              <div className="mt-8 pt-6 border-t border-slate-100 text-center">
-                <button
-                  id="btn-login-view-records"
-                  type="button"
-                  onClick={() => setView('records')}
-                  className="text-xs font-bold text-indigo-600 hover:text-indigo-800 hover:underline inline-flex items-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <BarChart3 className="w-4 h-4" />
-                  教师/助教免密查看全班成绩统计看板 →
-                </button>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         )}
 
         {/* VIEW 2: EXAM TAKING INTERFACE */}
