@@ -317,19 +317,34 @@ export default function Quiz() {
     return studentAttempts[studentAttempts.length - 1];
   }, [currentStudent, records, currentQuizId]);
 
-  // Automatically load draft or redirect if logged in
-  useEffect(() => {
-    if (currentStudent) {
-      const draft = localStorage.getItem(DRAFT_ANSWERS_KEY + currentStudent.id);
-      if (draft) {
-        try {
-          setAnswers(JSON.parse(draft));
-        } catch {
-          // ignore
-        }
-      }
+  // Helper to get student-specific draft key
+  const getStudentDraftKey = (clsId, qId, sId) => `${DRAFT_ANSWERS_KEY}_${clsId}_${qId}_${sId}`;
+
+  // Automatically load draft or reset to blank when student/quiz changes
+  const loadDraftForStudent = useCallback((student, clsId = currentClassId, qId = currentQuizId) => {
+    if (!student || !student.id) {
+      setAnswers({});
+      return;
     }
-  }, [currentStudent]);
+    const scopedKey = getStudentDraftKey(clsId, qId, student.id);
+    const legacyKey = DRAFT_ANSWERS_KEY + student.id;
+    const draft = localStorage.getItem(scopedKey) || localStorage.getItem(legacyKey);
+    if (draft) {
+      try {
+        const parsed = JSON.parse(draft);
+        setAnswers(parsed && typeof parsed === 'object' ? parsed : {});
+      } catch {
+        setAnswers({});
+      }
+    } else {
+      // Clean slate for new student!
+      setAnswers({});
+    }
+  }, [currentClassId, currentQuizId]);
+
+  useEffect(() => {
+    loadDraftForStudent(currentStudent, currentClassId, currentQuizId);
+  }, [currentStudent, currentClassId, currentQuizId, loadDraftForStudent]);
 
   // Format seconds to mm:ss
   const formatTime = (secs) => {
@@ -380,6 +395,7 @@ export default function Quiz() {
     setCurrentStudent(matched);
     localStorage.setItem(`${CURRENT_STUDENT_KEY}_${currentClassId}`, JSON.stringify(matched));
     recordStudentLogin(currentClassId, matched);
+    loadDraftForStudent(matched, currentClassId, currentQuizId);
 
     // Check if previously submitted
     const existing = records.find(
@@ -392,6 +408,7 @@ export default function Quiz() {
       setView('testing');
       setTimerActive(true);
       setTimerSeconds(0);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -418,6 +435,8 @@ export default function Quiz() {
       setCurrentStudent(student);
       localStorage.setItem(`${CURRENT_STUDENT_KEY}_${currentClassId}`, JSON.stringify(student));
       recordStudentLogin(currentClassId, student);
+      // Clean slate or load the pending student's own draft
+      loadDraftForStudent(student, currentClassId, currentQuizId);
 
       const existing = records.find(
         (r) => r.studentId === student.id && (r.quizId || 'quiz_ch1_ch2') === currentQuizId
@@ -429,6 +448,7 @@ export default function Quiz() {
         setView('testing');
         setTimerActive(true);
         setTimerSeconds(0);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     } else {
       setDeviceUnlockError('教师授权密码错误，请联系任课教师');
@@ -437,12 +457,19 @@ export default function Quiz() {
 
   // Handle Logout
   const handleLogout = () => {
+    if (currentStudent) {
+      const scopedKey = getStudentDraftKey(currentClassId, currentQuizId, currentStudent.id);
+      localStorage.removeItem(scopedKey);
+      localStorage.removeItem(DRAFT_ANSWERS_KEY + currentStudent.id);
+    }
     setCurrentStudent(null);
+    localStorage.removeItem(`${CURRENT_STUDENT_KEY}_${currentClassId}`);
     localStorage.removeItem(CURRENT_STUDENT_KEY);
     setAnswers({});
     setTimerActive(false);
     setTimerSeconds(0);
     setView('login');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   // Select Option
@@ -450,6 +477,8 @@ export default function Quiz() {
     const updated = { ...answers, [questionId]: optionKey };
     setAnswers(updated);
     if (currentStudent) {
+      const scopedKey = getStudentDraftKey(currentClassId, currentQuizId, currentStudent.id);
+      localStorage.setItem(scopedKey, JSON.stringify(updated));
       localStorage.setItem(DRAFT_ANSWERS_KEY + currentStudent.id, JSON.stringify(updated));
     }
   };
@@ -460,6 +489,8 @@ export default function Quiz() {
     setTimerSeconds(0);
     setTimerActive(true);
     if (currentStudent) {
+      const scopedKey = getStudentDraftKey(currentClassId, currentQuizId, currentStudent.id);
+      localStorage.removeItem(scopedKey);
       localStorage.removeItem(DRAFT_ANSWERS_KEY + currentStudent.id);
     }
     setView('testing');
@@ -551,8 +582,13 @@ export default function Quiz() {
       }
     });
 
-    // Clear draft
-    localStorage.removeItem(DRAFT_ANSWERS_KEY + currentStudent.id);
+    // Clear draft and reset in-memory answers state
+    if (currentStudent) {
+      const scopedKey = getStudentDraftKey(currentClassId, currentQuizId, currentStudent.id);
+      localStorage.removeItem(scopedKey);
+      localStorage.removeItem(DRAFT_ANSWERS_KEY + currentStudent.id);
+    }
+    setAnswers({});
 
     // ===== SAVE DEVICE LOCK =====
     // Lock this machine to the current student for this quiz
