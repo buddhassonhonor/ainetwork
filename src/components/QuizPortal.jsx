@@ -11,10 +11,11 @@ import {
   Clock,
   ArrowRight,
   School,
-  FileSpreadsheet
+  FileSpreadsheet,
+  ClipboardCheck
 } from 'lucide-react';
 
-export default function QuizPortal({ onSelectClass, selectedClassId }) {
+export default function QuizPortal({ onSelectClass, selectedClassId, onOpenAttendance }) {
   const networkClasses = CLASSES_CONFIG.filter(c => c.questionsType === 'network');
   const matlabClasses = CLASSES_CONFIG.filter(c => c.questionsType === 'matlab');
 
@@ -37,8 +38,8 @@ export default function QuizPortal({ onSelectClass, selectedClassId }) {
             请选择您所在的专业班级进入对应课程的随堂测验系统。<br className="hidden sm:inline" />各班级测验题目、成绩榜单与作答记录独立归档管理。
           </p>
 
-          {/* Quick Metrics */}
-          <div className="mt-8 flex flex-wrap justify-center items-center gap-4 text-xs font-bold text-slate-600">
+          {/* Quick Metrics & Actions */}
+          <div className="mt-8 flex flex-wrap justify-center items-center gap-3 sm:gap-4 text-xs font-bold text-slate-600">
             <div className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-slate-200/80 shadow-xs">
               <BookOpen className="w-4 h-4 text-indigo-600" />
               <span>2 门在线测评课程</span>
@@ -49,8 +50,16 @@ export default function QuizPortal({ onSelectClass, selectedClassId }) {
             </div>
             <div className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-slate-200/80 shadow-xs">
               <CheckCircle2 className="w-4 h-4 text-sky-600" />
-              <span>成绩自动沉淀 · Excel规范导出</span>
+              <span>成绩自动沉淀 · Excel导出</span>
             </div>
+            <button
+              onClick={onOpenAttendance}
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/90 text-emerald-800 shadow-xs cursor-pointer transition-all hover:scale-102"
+              title="教师密码5163：统计当前学生实时登录并保存签到记录"
+            >
+              <ClipboardCheck className="w-4 h-4 text-emerald-600" />
+              <span>📋 课堂统计登录与考勤 (口令5163)</span>
+            </button>
           </div>
         </div>
 

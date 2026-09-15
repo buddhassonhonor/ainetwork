@@ -54,9 +54,208 @@ function exportDownloadPlugin() {
   };
 }
 
+import fs from 'node:fs';
+
+function quizDataApiPlugin() {
+  const dataDir = resolve(__dirname, 'public', 'api', 'data');
+  if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir, { recursive: true });
+  }
+
+  const readJson = (file, fallback = []) => {
+    try {
+      if (fs.existsSync(file)) {
+        const raw = fs.readFileSync(file, 'utf-8');
+        return raw ? JSON.parse(raw) : fallback;
+      }
+    } catch {}
+    return fallback;
+  };
+
+  const writeJson = (file, data) => {
+    try {
+      fs.writeFileSync(file, JSON.stringify(data, null, 2), 'utf-8');
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  return {
+    name: 'quiz-data-api-server',
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const urlObj = new URL(req.url, 'http://localhost');
+        const pathname = urlObj.pathname;
+
+        if (
+          pathname === '/api/index.php' ||
+          pathname === '/api/records.ashx' ||
+          pathname.startsWith('/api/') && !pathname.includes('export-download')
+        ) {
+          const params = urlObj.searchParams;
+          const rawClass = params.get('class') || '24-1';
+          const classId = rawClass.replace(/[^a-zA-Z0-9_-]/g, '') || '24-1';
+          let action = params.get('action') || '';
+
+          res.setHeader('Content-Type', 'application/json; charset=utf-8');
+          res.setHeader('Access-Control-Allow-Origin', '*');
+          res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+          res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+          if (req.method === 'OPTIONS') {
+            res.statusCode = 200;
+            res.end();
+            return;
+          }
+
+          const recordsFile = resolve(dataDir, `quiz_records_${classId}.json`);
+          const loginsFile = resolve(dataDir, `logins_${classId}.json`);
+          const attendanceFile = resolve(dataDir, `attendance_${classId}.json`);
+          const locksFile = resolve(dataDir, `device_locks_${classId}.json`);
+
+          const handleAction = (body) => {
+            if (!action && body && body.action) {
+              action = body.action;
+            }
+
+            switch (action) {
+              case 'ping':
+                res.end(JSON.stringify({ status: 'ok', engine: 'vite-dev', serverTime: new Date().toISOString() }));
+                break;
+
+              case 'get_records': {
+                const recs = readJson(recordsFile, []);
+                res.end(JSON.stringify({ success: true, class: classId, count: recs.length, records: recs }));
+                break;
+              }
+
+              case 'save_record': {
+                const newRecord = body?.record;
+                if (!newRecord || !newRecord.studentId) {
+                  res.statusCode = 400;
+                  res.end(JSON.stringify({ success: false, error: 'Invalid record' }));
+                  return;
+                }
+                const recs = readJson(recordsFile, []);
+                recs.push(newRecord);
+                writeJson(recordsFile, recs);
+                res.end(JSON.stringify({ success: true, count: recs.length, records: recs }));
+                break;
+              }
+
+              case 'batch_save_records': {
+                const recs = body?.records || [];
+                writeJson(recordsFile, recs);
+                res.end(JSON.stringify({ success: true, count: recs.length }));
+                break;
+              }
+
+              case 'get_logins': {
+                const logs = readJson(loginsFile, []);
+                res.end(JSON.stringify({ success: true, class: classId, logins: logs }));
+                break;
+              }
+
+              case 'record_login': {
+                const student = body?.student;
+                if (!student || !student.id) {
+                  res.statusCode = 400;
+                  res.end(JSON.stringify({ success: false, error: 'Invalid student' }));
+                  return;
+                }
+                const logs = readJson(loginsFile, []);
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', hour12: false });
+                const dateStr = now.toLocaleDateString('zh-CN');
+                const idx = logs.findIndex((x) => x.id === student.id);
+                const item = {
+                  id: student.id,
+                  name: student.name || '',
+                  loginTime: now.toISOString(),
+                  timeStr,
+                  dateStr,
+                };
+                if (idx >= 0) {
+                  logs[idx] = item;
+                } else {
+                  logs.push(item);
+                }
+                writeJson(loginsFile, logs);
+                res.end(JSON.stringify({ success: true, logins: logs }));
+                break;
+              }
+
+              case 'clear_logins': {
+                writeJson(loginsFile, []);
+                res.end(JSON.stringify({ success: true }));
+                break;
+              }
+
+              case 'get_attendance': {
+                const att = readJson(attendanceFile, []);
+                res.end(JSON.stringify({ success: true, class: classId, records: att }));
+                break;
+              }
+
+              case 'save_attendance': {
+                const att = body?.records || [];
+                writeJson(attendanceFile, att);
+                res.end(JSON.stringify({ success: true, count: att.length }));
+                break;
+              }
+
+              case 'get_device_locks': {
+                const locks = readJson(locksFile, {});
+                res.end(JSON.stringify({ success: true, class: classId, locks }));
+                break;
+              }
+
+              case 'save_device_lock': {
+                const quizId = body?.quizId;
+                const lockData = body?.lockData;
+                const locks = readJson(locksFile, {});
+                if (quizId && lockData) {
+                  locks[quizId] = lockData;
+                  writeJson(locksFile, locks);
+                }
+                res.end(JSON.stringify({ success: true, locks }));
+                break;
+              }
+
+              default:
+                res.end(JSON.stringify({ success: false, error: 'Unknown action: ' + action }));
+                break;
+            }
+          };
+
+          if (req.method === 'POST') {
+            let rawBody = '';
+            req.on('data', (chunk) => {
+              rawBody += chunk;
+            });
+            req.on('end', () => {
+              try {
+                const body = rawBody ? JSON.parse(rawBody) : {};
+                handleAction(body);
+              } catch {
+                handleAction({});
+              }
+            });
+          } else {
+            handleAction({});
+          }
+        } else {
+          next();
+        }
+      });
+    },
+  };
+}
+
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [tailwindcss(), react(), exportDownloadPlugin()],
+  plugins: [tailwindcss(), react(), exportDownloadPlugin(), quizDataApiPlugin()],
   build: {
     rollupOptions: {
       input: {
@@ -66,3 +265,4 @@ export default defineConfig({
     },
   },
 })
+

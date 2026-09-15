@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -32,10 +32,18 @@ import {
   ShieldCheck,
   Lock,
   ShieldAlert,
-  FileSpreadsheet
+  FileSpreadsheet,
+  ClipboardCheck,
+  RotateCw
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import QuizPortal from '../components/QuizPortal';
+import Attendance from './Attendance';
+import {
+  fetchQuizRecords,
+  saveSingleQuizRecord,
+  recordStudentLogin
+} from '../utils/syncStorage';
 import {
   CLASSES_CONFIG,
   getClassConfig,
@@ -99,9 +107,11 @@ export default function Quiz() {
 
   const [currentClassId, setCurrentClassId] = useState(getInitialClassId);
 
-  // Navigation / views: 'portal' | 'login' | 'testing' | 'review' | 'records'
+  // Navigation / views: 'portal' | 'login' | 'testing' | 'review' | 'records' | 'attendance'
   // When visiting /quiz (no ?class=...), ALWAYS display the unified portal
   const [view, setView] = useState(() => {
+    const tabParam = searchParams.get('tab');
+    if (tabParam === 'attendance') return 'attendance';
     if (urlClassId && CLASSES_CONFIG.some((c) => c.id === urlClassId)) {
       return 'login';
     }
@@ -110,16 +120,21 @@ export default function Quiz() {
 
   // Keep view and classId synchronized with URL searchParams
   useEffect(() => {
+    const tabParam = searchParams.get('tab');
+    if (tabParam === 'attendance') {
+      setView('attendance');
+      return;
+    }
     if (urlClassId && CLASSES_CONFIG.some((c) => c.id === urlClassId)) {
       setCurrentClassId(urlClassId);
       localStorage.setItem('ainetwork_quiz_selected_class_id', urlClassId);
-      if (view === 'portal') {
+      if (view === 'portal' || view === 'attendance') {
         setView('login');
       }
-    } else if (!urlClassId) {
+    } else if (!urlClassId && !tabParam) {
       setView('portal');
     }
-  }, [urlClassId]);
+  }, [urlClassId, searchParams]);
 
   const classConfig = useMemo(() => getClassConfig(currentClassId), [currentClassId]);
   const studentsData = useMemo(() => getStudentsForClass(currentClassId), [currentClassId]);
@@ -186,6 +201,28 @@ export default function Quiz() {
   };
 
   const [records, setRecords] = useState(() => loadClassRecords(getInitialClassId()));
+  const [serverSyncStatus, setServerSyncStatus] = useState({ online: true, lastSync: null });
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  // Synchronize records from central server API
+  const refreshRecordsFromServer = useCallback(async (clsId = currentClassId) => {
+    setIsRefreshing(true);
+    try {
+      const serverRecords = await fetchQuizRecords(clsId);
+      if (serverRecords && Array.isArray(serverRecords)) {
+        setRecords(serverRecords);
+        setServerSyncStatus({
+          online: true,
+          lastSync: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })
+        });
+      }
+    } catch (e) {
+      console.error('Failed to sync records from server:', e);
+      setServerSyncStatus(prev => ({ ...prev, online: false }));
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, [currentClassId]);
 
   // Table filters for records
   const [tableSearch, setTableSearch] = useState('');
@@ -211,6 +248,7 @@ export default function Quiz() {
   useEffect(() => {
     const loaded = loadClassRecords(currentClassId);
     setRecords(loaded);
+    refreshRecordsFromServer(currentClassId);
     const cfg = getClassConfig(currentClassId);
     if (cfg && cfg.quizModules && cfg.quizModules.length > 0) {
       setCurrentQuizId(cfg.quizModules[0].id);
@@ -229,7 +267,17 @@ export default function Quiz() {
     setInputName('');
     setInputId('');
     setLoginError('');
-  }, [currentClassId]);
+  }, [currentClassId, refreshRecordsFromServer]);
+
+  // Periodic auto-sync on scoreboard page
+  useEffect(() => {
+    if (view !== 'records') return;
+    refreshRecordsFromServer(currentClassId);
+    const interval = setInterval(() => {
+      refreshRecordsFromServer(currentClassId);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [view, currentClassId, refreshRecordsFromServer]);
 
   // Sync records to localStorage
   const saveRecords = (newRecords) => {
@@ -331,6 +379,7 @@ export default function Quiz() {
     // Either no lock, or same student logging in again — proceed normally
     setCurrentStudent(matched);
     localStorage.setItem(`${CURRENT_STUDENT_KEY}_${currentClassId}`, JSON.stringify(matched));
+    recordStudentLogin(currentClassId, matched);
 
     // Check if previously submitted
     const existing = records.find(
@@ -368,6 +417,7 @@ export default function Quiz() {
 
       setCurrentStudent(student);
       localStorage.setItem(`${CURRENT_STUDENT_KEY}_${currentClassId}`, JSON.stringify(student));
+      recordStudentLogin(currentClassId, student);
 
       const existing = records.find(
         (r) => r.studentId === student.id && (r.quizId || 'quiz_ch1_ch2') === currentQuizId
@@ -495,6 +545,11 @@ export default function Quiz() {
     // KEEP ALL RECORDS - DO NOT OVERWRITE! Append new attempt
     const nextRecords = [...records, newRecord];
     saveRecords(nextRecords);
+    saveSingleQuizRecord(currentClassId, newRecord).then((latest) => {
+      if (latest && latest.length > 0) {
+        setRecords(latest);
+      }
+    });
 
     // Clear draft
     localStorage.removeItem(DRAFT_ANSWERS_KEY + currentStudent.id);
@@ -868,6 +923,25 @@ export default function Quiz() {
       <QuizPortal
         onSelectClass={handleSelectClass}
         selectedClassId={currentClassId}
+        onOpenAttendance={() => {
+          setView('attendance');
+        }}
+      />
+    );
+  }
+
+  if (view === 'attendance') {
+    return (
+      <Attendance
+        initialClassId={currentClassId}
+        onBack={() => {
+          if (urlClassId) {
+            setSearchParams({ class: currentClassId });
+            setView(currentStudent ? 'testing' : 'login');
+          } else {
+            handleBackToPortal();
+          }
+        }}
       />
     );
   }
@@ -948,6 +1022,21 @@ export default function Quiz() {
               <BarChart3 className="w-4 h-4 text-indigo-600" />
               <span className="hidden sm:inline">全班成绩单与统计</span>
               <span className="sm:hidden">成绩榜</span>
+            </button>
+
+            {/* Attendance Sign-in button */}
+            <button
+              id="btn-nav-attendance"
+              onClick={() => {
+                setSearchParams({ class: currentClassId, tab: 'attendance' });
+                setView('attendance');
+              }}
+              className="px-3 sm:px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200/90 flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs flex-shrink-0"
+              title="教师统计学生实时登录情况与考勤签到（密码5163）"
+            >
+              <ClipboardCheck className="w-4 h-4 text-emerald-600" />
+              <span className="hidden md:inline">统计登录/考勤</span>
+              <span className="md:hidden">考勤</span>
             </button>
 
             {/* Top Submit Button in Testing View */}
@@ -1222,16 +1311,29 @@ export default function Quiz() {
                   </div>
                 </form>
 
-                {/* Quick Jump to Class Records */}
-                <div className="mt-8 pt-6 border-t border-slate-100 text-center">
+                {/* Quick Jump to Class Records & Attendance */}
+                <div className="mt-8 pt-6 border-t border-slate-100 flex flex-col gap-2.5 text-center">
                   <button
                     id="btn-login-view-records"
                     type="button"
                     onClick={() => setView('records')}
-                    className="text-xs font-bold text-indigo-600 hover:text-indigo-800 hover:underline inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+                    className="text-xs font-bold text-indigo-600 hover:text-indigo-800 hover:underline inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                   >
                     <BarChart3 className="w-4 h-4" />
                     教师/助教免密查看全班成绩统计看板 →
+                  </button>
+
+                  <button
+                    id="btn-login-view-attendance"
+                    type="button"
+                    onClick={() => {
+                      setSearchParams({ class: currentClassId, tab: 'attendance' });
+                      setView('attendance');
+                    }}
+                    className="text-xs font-bold text-emerald-700 hover:text-emerald-900 inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer bg-emerald-50/80 hover:bg-emerald-100 py-2.5 px-4 rounded-2xl border border-emerald-200/90 shadow-2xs mt-1"
+                  >
+                    <ClipboardCheck className="w-4 h-4 text-emerald-600" />
+                    <span>教师统计学生实时登录 · 考勤签到与缺勤汇总 (密码5163) →</span>
                   </button>
                 </div>
               </div>
@@ -1703,6 +1805,32 @@ export default function Quiz() {
                     ))}
                     <option value="all">全班所有测验总汇明细</option>
                   </select>
+                </div>
+
+                {/* Real-time Server Sync Status & Refresh */}
+                <div className="flex items-center gap-1.5">
+                  <div
+                    className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold border shadow-2xs ${
+                      serverSyncStatus.online
+                        ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                        : 'bg-amber-50 text-amber-800 border-amber-200'
+                    }`}
+                    title={serverSyncStatus.online ? '已连通中央服务器：全班同学交卷后将实时汇总到此' : '离线存储模式'}
+                  >
+                    <span className={`w-2 h-2 rounded-full ${serverSyncStatus.online ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`}></span>
+                    <span className="hidden sm:inline">{serverSyncStatus.online ? `云端同步正常${serverSyncStatus.lastSync ? ` · ${serverSyncStatus.lastSync}` : ''}` : '离线模式'}</span>
+                    <span className="sm:hidden">{serverSyncStatus.online ? '同步中' : '离线'}</span>
+                  </div>
+
+                  <button
+                    onClick={() => refreshRecordsFromServer(currentClassId)}
+                    disabled={isRefreshing}
+                    className="px-3 py-2 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs disabled:opacity-50"
+                    title="从服务器强制拉取最新交卷数据"
+                  >
+                    <RotateCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-indigo-600' : 'text-slate-500'}`} />
+                    <span>{isRefreshing ? '拉取中...' : '刷新'}</span>
+                  </button>
                 </div>
 
                 {/* Export Excel (.xlsx) */}
