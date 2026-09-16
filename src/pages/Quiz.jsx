@@ -2034,7 +2034,7 @@ export default function Quiz() {
                     <button
                       onClick={() => setShowServerHelpModal(true)}
                       className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold border shadow-2xs bg-rose-50 text-rose-700 border-rose-300 hover:bg-rose-100 transition-colors cursor-pointer"
-                      title="点击查看为什么换电脑显示0人及宝塔激活指南"
+                      title="点击查看为什么换电脑显示0人及服务器激活指南"
                     >
                       <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
                       <span className="hidden sm:inline">服务器接口未激活 (仅本机缓存)</span>
@@ -2871,13 +2871,13 @@ export default function Quiz() {
                 </h4>
                 <div className="text-rose-800 space-y-1">
                   <p>
-                    1. <strong>服务器接口返回 404</strong>：当前站点在宝塔 Windows IIS 中创建为“纯静态”网站，未挂载 PHP 处理脚本。学生点击“交卷”发送数据到 <code>/api/index.php</code> 时，服务器直接返回 404，导致数据未能写入服务器硬盘。
+                    1. <strong>服务器接口返回 404</strong>：当前站点运行在 Windows 原生 IIS 上，默认只启用了“静态内容”模块，尚未启用 ASP.NET 脚本处理能力。学生交卷请求（POST 到 <code>/api/records.ashx</code>）时，IIS 因未映射处理脚本返回 404。
                   </p>
                   <p>
                     2. <strong>为何换电脑就是 0 人</strong>：因为服务器接口未通，这 3 名同学成绩暂时保存在第 1 台电脑本机的浏览器缓存中。换到第 2 台电脑时，本地缓存是空的，从服务器也拉不到数据，因此显示 0 人。
                   </p>
                   <p>
-                    3. <strong>关于 GitHub Actions</strong>：GitHub Actions 仅在您执行 <code>git push</code> 时把网站编译代码推送到服务器，它不是数据库，无法在学生上课交卷时自动收集成绩。
+                    3. <strong>关于 GitHub Actions</strong>：GitHub Actions 仅在您执行 <code>git push</code> 时把编译后的静态网页传到服务器，它不是数据库，无法在学生上课交卷时自动收集成绩。
                   </p>
                 </div>
               </div>
@@ -2885,26 +2885,26 @@ export default function Quiz() {
               <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200">
                 <h4 className="font-black text-emerald-900 mb-2 flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-                  彻底解决办法（只需在宝塔中点 1 步，耗时 5 秒）：
+                  彻底解决办法（无需安装任何第三方软件，利用 Windows 原生 IIS）：
                 </h4>
                 <ol className="list-decimal list-inside space-y-1.5 text-emerald-950 font-medium pl-1">
-                  <li>打开并登录您的<strong>宝塔 Windows 面板</strong>；</li>
-                  <li>点击左侧菜单<strong>【网站】</strong>；</li>
-                  <li>点击站点名称 <strong>baota.pomole.net</strong>；</li>
-                  <li>在弹出窗口中点击<strong>【PHP版本】</strong>标签，将下拉框从“静态”切换为<strong>【PHP-7.4】</strong>（或任意已安装的 PHP 版本）；</li>
-                  <li>点击<strong>【保存】</strong>！</li>
+                  <li>远程桌面登录您的 <strong>Windows Server</strong>；</li>
+                  <li>打开【服务器管理器】(Server Manager) -&gt; 【角色】 -&gt; 【Web 服务器 (IIS)】；</li>
+                  <li>点击【添加角色服务】，勾选 <strong>【ASP.NET】</strong>（及关联的 .NET 扩展性组件）并完成安装；</li>
+                  <li>打开【IIS 管理器】，在【应用程序池】中确认当前站点应用池的 .NET CLR 版本为 <strong>v4.0</strong>；</li>
+                  <li>在网站的 <code>api/data</code> 文件夹属性中，为 <code>IIS_IUSRS</code> 赋予<strong>修改/写入权限</strong>。</li>
                 </ol>
                 <p className="text-[11px] text-emerald-800 mt-2 font-bold">
-                  💡 保存后刷新本页面，顶部的红灯会立刻变为绿灯 🟢，所有学生交卷将秒级自动写入服务器硬盘，多电脑多机房实时互通！
+                  💡 配置完成后刷新本页面，指示灯会立刻变为绿灯 🟢，所有学生交卷将秒级自动写入服务器硬盘，多电脑多机房实时互通！
                 </p>
               </div>
 
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
                 <h4 className="font-black text-slate-900 mb-2">
-                  课堂应急：当前电脑成绩快速转移到另一台电脑
+                  课堂应急：无需配置服务器，成绩快速转移到另一台电脑
                 </h4>
                 <p className="text-slate-600 mb-3">
-                  若您此时在机房上课、暂时无法登录宝塔后台，可使用下方工具直接转移：
+                  若您此时在机房上课、暂时不方便登录服务器配置，可直接使用下方工具转移：
                 </p>
                 <div className="flex flex-col sm:flex-row items-center gap-2">
                   <button

@@ -320,7 +320,7 @@ export async function saveOfficialScores(classId, quizId = 'quiz_ch1_ch2', recor
     success: false,
     offline: true,
     official: sheet,
-    error: '未能写入中央服务器（服务器返回404或接口离线）。成绩当前仅保存在本机缓存中，若换电脑查看将无法读取。请在服务器宝塔面板中为该网站开启PHP，或使用【导出成绩单】功能备份转移。'
+    error: '未能写入中央服务器（服务器返回404或接口离线）。成绩当前仅保存在本机缓存中，若换电脑查看将无法读取。请在Windows服务器IIS中开启ASP.NET，或使用【导出成绩单】功能备份转移。'
   };
 }
 
