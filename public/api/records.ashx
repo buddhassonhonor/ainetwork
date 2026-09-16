@@ -15,6 +15,8 @@ public class QuizApiHandler : IHttpHandler {
         try {
             res.ContentType = "application/json; charset=utf-8";
 
+            try { res.TrySkipIisCustomErrors = true; } catch { }
+
             // Safe CORS headers for all IIS pipeline modes (Classic & Integrated)
             try {
                 res.AppendHeader("Access-Control-Allow-Origin", "*");
@@ -68,6 +70,22 @@ public class QuizApiHandler : IHttpHandler {
                         res.Write("{\"status\":\"ok\",\"engine\":\"aspnet\",\"serverTime\":\"" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "\"}");
                         break;
 
+                    case "debug":
+                        bool canWrite = false;
+                        string writeErr = "";
+                        try {
+                            string testFile = Path.Combine(dataDir, "_test_write.tmp");
+                            File.WriteAllText(testFile, "test", Encoding.UTF8);
+                            if (File.Exists(testFile)) {
+                                File.Delete(testFile);
+                                canWrite = true;
+                            }
+                        } catch (Exception wex) {
+                            writeErr = wex.Message;
+                        }
+                        res.Write("{\"status\":\"debug\",\"appPath\":\"" + appPath.Replace("\\", "\\\\") + "\",\"dataDir\":\"" + dataDir.Replace("\\", "\\\\") + "\",\"dataDirExists\":" + (Directory.Exists(dataDir) ? "true" : "false") + ",\"canWrite\":" + (canWrite ? "true" : "false") + ",\"writeErr\":\"" + writeErr.Replace("\\", "\\\\").Replace("\"", "'") + "\"}");
+                        break;
+
                     case "get_records":
                         string content = File.Exists(recordsFile) ? File.ReadAllText(recordsFile, Encoding.UTF8) : "[]";
                         res.Write("{\"success\":true,\"class\":\"" + classId + "\",\"records\":" + content + "}");
@@ -82,7 +100,6 @@ public class QuizApiHandler : IHttpHandler {
 
                     case "save_official_scores":
                         if (!body.Contains("\"password\":\"5163\"") && !body.Contains("\"password\": \"5163\"")) {
-                            res.StatusCode = 403;
                             res.Write("{\"success\":false,\"error\":\"\\u5bc6\\u7801\\u9519\\u8bef\\uff0c\\u8bf7\\u8f93\\u5165\\u6b63\\u786e\\u7684\\u6559\\u5e08\\u7ba1\\u7406\\u5bc6\\u7801\"}");
                             break;
                         }
@@ -110,8 +127,7 @@ public class QuizApiHandler : IHttpHandler {
                             File.WriteAllText(targetOfficial, sheetJson, Encoding.UTF8);
                             res.Write("{\"success\":true,\"official\":" + sheetJson + "}");
                         } catch (Exception ex) {
-                            res.StatusCode = 500;
-                            res.Write("{\"success\":false,\"error\":\"" + ex.Message.Replace("\"", "'") + "\"}");
+                            res.Write("{\"success\":false,\"error\":\"" + ex.Message.Replace("\\", "\\\\").Replace("\"", "'") + "\"}");
                         }
                         break;
 
@@ -122,8 +138,19 @@ public class QuizApiHandler : IHttpHandler {
                             int recIdx = body.IndexOf("\"record\":");
                             if (recIdx >= 0) {
                                 int s = body.IndexOf("{", recIdx);
-                                int e = body.LastIndexOf("}");
-                                if (s >= 0 && e > s) recordJson = body.Substring(s, e - s + 1);
+                                if (s >= 0) {
+                                    int depth = 0;
+                                    for (int i = s; i < body.Length; i++) {
+                                        if (body[i] == '{') depth++;
+                                        else if (body[i] == '}') {
+                                            depth--;
+                                            if (depth == 0) {
+                                                recordJson = body.Substring(s, i - s + 1);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
                             }
                             if (!string.IsNullOrEmpty(recordJson)) {
                                 string updated = existing.Trim();
@@ -154,8 +181,7 @@ public class QuizApiHandler : IHttpHandler {
                                 res.Write("{\"success\":false,\"error\":\"Empty record\"}");
                             }
                         } catch (Exception ex) {
-                            res.StatusCode = 500;
-                            res.Write("{\"success\":false,\"error\":\"" + ex.Message.Replace("\"", "'") + "\"}");
+                            res.Write("{\"success\":false,\"error\":\"" + ex.Message.Replace("\\", "\\\\").Replace("\"", "'") + "\"}");
                         }
                         break;
 
@@ -173,8 +199,7 @@ public class QuizApiHandler : IHttpHandler {
                             File.WriteAllText(recordsFile, batchRecords, Encoding.UTF8);
                             res.Write("{\"success\":true,\"count\":" + Regex.Matches(batchRecords, "\"studentId\"").Count + "}");
                         } catch (Exception ex) {
-                            res.StatusCode = 500;
-                            res.Write("{\"success\":false,\"error\":\"" + ex.Message.Replace("\"", "'") + "\"}");
+                            res.Write("{\"success\":false,\"error\":\"" + ex.Message.Replace("\\", "\\\\").Replace("\"", "'") + "\"}");
                         }
                         break;
 
@@ -190,8 +215,19 @@ public class QuizApiHandler : IHttpHandler {
                             string itemJson = "";
                             if (sPos >= 0) {
                                 int start = body.IndexOf("{", sPos);
-                                int end = body.LastIndexOf("}");
-                                if (start >= 0 && end > start) itemJson = body.Substring(start, end - start + 1);
+                                if (start >= 0) {
+                                    int depth = 0;
+                                    for (int i = start; i < body.Length; i++) {
+                                        if (body[i] == '{') depth++;
+                                        else if (body[i] == '}') {
+                                            depth--;
+                                            if (depth == 0) {
+                                                itemJson = body.Substring(start, i - start + 1);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
                             }
                             if (!string.IsNullOrEmpty(itemJson)) {
                                 string updated = curLogins.Trim();
@@ -204,14 +240,12 @@ public class QuizApiHandler : IHttpHandler {
                             }
                             res.Write("{\"success\":true}");
                         } catch (Exception ex) {
-                            res.StatusCode = 500;
-                            res.Write("{\"success\":false,\"error\":\"" + ex.Message.Replace("\"", "'") + "\"}");
+                            res.Write("{\"success\":false,\"error\":\"" + ex.Message.Replace("\\", "\\\\").Replace("\"", "'") + "\"}");
                         }
                         break;
 
                     case "clear_logins":
                         if (!body.Contains("\"password\":\"5163\"") && !body.Contains("\"password\": \"5163\"")) {
-                            res.StatusCode = 403;
                             res.Write("{\"success\":false,\"error\":\"\\u5bc6\\u7801\\u9519\\u8bef\"}");
                             break;
                         }
@@ -240,8 +274,7 @@ public class QuizApiHandler : IHttpHandler {
                             File.WriteAllText(attendanceFile, attToSave, Encoding.UTF8);
                             res.Write("{\"success\":true}");
                         } catch (Exception ex) {
-                            res.StatusCode = 500;
-                            res.Write("{\"success\":false,\"error\":\"" + ex.Message.Replace("\"", "'") + "\"}");
+                            res.Write("{\"success\":false,\"error\":\"" + ex.Message.Replace("\\", "\\\\").Replace("\"", "'") + "\"}");
                         }
                         break;
 
@@ -272,8 +305,7 @@ public class QuizApiHandler : IHttpHandler {
                             }
                             res.Write("{\"success\":true}");
                         } catch (Exception ex) {
-                            res.StatusCode = 500;
-                            res.Write("{\"success\":false,\"error\":\"" + ex.Message.Replace("\"", "'") + "\"}");
+                            res.Write("{\"success\":false,\"error\":\"" + ex.Message.Replace("\\", "\\\\").Replace("\"", "'") + "\"}");
                         }
                         break;
 
@@ -284,7 +316,6 @@ public class QuizApiHandler : IHttpHandler {
             }
         } catch (Exception topEx) {
             try {
-                res.StatusCode = 500;
                 res.Write("{\"success\":false,\"error\":\"" + topEx.Message.Replace("\\", "\\\\").Replace("\"", "'") + "\"}");
             } catch { }
         }
