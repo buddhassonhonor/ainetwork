@@ -102,6 +102,14 @@ public class QuizApiHandler : IHttpHandler {
             string attendanceFile = Path.Combine(dataDir, "attendance_" + classId + ".json");
             string locksFile = Path.Combine(dataDir, "device_locks_" + classId + ".json");
             string resetFile = Path.Combine(dataDir, "reset_" + classId + ".json");
+            long resetEpoch = 0;
+            try {
+                if (File.Exists(resetFile)) {
+                    string rText = File.ReadAllText(resetFile, Encoding.UTF8);
+                    Match rm = Regex.Match(rText, "\"resetAt\"\\s*:\\s*(\\d+)");
+                    if (rm.Success) long.TryParse(rm.Groups[1].Value, out resetEpoch);
+                }
+            } catch { }
 
             lock (_lockObj) {
                 switch (action) {
@@ -154,14 +162,6 @@ public class QuizApiHandler : IHttpHandler {
 
                     case "get_records":
                         string content = File.Exists(recordsFile) ? File.ReadAllText(recordsFile, Encoding.UTF8) : "[]";
-                        long resetEpoch = 0;
-                        try {
-                            if (File.Exists(resetFile)) {
-                                string rText = File.ReadAllText(resetFile, Encoding.UTF8);
-                                Match rm = Regex.Match(rText, "\"resetAt\"\\s*:\\s*(\\d+)");
-                                if (rm.Success) long.TryParse(rm.Groups[1].Value, out resetEpoch);
-                            }
-                        } catch { }
                         res.Write("{\"success\":true,\"class\":\"" + classId + "\",\"resetAt\":" + resetEpoch + ",\"records\":" + content + "}");
                         break;
 
@@ -253,6 +253,19 @@ public class QuizApiHandler : IHttpHandler {
                                 }
                             }
                             if (!string.IsNullOrEmpty(recordJson)) {
+                                if (resetEpoch > 0) {
+                                    Match sm = Regex.Match(recordJson, "\"submittedAt\"\\s*:\\s*\"([^\"]+)\"");
+                                    if (sm.Success) {
+                                        DateTime sdt;
+                                        if (DateTime.TryParse(sm.Groups[1].Value, out sdt)) {
+                                            long sEpoch = (long)(sdt.ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
+                                            if (sEpoch < resetEpoch) {
+                                                res.Write("{\"success\":true,\"rejectedStale\":true,\"records\":" + existing + "}");
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
                                 string updated = existing.Trim();
                                 if (updated.Length <= 2) {
                                     updated = "[" + recordJson + "]";
@@ -294,6 +307,24 @@ public class QuizApiHandler : IHttpHandler {
                                 int end = body.LastIndexOf("]");
                                 if (start >= 0 && end > start) {
                                     batchRecords = body.Substring(start, end - start + 1);
+                                }
+                            }
+                            if (resetEpoch > 0) {
+                                bool hasNewRecord = false;
+                                MatchCollection subMatches = Regex.Matches(batchRecords, "\"submittedAt\"\\s*:\\s*\"([^\"]+)\"");
+                                foreach (Match sm in subMatches) {
+                                    DateTime sdt;
+                                    if (DateTime.TryParse(sm.Groups[1].Value, out sdt)) {
+                                        long sEpoch = (long)(sdt.ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
+                                        if (sEpoch >= resetEpoch) {
+                                            hasNewRecord = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (!hasNewRecord && subMatches.Count > 0) {
+                                    res.Write("{\"success\":true,\"rejectedStale\":true,\"count\":0}");
+                                    break;
                                 }
                             }
                             SafeWriteFile(recordsFile, batchRecords);
