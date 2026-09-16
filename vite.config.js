@@ -113,6 +113,7 @@ function quizDataApiPlugin() {
           const loginsFile = resolve(dataDir, `logins_${classId}.json`);
           const attendanceFile = resolve(dataDir, `attendance_${classId}.json`);
           const locksFile = resolve(dataDir, `device_locks_${classId}.json`);
+          const resetFile = resolve(dataDir, `reset_${classId}.json`);
 
           const handleAction = (body) => {
             if (!action && body && body.action) {
@@ -126,7 +127,31 @@ function quizDataApiPlugin() {
 
               case 'get_records': {
                 const recs = readJson(recordsFile, []);
-                res.end(JSON.stringify({ success: true, class: classId, count: recs.length, records: recs }));
+                const resetData = readJson(resetFile, { resetAt: 0 });
+                res.end(JSON.stringify({ success: true, class: classId, resetAt: resetData?.resetAt || 0, count: recs.length, records: recs }));
+                break;
+              }
+
+              case 'clear_records': {
+                const pwd = body?.password;
+                if (pwd !== '5163') {
+                  res.statusCode = 403;
+                  res.end(JSON.stringify({ success: false, error: '密码错误，请输入正确的教师管理密码' }));
+                  return;
+                }
+                const nowEpoch = Date.now();
+                writeJson(resetFile, { classId, resetAt: nowEpoch });
+                writeJson(recordsFile, []);
+                try {
+                  const files = fs.readdirSync(dataDir);
+                  files.forEach(f => {
+                    if (f.startsWith(`official_scores_${classId}_`)) {
+                      try { fs.unlinkSync(resolve(dataDir, f)); } catch {}
+                    }
+                  });
+                } catch {}
+                writeJson(locksFile, {});
+                res.end(JSON.stringify({ success: true, class: classId, resetAt: nowEpoch, count: 0 }));
                 break;
               }
 

@@ -45,6 +45,7 @@ import {
   recordStudentLogin,
   fetchOfficialScores,
   saveOfficialScores,
+  clearClassQuizRecords,
   detectApiEndpoint,
   exportClassScores,
   importClassScores
@@ -1105,24 +1106,33 @@ export default function Quiz() {
     triggerFileDownload(blob, fileName);
   };
 
-  // Clear records for selected quiz
-  const handleClearRecords = () => {
-    const quizName = selectedQuizModule.title;
-    if (
-      window.confirm(
-        `⚠️ 警告：确定要清空【${quizName}】的所有成绩记录吗？此操作不可恢复！`
-      )
-    ) {
-      if (selectedQuizId === 'all') {
-        saveRecords([]);
-      } else {
-        const remaining = records.filter(
-          (r) => (r.quizId || 'quiz_ch1_ch2') !== selectedQuizId
-        );
-        saveRecords(remaining);
+  // Clear records for current class (both on central server and local)
+  const handleClearRecords = async () => {
+    const className = classConfig.name;
+    const inputPwd = window.prompt(
+      `⚠️ 警告：此操作将清空【${className}】在中央服务器及本地的所有交卷记录、官方成绩单与设备锁定！\n\n请输入任课教师管理授权密码确认清空：`
+    );
+    if (!inputPwd) return;
+
+    if (inputPwd.trim() !== MASTER_PASSWORD) {
+      alert('❌ 教师管理授权密码错误，清空操作已取消！');
+      return;
+    }
+
+    try {
+      const res = await clearClassQuizRecords(currentClassId, inputPwd.trim());
+      if (res && res.ok && res.data && res.data.success === false) {
+        alert(`❌ 服务器返回失败：${res.data.error || '未知错误'}`);
+        return;
       }
+      setRecords([]);
+      setOfficialSheet(null);
       setActiveReviewRecord(null);
+      setOfficialSuccessToast('已成功彻底清空本班所有测试成绩与设备锁定！');
       if (view === 'review') setView('login');
+      alert(`✅ 已彻底清空【${className}】的所有测试记录！后续所有电脑与浏览器刷新后均将呈现 0 人。`);
+    } catch (err) {
+      alert('清空过程中出现异常：' + err.message);
     }
   };
 
@@ -2092,11 +2102,13 @@ export default function Quiz() {
                 </button>
 
                 <button
+                  id="btn-clear-test-records"
                   onClick={handleClearRecords}
-                  className="p-2.5 rounded-xl bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-500 font-bold text-xs transition-all flex items-center gap-1.5 cursor-pointer"
-                  title="清空当前批次成绩记录"
+                  className="px-3 py-2 rounded-xl bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-500 font-bold text-xs transition-all flex items-center gap-1.5 cursor-pointer"
+                  title="输入教师授权密码，彻底清空本班所有测试成绩与设备锁定"
                 >
-                  <Trash2 className="w-4 h-4" />
+                  <Trash2 className="w-3.5 h-3.5 text-rose-500" />
+                  <span className="hidden sm:inline">清空测试成绩</span>
                 </button>
               </div>
             </div>

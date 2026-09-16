@@ -130,6 +130,9 @@ async function apiRequest(action, classId, method = 'GET', body = null, extraPar
 
 export async function fetchQuizRecords(classId) {
   const localKey = STORAGE_KEYS.quizRecords(classId);
+  const localResetKey = `ainetwork_reset_at_${classId}`;
+  let localResetAt = Number(localStorage.getItem(localResetKey) || 0);
+
   let localRecords = [];
   try {
     const raw = localStorage.getItem(localKey);
@@ -141,9 +144,11 @@ export async function fetchQuizRecords(classId) {
   } catch {}
 
   let serverRecords = null;
+  let serverResetAt = 0;
   const res = await apiRequest('get_records', classId, 'GET');
   if (res.ok && res.data && Array.isArray(res.data.records)) {
     serverRecords = res.data.records;
+    serverResetAt = Number(res.data.resetAt || 0);
   } else {
     // Static JSON fallback if API is offline / 404
     try {
@@ -157,6 +162,20 @@ export async function fetchQuizRecords(classId) {
     } catch {}
   }
 
+  // Check if server was reset after our local timestamp
+  if (serverResetAt > localResetAt) {
+    localStorage.setItem(localResetKey, String(serverResetAt));
+    localStorage.removeItem(localKey);
+    if (classId === '24-1') {
+      localStorage.removeItem('ainetwork_quiz_records_v2');
+    }
+    // Also remove local device locks so this machine can answer again
+    localStorage.removeItem(`ainetwork_device_locks_${classId}`);
+    localStorage.removeItem('ainetwork_device_lock_quiz_ch1_ch2');
+    localRecords = [];
+    localResetAt = serverResetAt;
+  }
+
   if (serverRecords) {
     // Merge strategy:
     // Create map of server records by unique studentId + quizId + attempt (or submittedAt)
@@ -166,15 +185,18 @@ export async function fetchQuizRecords(classId) {
       recordMap.set(key, r);
     });
 
-    // If local has records not yet on server, keep them and push to server in background
+    // If server was emptied (serverRecords is empty) and we had local cache,
+    // do NOT re-upload local cache unless local records were created AFTER the reset!
     const unpushed = [];
-    localRecords.forEach((r) => {
-      const key = `${r.studentId}_${r.quizId || 'quiz_ch1_ch2'}_${r.attempt || 1}`;
-      if (!recordMap.has(key)) {
-        recordMap.set(key, r);
-        unpushed.push(r);
-      }
-    });
+    if (serverRecords.length > 0) {
+      localRecords.forEach((r) => {
+        const key = `${r.studentId}_${r.quizId || 'quiz_ch1_ch2'}_${r.attempt || 1}`;
+        if (!recordMap.has(key)) {
+          recordMap.set(key, r);
+          unpushed.push(r);
+        }
+      });
+    }
 
     const merged = Array.from(recordMap.values());
     // Sort chronologically by submittedAt
@@ -196,6 +218,35 @@ export async function fetchQuizRecords(classId) {
   }
 
   return localRecords;
+}
+
+export async function clearClassQuizRecords(classId, password = '5163') {
+  const localKey = STORAGE_KEYS.quizRecords(classId);
+  const localResetKey = `ainetwork_reset_at_${classId}`;
+  const now = Date.now();
+
+  localStorage.setItem(localResetKey, String(now));
+  localStorage.removeItem(localKey);
+  if (classId === '24-1') {
+    localStorage.removeItem('ainetwork_quiz_records_v2');
+  }
+  // Clear device locks
+  localStorage.removeItem(`ainetwork_device_locks_${classId}`);
+  localStorage.removeItem('ainetwork_device_lock_quiz_ch1_ch2');
+  localStorage.removeItem(STORAGE_KEYS.studentLogins(classId));
+
+  // Remove any local official score sheets for this class
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith(`ainetwork_official_scores_${classId}_`)) {
+        localStorage.removeItem(k);
+      }
+    }
+  } catch {}
+
+  const res = await apiRequest('clear_records', classId, 'POST', { password });
+  return res;
 }
 
 export async function saveSingleQuizRecord(classId, record) {
@@ -255,8 +306,14 @@ export async function fetchOfficialScores(classId, quizId = 'quiz_ch1_ch2') {
 
   let serverSheet = null;
   const res = await apiRequest('get_official_scores', classId, 'GET', null, { quizId });
-  if (res.ok && res.data && res.data.official) {
-    serverSheet = res.data.official;
+  if (res.ok && res.data) {
+    if (res.data.official) {
+      serverSheet = res.data.official;
+    } else {
+      // Server explicitly reports official sheet does NOT exist (e.g. wiped or never confirmed)
+      try { localStorage.removeItem(localKey); } catch {}
+      return null;
+    }
   } else {
     // Static JSON fallback if API is offline / 404
     try {

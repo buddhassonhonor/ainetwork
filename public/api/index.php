@@ -9,6 +9,9 @@
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
+header("Cache-Control: no-cache, no-store, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
 header("Content-Type: application/json; charset=utf-8");
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -97,7 +100,15 @@ switch ($action) {
     // --- QUIZ RECORDS ---
     case 'get_records':
         $records = readJsonFile($recordsFile, []);
-        echo json_encode(['success' => true, 'class' => $classId, 'count' => count($records), 'records' => $records]);
+        $resetFile = $dataDir . DIRECTORY_SEPARATOR . "reset_{$classId}.json";
+        $resetData = readJsonFile($resetFile, ['resetAt' => 0]);
+        echo json_encode([
+            'success' => true,
+            'class' => $classId,
+            'resetAt' => isset($resetData['resetAt']) ? (int)$resetData['resetAt'] : 0,
+            'count' => count($records),
+            'records' => $records
+        ]);
         break;
 
     case 'get_official_scores':
@@ -188,11 +199,21 @@ switch ($action) {
         $pwd = isset($inputBody['password']) ? $inputBody['password'] : '';
         if ($pwd !== '5163') {
             http_response_code(403);
-            echo json_encode(['success' => false, 'error' => 'Unauthorized']);
+            echo json_encode(['success' => false, 'error' => '密码错误，请输入正确的教师管理密码']);
             break;
         }
+        $nowEpoch = round(microtime(true) * 1000);
+        $resetFile = $dataDir . DIRECTORY_SEPARATOR . "reset_{$classId}.json";
+        writeJsonFile($resetFile, ['classId' => $classId, 'resetAt' => $nowEpoch]);
         writeJsonFile($recordsFile, []);
-        echo json_encode(['success' => true, 'count' => 0]);
+        // Also remove official scores for this class
+        $officialFiles = glob($dataDir . DIRECTORY_SEPARATOR . "official_scores_{$classId}_*.json");
+        if ($officialFiles) {
+            foreach ($officialFiles as $f) { @unlink($f); }
+        }
+        // Also clear device locks
+        writeJsonFile($locksFile, new stdClass());
+        echo json_encode(['success' => true, 'class' => $classId, 'resetAt' => $nowEpoch, 'count' => 0]);
         break;
 
     // --- STUDENT LOGINS (for Attendance) ---

@@ -52,11 +52,14 @@ public class QuizApiHandler : IHttpHandler {
 
             try { res.TrySkipIisCustomErrors = true; } catch { }
 
-            // Safe CORS headers for all IIS pipeline modes (Classic & Integrated)
+            // Safe CORS and Cache-Control headers for all IIS pipeline modes (Classic & Integrated)
             try {
                 res.AppendHeader("Access-Control-Allow-Origin", "*");
                 res.AppendHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
                 res.AppendHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
+                res.AppendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+                res.AppendHeader("Pragma", "no-cache");
+                res.AppendHeader("Expires", "0");
             } catch { }
 
             if (req.HttpMethod == "OPTIONS") {
@@ -98,6 +101,7 @@ public class QuizApiHandler : IHttpHandler {
             string loginsFile = Path.Combine(dataDir, "logins_" + classId + ".json");
             string attendanceFile = Path.Combine(dataDir, "attendance_" + classId + ".json");
             string locksFile = Path.Combine(dataDir, "device_locks_" + classId + ".json");
+            string resetFile = Path.Combine(dataDir, "reset_" + classId + ".json");
 
             lock (_lockObj) {
                 switch (action) {
@@ -150,7 +154,37 @@ public class QuizApiHandler : IHttpHandler {
 
                     case "get_records":
                         string content = File.Exists(recordsFile) ? File.ReadAllText(recordsFile, Encoding.UTF8) : "[]";
-                        res.Write("{\"success\":true,\"class\":\"" + classId + "\",\"records\":" + content + "}");
+                        long resetEpoch = 0;
+                        try {
+                            if (File.Exists(resetFile)) {
+                                string rText = File.ReadAllText(resetFile, Encoding.UTF8);
+                                Match rm = Regex.Match(rText, "\"resetAt\"\\s*:\\s*(\\d+)");
+                                if (rm.Success) long.TryParse(rm.Groups[1].Value, out resetEpoch);
+                            }
+                        } catch { }
+                        res.Write("{\"success\":true,\"class\":\"" + classId + "\",\"resetAt\":" + resetEpoch + ",\"records\":" + content + "}");
+                        break;
+
+                    case "clear_records":
+                        if (!body.Contains("\"password\":\"5163\"") && !body.Contains("\"password\": \"5163\"")) {
+                            res.Write("{\"success\":false,\"error\":\"\\u5bc6\\u7801\\u9519\\u8bef\\uff0c\\u8bf7\\u8f93\\u5165\\u6b63\\u786e\\u7684\\u6559\\u5e08\\u7ba1\\u7406\\u5bc6\\u7801\"}");
+                            break;
+                        }
+                        long nowReset = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
+                        SafeWriteFile(resetFile, "{\"classId\":\"" + classId + "\",\"resetAt\":" + nowReset + "}");
+                        SafeWriteFile(recordsFile, "[]");
+                        try {
+                            if (Directory.Exists(dataDir)) {
+                                string[] offFiles = Directory.GetFiles(dataDir, "official_scores_" + classId + "_*.json");
+                                foreach (string of in offFiles) {
+                                    try { File.Delete(of); } catch { }
+                                }
+                            }
+                        } catch { }
+                        try {
+                            if (File.Exists(locksFile)) SafeWriteFile(locksFile, "{}");
+                        } catch { }
+                        res.Write("{\"success\":true,\"class\":\"" + classId + "\",\"resetAt\":" + nowReset + ",\"count\":0}");
                         break;
 
                     case "get_official_scores":
