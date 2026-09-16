@@ -44,7 +44,10 @@ import {
   saveSingleQuizRecord,
   recordStudentLogin,
   fetchOfficialScores,
-  saveOfficialScores
+  saveOfficialScores,
+  detectApiEndpoint,
+  exportClassScores,
+  importClassScores
 } from '../utils/syncStorage';
 import {
   CLASSES_CONFIG,
@@ -203,8 +206,41 @@ export default function Quiz() {
   };
 
   const [records, setRecords] = useState(() => loadClassRecords(getInitialClassId()));
-  const [serverSyncStatus, setServerSyncStatus] = useState({ online: true, lastSync: null });
+  const [serverSyncStatus, setServerSyncStatus] = useState({ online: false, lastSync: null });
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [showServerHelpModal, setShowServerHelpModal] = useState(false);
+  const backupFileInputRef = useRef(null);
+
+  // Export full score bundle for backup or multi-computer sync
+  const handleExportBackup = () => {
+    const bundle = exportClassScores(currentClassId);
+    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(bundle, null, 2));
+    const a = document.createElement('a');
+    a.href = dataStr;
+    a.download = `ainetwork_${currentClassId}_scores_backup_${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  };
+
+  // Import score bundle from another machine
+  const handleImportBackup = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async (evt) => {
+      try {
+        const json = JSON.parse(evt.target.result);
+        const res = await importClassScores(currentClassId, json);
+        alert(`✅ 成绩数据导入成功！已成功合并 ${res.count} 条记录。`);
+        refreshRecordsFromServer(currentClassId, selectedQuizId);
+      } catch (err) {
+        alert('导入失败：' + err.message);
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  };
 
   // Official Master Score Sheet State ("唯一成绩单")
   const [officialSheet, setOfficialSheet] = useState(null);
@@ -218,15 +254,18 @@ export default function Quiz() {
   const refreshRecordsFromServer = useCallback(async (clsId = currentClassId, qId = selectedQuizId) => {
     setIsRefreshing(true);
     try {
-      // 1. Fetch live quiz records from central server
+      // 1. Check API endpoint availability
+      const ep = await detectApiEndpoint();
+
+      // 2. Fetch live quiz records from central server
       const serverRecords = await fetchQuizRecords(clsId);
 
-      // 2. Fetch official archived score sheet for the selected quiz
+      // 3. Fetch official archived score sheet for the selected quiz
       const actualQid = qId === 'all' ? (QUIZ_MODULES[0]?.id || 'quiz_ch1_ch2') : qId;
       const officialData = await fetchOfficialScores(clsId, actualQid);
       setOfficialSheet(officialData || null);
 
-      // 3. Merging strategy:
+      // 4. Merging strategy:
       // If official scores exist, ensure those records are included in the active records
       // so opening in a new computer or fresh browser NEVER presents a blank scoreboard!
       let finalRecords = Array.isArray(serverRecords) ? [...serverRecords] : [];
@@ -257,7 +296,7 @@ export default function Quiz() {
       }
 
       setServerSyncStatus({
-        online: true,
+        online: !!ep,
         lastSync: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })
       });
     } catch (e) {
@@ -795,7 +834,7 @@ export default function Quiz() {
     if (e) e.preventDefault();
     const cleanPwd = officialPasswordInput.trim();
     if (cleanPwd !== MASTER_PASSWORD) {
-      setOfficialModalError('授权密码错误，请输入任课教师管理密码 5163！');
+      setOfficialModalError('授权密码错误，请核对后重新输入！');
       return;
     }
 
@@ -1205,7 +1244,7 @@ export default function Quiz() {
                 setView('attendance');
               }}
               className="px-3 sm:px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200/90 flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs flex-shrink-0"
-              title="教师统计学生实时登录情况与考勤签到（密码5163）"
+              title="教师统计学生实时登录情况与考勤签到"
             >
               <ClipboardCheck className="w-4 h-4 text-emerald-600" />
               <span className="hidden md:inline">统计登录/考勤</span>
@@ -1506,7 +1545,7 @@ export default function Quiz() {
                     className="text-xs font-bold text-emerald-700 hover:text-emerald-900 inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer bg-emerald-50/80 hover:bg-emerald-100 py-2.5 px-4 rounded-2xl border border-emerald-200/90 shadow-2xs mt-1"
                   >
                     <ClipboardCheck className="w-4 h-4 text-emerald-600" />
-                    <span>教师统计学生实时登录 · 考勤签到与缺勤汇总 (密码5163) →</span>
+                    <span>教师统计学生实时登录 · 考勤签到与缺勤汇总 →</span>
                   </button>
                 </div>
               </div>
@@ -1982,18 +2021,27 @@ export default function Quiz() {
 
                 {/* Real-time Server Sync Status & Refresh */}
                 <div className="flex items-center gap-1.5">
-                  <div
-                    className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold border shadow-2xs ${
-                      serverSyncStatus.online
-                        ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
-                        : 'bg-amber-50 text-amber-800 border-amber-200'
-                    }`}
-                    title={serverSyncStatus.online ? '已连通中央服务器：全班同学交卷后将实时汇总到此' : '离线存储模式'}
-                  >
-                    <span className={`w-2 h-2 rounded-full ${serverSyncStatus.online ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`}></span>
-                    <span className="hidden sm:inline">{serverSyncStatus.online ? `云端同步正常${serverSyncStatus.lastSync ? ` · ${serverSyncStatus.lastSync}` : ''}` : '离线模式'}</span>
-                    <span className="sm:hidden">{serverSyncStatus.online ? '同步中' : '离线'}</span>
-                  </div>
+                  {serverSyncStatus.online ? (
+                    <div
+                      className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold border shadow-2xs bg-emerald-50 text-emerald-800 border-emerald-200"
+                      title="已连通中央服务器：全班同学交卷后将实时汇总到此，多电脑同步"
+                    >
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                      <span className="hidden sm:inline">云端已连接{serverSyncStatus.lastSync ? ` · ${serverSyncStatus.lastSync}` : ''}</span>
+                      <span className="sm:hidden">已连接</span>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => setShowServerHelpModal(true)}
+                      className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold border shadow-2xs bg-rose-50 text-rose-700 border-rose-300 hover:bg-rose-100 transition-colors cursor-pointer"
+                      title="点击查看为什么换电脑显示0人及宝塔激活指南"
+                    >
+                      <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+                      <span className="hidden sm:inline">服务器接口未激活 (仅本机缓存)</span>
+                      <span className="sm:hidden">未激活</span>
+                      <span className="underline font-black text-indigo-700 ml-0.5">解决指南</span>
+                    </button>
+                  )}
 
                   <button
                     onClick={() => refreshRecordsFromServer(currentClassId)}
@@ -2005,6 +2053,32 @@ export default function Quiz() {
                     <span>{isRefreshing ? '拉取中...' : '刷新'}</span>
                   </button>
                 </div>
+
+                {/* Backup JSON tools */}
+                <button
+                  onClick={handleExportBackup}
+                  className="px-3 py-2 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                  title="导出本班所有交卷与官方成绩数据包 (.json)，方便跨电脑转移或备份"
+                >
+                  <Download className="w-3.5 h-3.5 text-slate-500" />
+                  <span className="hidden sm:inline">导出成绩包</span>
+                </button>
+
+                <input
+                  type="file"
+                  ref={backupFileInputRef}
+                  onChange={handleImportBackup}
+                  accept=".json"
+                  className="hidden"
+                />
+                <button
+                  onClick={() => backupFileInputRef.current?.click()}
+                  className="px-3 py-2 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                  title="导入从其他电脑导出的成绩包并合入当前电脑"
+                >
+                  <FileText className="w-3.5 h-3.5 text-indigo-600" />
+                  <span className="hidden sm:inline">导入成绩包</span>
+                </button>
 
                 {/* Export Excel (.xlsx) */}
                 <button
@@ -2080,10 +2154,10 @@ export default function Quiz() {
                         id="btn-update-official-scores"
                         onClick={handleOpenOfficialModal}
                         className="w-full sm:w-auto px-4.5 py-2.5 rounded-2xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white font-black text-xs sm:text-sm shadow-md shadow-amber-600/25 flex items-center justify-center gap-2 transition-all cursor-pointer hover:scale-102"
-                        title="教师输入密码5163，将补做学生的最新成绩合入官方成绩单"
+                        title="教师输入管理密码，将补做学生的最新成绩合入官方成绩单"
                       >
                         <Lock className="w-4 h-4" />
-                        <span>输入密码 5163 确认更新官方成绩单 ({unmergedSubmissions.length}人待合入)</span>
+                        <span>确认更新官方成绩单 ({unmergedSubmissions.length}人待合入)</span>
                       </button>
                     ) : (
                       <button
@@ -2093,7 +2167,7 @@ export default function Quiz() {
                         title="教师重新核定并更新归档官方成绩单"
                       >
                         <Lock className="w-3.5 h-3.5 text-emerald-600" />
-                        <span>重新核定/更新官方成绩单 (密码5163)</span>
+                        <span>重新核定/更新官方成绩单</span>
                       </button>
                     )}
                   </div>
@@ -2114,7 +2188,7 @@ export default function Quiz() {
                         </span>
                       </div>
                       <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                        为保证成绩永久有效，防止更换浏览器或电脑时榜单为空，请任课教师核实学生交卷后，输入管理密码 <strong className="text-indigo-700 font-mono">5163</strong> 确认成绩榜单并保存为本卷唯一成绩单。
+                        为保证成绩永久有效，防止更换浏览器或电脑时榜单为空，请任课教师核实学生交卷后，输入管理授权密码确认成绩榜单并保存为本卷唯一成绩单。
                       </p>
                     </div>
                   </div>
@@ -2124,10 +2198,10 @@ export default function Quiz() {
                       id="btn-archive-official-scores"
                       onClick={handleOpenOfficialModal}
                       className="w-full sm:w-auto px-5 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs sm:text-sm shadow-md shadow-indigo-600/25 flex items-center justify-center gap-2 transition-all cursor-pointer hover:scale-102"
-                      title="教师输入密码5163，确认成绩榜单并保存记录为本测试卷的唯一成绩单"
+                      title="教师输入管理授权密码，确认成绩榜单并保存记录为本测试卷的唯一成绩单"
                     >
                       <Lock className="w-4 h-4" />
-                      <span>确认成绩榜单并保存为唯一成绩单 (密码5163)</span>
+                      <span>确认成绩榜单并保存为唯一成绩单</span>
                     </button>
                   </div>
                 </div>
@@ -2331,7 +2405,7 @@ export default function Quiz() {
                                   已完成
                                 </span>
                                 {student.isUnmerged ? (
-                                  <span className="text-[10px] font-bold text-amber-700 bg-amber-100/90 border border-amber-300 px-1.5 py-0.5 rounded-md inline-block animate-pulse" title="该生有补做或新交卷成绩，待教师输入5163合入官方成绩单">
+                                  <span className="text-[10px] font-bold text-amber-700 bg-amber-100/90 border border-amber-300 px-1.5 py-0.5 rounded-md inline-block animate-pulse" title="该生有补做或新交卷成绩，待教师输入管理密码合入官方成绩单">
                                     待确认合入
                                   </span>
                                 ) : student.isOfficiallyArchived ? (
@@ -2721,7 +2795,7 @@ export default function Quiz() {
                     setOfficialPasswordInput(e.target.value);
                     if (officialModalError) setOfficialModalError('');
                   }}
-                  placeholder="请输入教师管理密码 (5163)"
+                  placeholder="请输入教师管理密码"
                   autoFocus
                   className="w-full px-4.5 py-3.5 rounded-2xl border-2 border-slate-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none text-slate-900 font-bold transition-all text-sm bg-slate-50/50 focus:bg-white"
                 />
@@ -2757,6 +2831,114 @@ export default function Quiz() {
                 </button>
               </div>
             </form>
+          </motion.div>
+        </div>
+      )}
+
+      {/* SERVER SETUP & BACKUP MODAL */}
+      {showServerHelpModal && (
+        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
+          <motion.div
+            initial={{ scale: 0.92, opacity: 0, y: 10 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            className="bg-white rounded-3xl p-6 sm:p-8 max-w-xl w-full shadow-2xl border-2 border-indigo-200 overflow-y-auto max-h-[90vh]"
+          >
+            <div className="flex items-start gap-4 mb-4">
+              <div className="w-12 h-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center flex-shrink-0 shadow-lg shadow-amber-500/30">
+                <AlertCircle className="w-6 h-6" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-black text-slate-900 leading-tight">
+                  为什么换电脑后成绩显示为 0 人？
+                </h3>
+                <p className="text-xs text-slate-500 mt-1">
+                  服务器接口状态诊断与 1 分钟一键激活说明
+                </p>
+              </div>
+              <button
+                onClick={() => setShowServerHelpModal(false)}
+                className="text-slate-400 hover:text-slate-700 font-extrabold text-sm p-1 cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-4 text-xs text-slate-700 leading-relaxed">
+              <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200">
+                <h4 className="font-black text-rose-900 mb-1 flex items-center gap-1.5">
+                  <XCircle className="w-4 h-4 text-rose-600 flex-shrink-0" />
+                  根本原因分析
+                </h4>
+                <div className="text-rose-800 space-y-1">
+                  <p>
+                    1. <strong>服务器接口返回 404</strong>：当前站点在宝塔 Windows IIS 中创建为“纯静态”网站，未挂载 PHP 处理脚本。学生点击“交卷”发送数据到 <code>/api/index.php</code> 时，服务器直接返回 404，导致数据未能写入服务器硬盘。
+                  </p>
+                  <p>
+                    2. <strong>为何换电脑就是 0 人</strong>：因为服务器接口未通，这 3 名同学成绩暂时保存在第 1 台电脑本机的浏览器缓存中。换到第 2 台电脑时，本地缓存是空的，从服务器也拉不到数据，因此显示 0 人。
+                  </p>
+                  <p>
+                    3. <strong>关于 GitHub Actions</strong>：GitHub Actions 仅在您执行 <code>git push</code> 时把网站编译代码推送到服务器，它不是数据库，无法在学生上课交卷时自动收集成绩。
+                  </p>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200">
+                <h4 className="font-black text-emerald-900 mb-2 flex items-center gap-1.5">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                  彻底解决办法（只需在宝塔中点 1 步，耗时 5 秒）：
+                </h4>
+                <ol className="list-decimal list-inside space-y-1.5 text-emerald-950 font-medium pl-1">
+                  <li>打开并登录您的<strong>宝塔 Windows 面板</strong>；</li>
+                  <li>点击左侧菜单<strong>【网站】</strong>；</li>
+                  <li>点击站点名称 <strong>baota.pomole.net</strong>；</li>
+                  <li>在弹出窗口中点击<strong>【PHP版本】</strong>标签，将下拉框从“静态”切换为<strong>【PHP-7.4】</strong>（或任意已安装的 PHP 版本）；</li>
+                  <li>点击<strong>【保存】</strong>！</li>
+                </ol>
+                <p className="text-[11px] text-emerald-800 mt-2 font-bold">
+                  💡 保存后刷新本页面，顶部的红灯会立刻变为绿灯 🟢，所有学生交卷将秒级自动写入服务器硬盘，多电脑多机房实时互通！
+                </p>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                <h4 className="font-black text-slate-900 mb-2">
+                  课堂应急：当前电脑成绩快速转移到另一台电脑
+                </h4>
+                <p className="text-slate-600 mb-3">
+                  若您此时在机房上课、暂时无法登录宝塔后台，可使用下方工具直接转移：
+                </p>
+                <div className="flex flex-col sm:flex-row items-center gap-2">
+                  <button
+                    onClick={() => {
+                      handleExportBackup();
+                      setShowServerHelpModal(false);
+                    }}
+                    className="w-full sm:flex-1 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm cursor-pointer"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>导出当前电脑的成绩单 (.json)</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      backupFileInputRef.current?.click();
+                      setShowServerHelpModal(false);
+                    }}
+                    className="w-full sm:flex-1 py-2.5 rounded-xl bg-white border border-slate-300 hover:bg-slate-100 text-slate-800 font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm cursor-pointer"
+                  >
+                    <FileText className="w-3.5 h-3.5 text-indigo-600" />
+                    <span>导入到这台电脑</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-5 flex justify-end">
+              <button
+                onClick={() => setShowServerHelpModal(false)}
+                className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs cursor-pointer"
+              >
+                我知道了，返回成绩榜单
+              </button>
+            </div>
           </motion.div>
         </div>
       )}

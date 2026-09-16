@@ -68,7 +68,7 @@ public class QuizApiHandler : IHttpHandler {
                 case "save_official_scores":
                     if (!body.Contains("\"password\":\"5163\"") && !body.Contains("\"password\": \"5163\"")) {
                         res.StatusCode = 403;
-                        res.Write("{\"success\":false,\"error\":\"密码错误，请输入教师授权密码 5163\"}");
+                        res.Write("{\"success\":false,\"error\":\"密码错误，请输入正确的教师管理密码\"}");
                         break;
                     }
                     string saveQid = req.QueryString["quizId"] ?? "quiz_ch1_ch2";

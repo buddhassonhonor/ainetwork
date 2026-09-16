@@ -98,12 +98,12 @@ async function apiRequest(action, classId, method = 'GET', body = null, extraPar
     const options = {
       method,
       headers: {
-        'Content-Type': 'application/json',
         Accept: 'application/json',
       },
     };
 
-    if (method === 'POST' && body) {
+    if (body && (method === 'POST' || method === 'PUT')) {
+      options.headers['Content-Type'] = 'application/json';
       options.body = JSON.stringify(body);
     }
 
@@ -140,10 +140,24 @@ export async function fetchQuizRecords(classId) {
     }
   } catch {}
 
+  let serverRecords = null;
   const res = await apiRequest('get_records', classId, 'GET');
   if (res.ok && res.data && Array.isArray(res.data.records)) {
-    const serverRecords = res.data.records;
+    serverRecords = res.data.records;
+  } else {
+    // Static JSON fallback if API is offline / 404
+    try {
+      const staticRes = await fetch(`/api/data/quiz_records_${classId}.json?_t=${Date.now()}`);
+      if (staticRes.ok) {
+        const staticData = await staticRes.json();
+        if (Array.isArray(staticData)) {
+          serverRecords = staticData;
+        }
+      }
+    } catch {}
+  }
 
+  if (serverRecords) {
     // Merge strategy:
     // Create map of server records by unique studentId + quizId + attempt (or submittedAt)
     const recordMap = new Map();
@@ -239,9 +253,24 @@ export async function fetchOfficialScores(classId, quizId = 'quiz_ch1_ch2') {
     if (raw) localSheet = JSON.parse(raw);
   } catch {}
 
+  let serverSheet = null;
   const res = await apiRequest('get_official_scores', classId, 'GET', null, { quizId });
   if (res.ok && res.data && res.data.official) {
-    const serverSheet = res.data.official;
+    serverSheet = res.data.official;
+  } else {
+    // Static JSON fallback if API is offline / 404
+    try {
+      const staticRes = await fetch(`/api/data/official_scores_${classId}_${quizId}.json?_t=${Date.now()}`);
+      if (staticRes.ok) {
+        const staticData = await staticRes.json();
+        if (staticData && staticData.records) {
+          serverSheet = staticData;
+        }
+      }
+    } catch {}
+  }
+
+  if (serverSheet) {
     try {
       localStorage.setItem(localKey, JSON.stringify(serverSheet));
     } catch {}
@@ -252,7 +281,7 @@ export async function fetchOfficialScores(classId, quizId = 'quiz_ch1_ch2') {
 }
 
 /**
- * Teacher confirms and permanently saves official master score sheet (Requires password 5163)
+ * Teacher confirms and permanently saves official master score sheet (Requires teacher password)
  */
 export async function saveOfficialScores(classId, quizId = 'quiz_ch1_ch2', records, password = '5163') {
   const localKey = `ainetwork_official_scores_${classId}_${quizId}`;
@@ -279,14 +308,105 @@ export async function saveOfficialScores(classId, quizId = 'quiz_ch1_ch2', recor
   }, { quizId });
 
   if (res.ok && res.data && res.data.official) {
-    return { success: true, official: res.data.official };
+    return { success: true, official: res.data.official, onServer: true };
   }
 
   if (res.status === 403 || res.error?.includes('密码')) {
-    return { success: false, error: '密码错误，请输入教师授权密码 5163' };
+    return { success: false, error: '密码错误，请输入正确的教师管理密码' };
   }
 
-  return { success: true, official: sheet, offline: true };
+  // Server is offline / 404
+  return {
+    success: false,
+    offline: true,
+    official: sheet,
+    error: '未能写入中央服务器（服务器返回404或接口离线）。成绩当前仅保存在本机缓存中，若换电脑查看将无法读取。请在服务器宝塔面板中为该网站开启PHP，或使用【导出成绩单】功能备份转移。'
+  };
+}
+
+/**
+ * Export full class score & official sheet bundle for backup or cross-computer transfer
+ */
+export function exportClassScores(classId) {
+  const localKey = STORAGE_KEYS.quizRecords(classId);
+  let records = [];
+  try {
+    const raw = localStorage.getItem(localKey);
+    if (raw) records = JSON.parse(raw);
+  } catch {}
+
+  const officialScores = {};
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && k.startsWith(`ainetwork_official_scores_${classId}_`)) {
+      try {
+        officialScores[k] = JSON.parse(localStorage.getItem(k));
+      } catch {}
+    }
+  }
+
+  return {
+    exportVersion: 'ainetwork_v1',
+    classId,
+    exportedAt: new Date().toISOString(),
+    recordsCount: records.length,
+    records,
+    officialScores
+  };
+}
+
+/**
+ * Import class score bundle (e.g. transferred via USB/file from another computer)
+ */
+export async function importClassScores(classId, bundle) {
+  if (!bundle || typeof bundle !== 'object') {
+    throw new Error('无效的成绩数据文件格式');
+  }
+
+  const localKey = STORAGE_KEYS.quizRecords(classId);
+  let existingRecords = [];
+  try {
+    const raw = localStorage.getItem(localKey);
+    if (raw) existingRecords = JSON.parse(raw);
+  } catch {}
+
+  const recordMap = new Map();
+  existingRecords.forEach((r) => {
+    const key = `${r.studentId}_${r.quizId || 'quiz_ch1_ch2'}_${r.attempt || 1}`;
+    recordMap.set(key, r);
+  });
+
+  const incomingRecords = Array.isArray(bundle.records) ? bundle.records : [];
+  incomingRecords.forEach((r) => {
+    const key = `${r.studentId}_${r.quizId || 'quiz_ch1_ch2'}_${r.attempt || 1}`;
+    recordMap.set(key, r);
+  });
+
+  const merged = Array.from(recordMap.values());
+  merged.sort((a, b) => new Date(a.submittedAt || 0) - new Date(b.submittedAt || 0));
+
+  try {
+    localStorage.setItem(localKey, JSON.stringify(merged));
+    if (classId === '24-1') {
+      localStorage.setItem('ainetwork_quiz_records_v2', JSON.stringify(merged));
+    }
+  } catch {}
+
+  // Restore official score sheets
+  if (bundle.officialScores && typeof bundle.officialScores === 'object') {
+    Object.entries(bundle.officialScores).forEach(([k, v]) => {
+      try {
+        localStorage.setItem(k, JSON.stringify(v));
+      } catch {}
+    });
+  }
+
+  // If server is reachable, push merged to server!
+  try {
+    await apiRequest('batch_save_records', classId, 'POST', { records: merged });
+  } catch {}
+
+  return { success: true, count: merged.length };
 }
 
 // ==========================================
@@ -336,9 +456,24 @@ export async function fetchStudentLogins(classId) {
     if (raw) localList = JSON.parse(raw);
   } catch {}
 
+  let serverLogins = null;
   const res = await apiRequest('get_logins', classId, 'GET');
   if (res.ok && res.data && Array.isArray(res.data.logins)) {
-    const serverLogins = res.data.logins;
+    serverLogins = res.data.logins;
+  } else {
+    // Static fallback
+    try {
+      const staticRes = await fetch(`/api/data/logins_${classId}.json?_t=${Date.now()}`);
+      if (staticRes.ok) {
+        const staticData = await staticRes.json();
+        if (Array.isArray(staticData)) {
+          serverLogins = staticData;
+        }
+      }
+    } catch {}
+  }
+
+  if (serverLogins) {
     const loginMap = new Map();
     serverLogins.forEach((l) => loginMap.set(l.id, l));
     localList.forEach((l) => {

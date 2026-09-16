@@ -142,7 +142,7 @@ function quizDataApiPlugin() {
                 const pwd = body?.password;
                 if (pwd !== '5163') {
                   res.statusCode = 403;
-                  res.end(JSON.stringify({ success: false, error: '密码错误，请输入教师授权密码 5163' }));
+                  res.end(JSON.stringify({ success: false, error: '密码错误，请输入正确的教师管理密码' }));
                   return;
                 }
                 const quizId = (params.get('quizId') || body?.quizId || 'quiz_ch1_ch2').replace(/[^a-zA-Z0-9_-]/g, '');

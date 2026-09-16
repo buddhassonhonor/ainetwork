@@ -62,7 +62,7 @@ function LoginGate({ onAuth, onCancel }) {
       sessionStorage.setItem(AUTH_SESSION_KEY, 'true');
       onAuth();
     } else {
-      setErr('密码错误！请输入教师管理授权密码 5163');
+      setErr('密码错误！请输入正确的教师管理授权密码');
       setPwd('');
     }
   };
@@ -92,7 +92,7 @@ function LoginGate({ onAuth, onCancel }) {
                 setPwd(e.target.value);
                 if (err) setErr('');
               }}
-              placeholder="请输入密码（5163）"
+              placeholder="请输入教师管理授权密码"
               autoFocus
               className="w-full px-4 py-3.5 rounded-2xl border-2 border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 outline-none text-slate-900 font-bold transition-all text-sm bg-slate-50/50 focus:bg-white text-center tracking-widest text-lg"
               required

@@ -35,4 +35,7 @@ jobs:
           local-dir: ./dist/
           server-dir: /
           state-name: .ftp-deploy-sync-state.json
-
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/api/data/**

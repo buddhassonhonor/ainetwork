@@ -55,10 +55,10 @@ export default function QuizPortal({ onSelectClass, selectedClassId, onOpenAtten
             <button
               onClick={onOpenAttendance}
               className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/90 text-emerald-800 shadow-xs cursor-pointer transition-all hover:scale-102"
-              title="教师密码5163：统计当前学生实时登录并保存签到记录"
+              title="教师管理：统计当前学生实时登录并保存签到记录"
             >
               <ClipboardCheck className="w-4 h-4 text-emerald-600" />
-              <span>📋 课堂统计登录与考勤 (口令5163)</span>
+              <span>📋 课堂统计登录与考勤</span>
             </button>
           </div>
         </div>

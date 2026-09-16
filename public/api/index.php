@@ -112,7 +112,7 @@ switch ($action) {
         $pwd = isset($inputBody['password']) ? $inputBody['password'] : '';
         if ($pwd !== '5163') {
             http_response_code(403);
-            echo json_encode(['success' => false, 'error' => '密码错误，请输入教师授权密码 5163']);
+            echo json_encode(['success' => false, 'error' => '密码错误，请输入正确的教师管理密码']);
             break;
         }
         $rawQid = isset($_GET['quizId']) ? $_GET['quizId'] : (isset($inputBody['quizId']) ? $inputBody['quizId'] : 'quiz_ch1_ch2');
