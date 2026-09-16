@@ -83,7 +83,7 @@ public class QuizApiHandler : IHttpHandler {
                     case "save_official_scores":
                         if (!body.Contains("\"password\":\"5163\"") && !body.Contains("\"password\": \"5163\"")) {
                             res.StatusCode = 403;
-                            res.Write("{\"success\":false,\"error\":\"密码错误，请输入正确的教师管理密码\"}");
+                            res.Write("{\"success\":false,\"error\":\"\\u5bc6\\u7801\\u9519\\u8bef\\uff0c\\u8bf7\\u8f93\\u5165\\u6b63\\u786e\\u7684\\u6559\\u5e08\\u7ba1\\u7406\\u5bc6\\u7801\"}");
                             break;
                         }
                         string saveQid = req.QueryString["quizId"] ?? "quiz_ch1_ch2";
@@ -212,7 +212,7 @@ public class QuizApiHandler : IHttpHandler {
                     case "clear_logins":
                         if (!body.Contains("\"password\":\"5163\"") && !body.Contains("\"password\": \"5163\"")) {
                             res.StatusCode = 403;
-                            res.Write("{\"success\":false,\"error\":\"密码错误\"}");
+                            res.Write("{\"success\":false,\"error\":\"\\u5bc6\\u7801\\u9519\\u8bef\"}");
                             break;
                         }
                         if (File.Exists(loginsFile)) {
