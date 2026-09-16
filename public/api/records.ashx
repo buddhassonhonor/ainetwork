@@ -8,6 +8,41 @@ using System.Text.RegularExpressions;
 public class QuizApiHandler : IHttpHandler {
     private static readonly object _lockObj = new object();
 
+    private static void SafeWriteFile(string filePath, string content) {
+        try {
+            if (File.Exists(filePath)) {
+                try { File.SetAttributes(filePath, FileAttributes.Normal); } catch { }
+            }
+            File.WriteAllText(filePath, content, Encoding.UTF8);
+            return;
+        } catch { }
+
+        // Fallback: write to temp file in same directory and swap
+        try {
+            string dir = Path.GetDirectoryName(filePath);
+            string tempFile = Path.Combine(dir, "_" + Path.GetFileName(filePath) + "." + Guid.NewGuid().ToString("N") + ".tmp");
+            File.WriteAllText(tempFile, content, Encoding.UTF8);
+
+            try {
+                if (File.Exists(filePath)) {
+                    try { File.SetAttributes(filePath, FileAttributes.Normal); } catch { }
+                    try { File.Delete(filePath); } catch { }
+                }
+                File.Move(tempFile, filePath);
+                return;
+            } catch { }
+
+            try {
+                File.Copy(tempFile, filePath, true);
+                try { File.Delete(tempFile); } catch { }
+                return;
+            } catch { }
+        } catch { }
+
+        // Final attempt
+        File.WriteAllText(filePath, content, Encoding.UTF8);
+    }
+
     public void ProcessRequest(HttpContext context) {
         HttpRequest req = context.Request;
         HttpResponse res = context.Response;
@@ -73,9 +108,15 @@ public class QuizApiHandler : IHttpHandler {
                     case "debug":
                         bool canWrite = false;
                         string writeErr = "";
+                        string fileAttrs = "";
                         try {
+                            if (File.Exists(recordsFile)) {
+                                fileAttrs = File.GetAttributes(recordsFile).ToString();
+                            } else {
+                                fileAttrs = "not_found";
+                            }
                             string testFile = Path.Combine(dataDir, "_test_write.tmp");
-                            File.WriteAllText(testFile, "test", Encoding.UTF8);
+                            SafeWriteFile(testFile, "test");
                             if (File.Exists(testFile)) {
                                 File.Delete(testFile);
                                 canWrite = true;
@@ -83,7 +124,28 @@ public class QuizApiHandler : IHttpHandler {
                         } catch (Exception wex) {
                             writeErr = wex.Message;
                         }
-                        res.Write("{\"status\":\"debug\",\"appPath\":\"" + appPath.Replace("\\", "\\\\") + "\",\"dataDir\":\"" + dataDir.Replace("\\", "\\\\") + "\",\"dataDirExists\":" + (Directory.Exists(dataDir) ? "true" : "false") + ",\"canWrite\":" + (canWrite ? "true" : "false") + ",\"writeErr\":\"" + writeErr.Replace("\\", "\\\\").Replace("\"", "'") + "\"}");
+                        res.Write("{\"status\":\"debug\",\"appPath\":\"" + appPath.Replace("\\", "\\\\") + "\",\"dataDir\":\"" + dataDir.Replace("\\", "\\\\") + "\",\"dataDirExists\":" + (Directory.Exists(dataDir) ? "true" : "false") + ",\"canWrite\":" + (canWrite ? "true" : "false") + ",\"fileAttrs\":\"" + fileAttrs + "\",\"writeErr\":\"" + writeErr.Replace("\\", "\\\\").Replace("\"", "'") + "\"}");
+                        break;
+
+                    case "unlock_data":
+                        int unlockedCount = 0;
+                        string unlockLog = "";
+                        try {
+                            if (Directory.Exists(dataDir)) {
+                                string[] files = Directory.GetFiles(dataDir);
+                                foreach (string f in files) {
+                                    try {
+                                        File.SetAttributes(f, FileAttributes.Normal);
+                                        unlockedCount++;
+                                    } catch (Exception uex) {
+                                        unlockLog += Path.GetFileName(f) + ": " + uex.Message + "; ";
+                                    }
+                                }
+                            }
+                        } catch (Exception dex) {
+                            unlockLog = dex.Message;
+                        }
+                        res.Write("{\"success\":true,\"unlockedCount\":" + unlockedCount + ",\"errors\":\"" + unlockLog.Replace("\\", "\\\\").Replace("\"", "'") + "\"}");
                         break;
 
                     case "get_records":
@@ -119,13 +181,17 @@ public class QuizApiHandler : IHttpHandler {
                             if (rIdx >= 0) {
                                 int start = body.IndexOf("[", rIdx);
                                 int end = body.LastIndexOf("]");
+                                int count = 0;
                                 if (start >= 0 && end > start) {
                                     recordsArr = body.Substring(start, end - start + 1);
+                                    count = Regex.Matches(recordsArr, "\"studentId\"").Count;
                                 }
+                                string sheetJson = "{\"classId\":\"" + classId + "\",\"quizId\":\"" + saveQid + "\",\"savedAt\":\"" + DateTime.Now.ToString("yyyy/M/d HH:mm:ss") + "\",\"teacherConfirmed\":true,\"count\":" + count + ",\"records\":" + recordsArr + "}";
+                                SafeWriteFile(targetOfficial, sheetJson);
+                                res.Write("{\"success\":true,\"official\":" + sheetJson + "}");
+                            } else {
+                                res.Write("{\"success\":false,\"error\":\"Missing records in payload\"}");
                             }
-                            string sheetJson = "{\"classId\":\"" + classId + "\",\"quizId\":\"" + saveQid + "\",\"savedAt\":\"" + DateTime.Now.ToString("yyyy/M/d HH:mm:ss") + "\",\"teacherConfirmed\":true,\"count\":" + Regex.Matches(recordsArr, "\"studentId\"").Count + ",\"records\":" + recordsArr + "}";
-                            File.WriteAllText(targetOfficial, sheetJson, Encoding.UTF8);
-                            res.Write("{\"success\":true,\"official\":" + sheetJson + "}");
                         } catch (Exception ex) {
                             res.Write("{\"success\":false,\"error\":\"" + ex.Message.Replace("\\", "\\\\").Replace("\"", "'") + "\"}");
                         }
@@ -175,7 +241,7 @@ public class QuizApiHandler : IHttpHandler {
                                         updated = updated.Substring(0, updated.Length - 1) + "," + recordJson + "]";
                                     }
                                 }
-                                File.WriteAllText(recordsFile, updated, Encoding.UTF8);
+                                SafeWriteFile(recordsFile, updated);
                                 res.Write("{\"success\":true,\"records\":" + updated + "}");
                             } else {
                                 res.Write("{\"success\":false,\"error\":\"Empty record\"}");
@@ -196,7 +262,7 @@ public class QuizApiHandler : IHttpHandler {
                                     batchRecords = body.Substring(start, end - start + 1);
                                 }
                             }
-                            File.WriteAllText(recordsFile, batchRecords, Encoding.UTF8);
+                            SafeWriteFile(recordsFile, batchRecords);
                             res.Write("{\"success\":true,\"count\":" + Regex.Matches(batchRecords, "\"studentId\"").Count + "}");
                         } catch (Exception ex) {
                             res.Write("{\"success\":false,\"error\":\"" + ex.Message.Replace("\\", "\\\\").Replace("\"", "'") + "\"}");
@@ -236,7 +302,7 @@ public class QuizApiHandler : IHttpHandler {
                                 } else {
                                     updated = updated.Substring(0, updated.Length - 1) + "," + itemJson + "]";
                                 }
-                                File.WriteAllText(loginsFile, updated, Encoding.UTF8);
+                                SafeWriteFile(loginsFile, updated);
                             }
                             res.Write("{\"success\":true}");
                         } catch (Exception ex) {
@@ -250,7 +316,7 @@ public class QuizApiHandler : IHttpHandler {
                             break;
                         }
                         if (File.Exists(loginsFile)) {
-                            File.WriteAllText(loginsFile, "[]", Encoding.UTF8);
+                            SafeWriteFile(loginsFile, "[]");
                         }
                         res.Write("{\"success\":true}");
                         break;
@@ -271,7 +337,7 @@ public class QuizApiHandler : IHttpHandler {
                                     attToSave = body.Substring(start, end - start + 1);
                                 }
                             }
-                            File.WriteAllText(attendanceFile, attToSave, Encoding.UTF8);
+                            SafeWriteFile(attendanceFile, attToSave);
                             res.Write("{\"success\":true}");
                         } catch (Exception ex) {
                             res.Write("{\"success\":false,\"error\":\"" + ex.Message.Replace("\\", "\\\\").Replace("\"", "'") + "\"}");
@@ -301,7 +367,7 @@ public class QuizApiHandler : IHttpHandler {
                                 } else {
                                     updatedLocks = updatedLocks.Substring(0, updatedLocks.Length - 1) + ",\"" + qIdKey + "\":" + lockJson + "}";
                                 }
-                                File.WriteAllText(locksFile, updatedLocks, Encoding.UTF8);
+                                SafeWriteFile(locksFile, updatedLocks);
                             }
                             res.Write("{\"success\":true}");
                         } catch (Exception ex) {
