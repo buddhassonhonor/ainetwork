@@ -1,5 +1,6 @@
 import classRosters from './classRosters.json';
 import networkQuizQuestions from './quizQuestions.json';
+import networkQuizQuestionsCh3 from './quizQuestions_ch3.json';
 import matlabQuizQuestions from './matlabQuestions.json';
 
 export const CLASSES_CONFIG = [
@@ -18,29 +19,29 @@ export const CLASSES_CONFIG = [
     status: 'active',
     statusText: '随堂测验进行中',
     statusBadge: '测验进行中',
-    description: '国家级一流本科专业 · 专业核心课 · 覆盖第1-4章随堂测验',
+    description: '专业核心课 · 覆盖第1-4章随堂测验',
     accentColor: '#4f46e5',
     tagColor: 'indigo',
     questionsType: 'network',
     quizModules: [
       {
         id: 'quiz_ch1_ch2',
-        title: '随堂测验 1：第1-2章 概述与物理层',
-        shortTitle: '第1次测验_第1-2章',
+        title: '【习题1】第1-2章 概述与物理层随堂测验',
+        shortTitle: '习题1_第1-2章',
         chapters: '第1章 概述 · 第2章 物理层',
         totalQuestions: 28,
       },
       {
         id: 'quiz_ch3',
-        title: '随堂测验 2：第3章 数据链路层',
-        shortTitle: '第2次测验_第3章',
+        title: '【习题2】第3章 数据链路层随堂测验',
+        shortTitle: '习题2_第3章',
         chapters: '第3章 数据链路层与局域网',
-        totalQuestions: 20,
+        totalQuestions: 16,
       },
       {
         id: 'quiz_ch4',
-        title: '随堂测验 3：第4章 网络层与IP协议',
-        shortTitle: '第3次测验_第4章',
+        title: '【习题3】第4章 网络层与IP协议随堂测验',
+        shortTitle: '习题3_第4章',
         chapters: '第4章 网络层与IP编址路由',
         totalQuestions: 25,
       },
@@ -68,22 +69,22 @@ export const CLASSES_CONFIG = [
     quizModules: [
       {
         id: 'quiz_ch1_ch2',
-        title: '随堂测验 1：第1-2章 概述与物理层',
-        shortTitle: '第1次测验_第1-2章',
+        title: '【习题1】第1-2章 概述与物理层随堂测验',
+        shortTitle: '习题1_第1-2章',
         chapters: '第1章 概述 · 第2章 物理层',
         totalQuestions: 28,
       },
       {
         id: 'quiz_ch3',
-        title: '随堂测验 2：第3章 数据链路层',
-        shortTitle: '第2次测验_第3章',
+        title: '【习题2】第3章 数据链路层随堂测验',
+        shortTitle: '习题2_第3章',
         chapters: '第3章 数据链路层与局域网',
-        totalQuestions: 20,
+        totalQuestions: 16,
       },
       {
         id: 'quiz_ch4',
-        title: '随堂测验 3：第4章 网络层与IP协议',
-        shortTitle: '第3次测验_第4章',
+        title: '【习题3】第4章 网络层与IP协议随堂测验',
+        shortTitle: '习题3_第4章',
         chapters: '第4章 网络层与IP编址路由',
         totalQuestions: 25,
       },
@@ -163,10 +164,16 @@ export const CLASSES_CONFIG = [
   },
 ];
 
-export const getQuestionsForClass = (classId) => {
+export const getQuestionsForClass = (classId, quizId = 'quiz_ch1_ch2') => {
   const cfg = CLASSES_CONFIG.find((c) => c.id === classId);
   if (cfg && cfg.questionsType === 'matlab') {
-    return matlabQuizQuestions;
+    if (quizId === 'quiz_matlab_2') {
+      return matlabQuizQuestions.slice(12, 24);
+    }
+    return matlabQuizQuestions.slice(0, 12);
+  }
+  if (quizId === 'quiz_ch3') {
+    return networkQuizQuestionsCh3;
   }
   return networkQuizQuestions;
 };

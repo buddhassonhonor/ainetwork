@@ -145,7 +145,6 @@ export default function Quiz() {
   const classConfig = useMemo(() => getClassConfig(currentClassId), [currentClassId]);
   const studentsData = useMemo(() => getStudentsForClass(currentClassId), [currentClassId]);
   const realStudentsData = useMemo(() => studentsData.filter((s) => !s.isTest), [studentsData]);
-  const quizQuestions = useMemo(() => getQuestionsForClass(currentClassId), [currentClassId]);
   const QUIZ_MODULES = classConfig.quizModules;
 
   // Multi-quiz state
@@ -189,6 +188,14 @@ export default function Quiz() {
   // Review state
   const [reviewFilter, setReviewFilter] = useState('all');
   const [activeReviewRecord, setActiveReviewRecord] = useState(null);
+
+  // Questions strictly scoped by quiz module (习题1 vs 习题2)
+  const quizQuestions = useMemo(() => {
+    if (view === 'review' && activeReviewRecord?.quizId) {
+      return getQuestionsForClass(currentClassId, activeReviewRecord.quizId);
+    }
+    return getQuestionsForClass(currentClassId, currentQuizId);
+  }, [currentClassId, currentQuizId, view, activeReviewRecord]);
 
   // Records state
   const getClassStorageKey = (clsId) => `ainetwork_quiz_records_${clsId}_v2`;
@@ -1407,6 +1414,44 @@ export default function Quiz() {
                       <span>切换班级</span>
                       <ChevronRight className="w-3.5 h-3.5" />
                     </button>
+                  </div>
+                </div>
+
+                {/* 测验批次切换：习题1 / 习题2 严格隔离 */}
+                <div className="mb-6 p-3 rounded-2xl bg-slate-50 border border-slate-200/90 shadow-2xs">
+                  <div className="text-xs font-black text-slate-700 mb-2 flex items-center justify-between">
+                    <span className="flex items-center gap-1.5">
+                      <Layers className="w-4 h-4 text-indigo-600" />
+                      <span>请选择本次作答的试卷：</span>
+                    </span>
+                    <span className="text-[11px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-100">
+                      当前：{currentQuizModule?.shortTitle || currentQuizModule?.title}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    {QUIZ_MODULES.map((m) => {
+                      const isSelected = currentQuizId === m.id;
+                      return (
+                        <button
+                          key={m.id}
+                          type="button"
+                          onClick={() => {
+                            setCurrentQuizId(m.id);
+                            setSelectedQuizId(m.id);
+                          }}
+                          className={`py-2.5 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5 text-center ${
+                            isSelected
+                              ? 'bg-white text-indigo-700 shadow-sm border-2 border-indigo-500 font-black ring-2 ring-indigo-500/20'
+                              : 'bg-white/60 text-slate-600 hover:text-slate-900 hover:bg-white border border-slate-200'
+                          }`}
+                        >
+                          <span className="leading-tight">{m.shortTitle || m.title}</span>
+                          <span className="text-[10px] font-normal text-slate-400">
+                            共 {m.totalQuestions} 题
+                          </span>
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
 
