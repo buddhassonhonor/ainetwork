@@ -38,13 +38,6 @@ export const CLASSES_CONFIG = [
         chapters: '第3章 数据链路层与局域网',
         totalQuestions: 16,
       },
-      {
-        id: 'quiz_ch4',
-        title: '【习题3】第4章 网络层与IP协议随堂测验',
-        shortTitle: '习题3_第4章',
-        chapters: '第4章 网络层与IP编址路由',
-        totalQuestions: 25,
-      },
     ]
   },
   {
@@ -80,13 +73,6 @@ export const CLASSES_CONFIG = [
         shortTitle: '习题2_第3章',
         chapters: '第3章 数据链路层与局域网',
         totalQuestions: 16,
-      },
-      {
-        id: 'quiz_ch4',
-        title: '【习题3】第4章 网络层与IP协议随堂测验',
-        shortTitle: '习题3_第4章',
-        chapters: '第4章 网络层与IP编址路由',
-        totalQuestions: 25,
       },
     ]
   },

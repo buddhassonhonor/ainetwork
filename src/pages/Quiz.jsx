@@ -16,6 +16,7 @@ import {
   Users,
   Check,
   ChevronRight,
+  ChevronDown,
   AlertCircle,
   LogOut,
   GraduationCap,
@@ -1417,41 +1418,47 @@ export default function Quiz() {
                   </div>
                 </div>
 
-                {/* 测验批次切换：习题1 / 习题2 严格隔离 */}
-                <div className="mb-6 p-3 rounded-2xl bg-slate-50 border border-slate-200/90 shadow-2xs">
-                  <div className="text-xs font-black text-slate-700 mb-2 flex items-center justify-between">
+                {/* 测验试卷下拉选择菜单：习题1 / 习题2 */}
+                <div className="mb-6 p-4 rounded-2xl bg-indigo-50/70 border border-indigo-200/80 shadow-2xs">
+                  <label
+                    htmlFor="select-active-quiz"
+                    className="block text-xs font-black text-slate-800 mb-2 flex items-center justify-between cursor-pointer"
+                  >
                     <span className="flex items-center gap-1.5">
                       <Layers className="w-4 h-4 text-indigo-600" />
                       <span>请选择本次作答的试卷：</span>
                     </span>
-                    <span className="text-[11px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-100">
-                      当前：{currentQuizModule?.shortTitle || currentQuizModule?.title}
+                    <span className="text-[11px] font-bold text-indigo-700 bg-white px-2.5 py-0.5 rounded-full border border-indigo-200 shadow-2xs">
+                      共 {currentQuizModule?.totalQuestions} 题
                     </span>
+                  </label>
+
+                  <div className="relative">
+                    <select
+                      id="select-active-quiz"
+                      value={currentQuizId}
+                      onChange={(e) => {
+                        const newQid = e.target.value;
+                        setCurrentQuizId(newQid);
+                        setSelectedQuizId(newQid);
+                        if (currentStudent) {
+                          loadDraftForStudent(currentStudent, currentClassId, newQid);
+                        }
+                      }}
+                      className="w-full px-4 py-3.5 pr-10 rounded-xl bg-white border-2 border-indigo-400 focus:border-indigo-600 text-slate-900 font-extrabold text-sm shadow-xs focus:ring-4 focus:ring-indigo-100 focus:outline-none transition-all cursor-pointer appearance-none"
+                    >
+                      {QUIZ_MODULES.map((m) => (
+                        <option key={m.id} value={m.id} className="py-2 text-slate-900 font-bold">
+                          {m.title}（共 {m.totalQuestions} 题）
+                        </option>
+                      ))}
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3.5 text-indigo-600">
+                      <ChevronDown className="w-5 h-5" />
+                    </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    {QUIZ_MODULES.map((m) => {
-                      const isSelected = currentQuizId === m.id;
-                      return (
-                        <button
-                          key={m.id}
-                          type="button"
-                          onClick={() => {
-                            setCurrentQuizId(m.id);
-                            setSelectedQuizId(m.id);
-                          }}
-                          className={`py-2.5 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5 text-center ${
-                            isSelected
-                              ? 'bg-white text-indigo-700 shadow-sm border-2 border-indigo-500 font-black ring-2 ring-indigo-500/20'
-                              : 'bg-white/60 text-slate-600 hover:text-slate-900 hover:bg-white border border-slate-200'
-                          }`}
-                        >
-                          <span className="leading-tight">{m.shortTitle || m.title}</span>
-                          <span className="text-[10px] font-normal text-slate-400">
-                            共 {m.totalQuestions} 题
-                          </span>
-                        </button>
-                      );
-                    })}
+                  <div className="mt-2 text-[11px] text-slate-500 flex items-center gap-1">
+                    <span>💡 提示：点击下拉框可自由选择作答【习题1】或【习题2】，各卷作答与成绩完全独立</span>
                   </div>
                 </div>
 
