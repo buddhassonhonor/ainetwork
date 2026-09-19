@@ -336,30 +336,38 @@ export default function Quiz() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Switch class effect
+  // Track previous classId so switching quiz never resets currentQuizId
+  const prevClassIdRef = useRef(currentClassId);
+
+  // Switch class effect: ONLY runs when currentClassId changes
   useEffect(() => {
     const loaded = loadClassRecords(currentClassId);
     setRecords(loaded);
-    refreshRecordsFromServer(currentClassId);
-    const cfg = getClassConfig(currentClassId);
-    if (cfg && cfg.quizModules && cfg.quizModules.length > 0) {
-      setCurrentQuizId(cfg.quizModules[0].id);
-      setSelectedQuizId(cfg.quizModules[0].id);
-    }
-    const studentSaved = localStorage.getItem(`${CURRENT_STUDENT_KEY}_${currentClassId}`);
-    if (studentSaved) {
-      try {
-        setCurrentStudent(JSON.parse(studentSaved));
-      } catch {
+    refreshRecordsFromServer(currentClassId, selectedQuizId);
+
+    // Only reset currentQuizId and inputs if user actually switched classes
+    if (prevClassIdRef.current !== currentClassId) {
+      prevClassIdRef.current = currentClassId;
+      const cfg = getClassConfig(currentClassId);
+      if (cfg && cfg.quizModules && cfg.quizModules.length > 0) {
+        setCurrentQuizId(cfg.quizModules[0].id);
+        setSelectedQuizId(cfg.quizModules[0].id);
+      }
+      const studentSaved = localStorage.getItem(`${CURRENT_STUDENT_KEY}_${currentClassId}`);
+      if (studentSaved) {
+        try {
+          setCurrentStudent(JSON.parse(studentSaved));
+        } catch {
+          setCurrentStudent(null);
+        }
+      } else {
         setCurrentStudent(null);
       }
-    } else {
-      setCurrentStudent(null);
+      setInputName('');
+      setInputId('');
+      setLoginError('');
     }
-    setInputName('');
-    setInputId('');
-    setLoginError('');
-  }, [currentClassId, refreshRecordsFromServer]);
+  }, [currentClassId]);
 
   // Periodic auto-sync on scoreboard page & when selectedQuizId changes
   useEffect(() => {
@@ -369,7 +377,7 @@ export default function Quiz() {
       refreshRecordsFromServer(currentClassId, selectedQuizId);
     }, 6000);
     return () => clearInterval(interval);
-  }, [view, currentClassId, selectedQuizId, refreshRecordsFromServer]);
+  }, [view, currentClassId, selectedQuizId]);
 
   // Sync records to localStorage
   const saveRecords = (newRecords) => {
