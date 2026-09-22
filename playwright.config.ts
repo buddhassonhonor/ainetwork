@@ -5,6 +5,11 @@ export default defineConfig({
   timeout: 30_000,
   expect: { timeout: 5000 },
   fullyParallel: false,
+  webServer: {
+    command: 'npm run dev',
+    port: 5173,
+    reuseExistingServer: true,
+  },
   use: {
     headless: true,
     viewport: { width: 1280, height: 720 },

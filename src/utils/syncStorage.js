@@ -22,7 +22,7 @@ export async function detectApiEndpoint(force = false) {
     return detectedApiEndpoint;
   }
 
-  const candidates = ['/api/index.php', '/api/records.ashx'];
+  const candidates = ['/api/records.ashx', '/api/index.php'];
 
   for (const endpoint of candidates) {
     try {
@@ -185,18 +185,18 @@ export async function fetchQuizRecords(classId) {
       recordMap.set(key, r);
     });
 
-    // If server was emptied (serverRecords is empty) and we had local cache,
-    // do NOT re-upload local cache unless local records were created AFTER the reset!
+    // Merge any local records that were created AFTER the reset, even if server was empty
     const unpushed = [];
-    if (serverRecords.length > 0) {
-      localRecords.forEach((r) => {
+    localRecords.forEach((r) => {
+      const subTime = new Date(r.submittedAt || 0).getTime();
+      if (subTime >= serverResetAt) {
         const key = `${r.studentId}_${r.quizId || 'quiz_ch1_ch2'}_${r.attempt || 1}`;
         if (!recordMap.has(key)) {
           recordMap.set(key, r);
           unpushed.push(r);
         }
-      });
-    }
+      }
+    });
 
     const merged = Array.from(recordMap.values());
     // Sort chronologically by submittedAt

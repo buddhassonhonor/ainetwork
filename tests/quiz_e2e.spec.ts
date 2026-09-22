@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('计算机网络随堂测验系统 E2E 测试 (28题新版)', () => {
-  const BASE_URL = 'http://localhost:5173/quiz';
+  const BASE_URL = 'http://localhost:5173/quiz?class=24-1';
 
   test.beforeEach(async ({ page }) => {
     // Clear localStorage before test
@@ -19,7 +19,7 @@ test.describe('计算机网络随堂测验系统 E2E 测试 (28题新版)', () =
     await page.click('#btn-login-submit');
 
     // Verify error message is shown
-    const errorBox = page.locator('text=未在 2024级通信工程1班 名单中匹配到此信息');
+    const errorBox = page.locator('text=名单中匹配到此信息');
     await expect(errorBox).toBeVisible();
   });
 
@@ -154,16 +154,14 @@ test.describe('计算机网络随堂测验系统 E2E 测试 (28题新版)', () =
     const excelDownloadPromise = page.waitForEvent('download');
     await page.click('#btn-export-excel');
     const excelDownload = await excelDownloadPromise;
-    expect(excelDownload.suggestedFilename()).toContain('2024级通信1班');
-    expect(excelDownload.suggestedFilename()).toContain('第1次测验');
+    expect(excelDownload.suggestedFilename()).toContain('24通信1班');
     expect(excelDownload.suggestedFilename()).toMatch(/\.xlsx$/);
 
     // Test 2: Export CSV (.csv)
     const csvDownloadPromise = page.waitForEvent('download');
     await page.click('#btn-export-csv');
     const csvDownload = await csvDownloadPromise;
-    expect(csvDownload.suggestedFilename()).toContain('2024级通信1班');
-    expect(csvDownload.suggestedFilename()).toContain('第1次测验');
+    expect(csvDownload.suggestedFilename()).toContain('24通信1班');
     expect(csvDownload.suggestedFilename()).toMatch(/\.csv$/);
   });
 

@@ -725,6 +725,8 @@ export default function Quiz() {
         avgScore: 0,
         maxScore: 0,
         minScore: 0,
+        passCount: 0,
+        excellentCount: 0,
         passRate: '0.0',
         excellentRate: '0.0',
         distribution: [0, 0, 0, 0, 0],
@@ -763,6 +765,8 @@ export default function Quiz() {
       avgScore,
       maxScore,
       minScore,
+      passCount,
+      excellentCount,
       passRate,
       excellentRate,
       distribution,
@@ -2321,7 +2325,7 @@ export default function Quiz() {
                   {classStats.passRate}%
                 </div>
                 <div className="text-xs font-bold text-slate-400 mt-2">
-                  共 {records.filter((r) => r.score >= 60).length} 人及格
+                  共 {classStats.passCount} 人及格
                 </div>
               </div>
 
@@ -2334,7 +2338,7 @@ export default function Quiz() {
                   {classStats.excellentRate}%
                 </div>
                 <div className="text-xs font-bold text-slate-400 mt-2">
-                  共 {records.filter((r) => r.score >= 90).length} 人达到优秀
+                  共 {classStats.excellentCount} 人达到优秀
                 </div>
               </div>
             </div>

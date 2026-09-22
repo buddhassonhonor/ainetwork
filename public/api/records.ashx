@@ -4,9 +4,88 @@ using System.Web;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 public class QuizApiHandler : IHttpHandler {
     private static readonly object _lockObj = new object();
+
+    private static string GetJsonStringProp(string json, string propName, string defaultValue = "") {
+        Match m = Regex.Match(json, "\"" + propName + "\"\\s*:\\s*\"([^\"]+)\"");
+        return m.Success ? m.Groups[1].Value : defaultValue;
+    }
+
+    private static int GetJsonIntProp(string json, string propName, int defaultValue = 1) {
+        Match m = Regex.Match(json, "\"" + propName + "\"\\s*:\\s*(\\d+)");
+        if (m.Success) {
+            int v;
+            if (int.TryParse(m.Groups[1].Value, out v)) return v;
+        }
+        return defaultValue;
+    }
+
+    private static List<string> ParseJsonArrayObjects(string json) {
+        var result = new List<string>();
+        if (string.IsNullOrEmpty(json)) return result;
+
+        int firstBracket = json.IndexOf('[');
+        int lastBracket = json.LastIndexOf(']');
+        if (firstBracket < 0 || lastBracket <= firstBracket) return result;
+
+        int i = firstBracket + 1;
+        while (i < lastBracket) {
+            while (i < lastBracket && (json[i] == ' ' || json[i] == '\r' || json[i] == '\n' || json[i] == '\t' || json[i] == ',')) {
+                i++;
+            }
+            if (i >= lastBracket) break;
+
+            if (json[i] == '{') {
+                int start = i;
+                int depth = 0;
+                bool inString = false;
+                bool escape = false;
+                int end = -1;
+
+                for (int j = start; j < lastBracket; j++) {
+                    char c = json[j];
+                    if (escape) {
+                        escape = false;
+                        continue;
+                    }
+                    if (c == '\\') {
+                        escape = true;
+                        continue;
+                    }
+                    if (c == '"') {
+                        inString = !inString;
+                        continue;
+                    }
+                    if (!inString) {
+                        if (c == '{') depth++;
+                        else if (c == '}') {
+                            depth--;
+                            if (depth == 0) {
+                                end = j;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (end > start) {
+                    string objStr = json.Substring(start, end - start + 1);
+                    if (objStr.Contains("\"studentId\"")) {
+                        result.Add(objStr);
+                    }
+                    i = end + 1;
+                } else {
+                    i++;
+                }
+            } else {
+                i++;
+            }
+        }
+        return result;
+    }
 
     private static void SafeWriteFile(string filePath, string content) {
         try {
@@ -161,7 +240,16 @@ public class QuizApiHandler : IHttpHandler {
                         break;
 
                     case "get_records":
-                        string content = File.Exists(recordsFile) ? File.ReadAllText(recordsFile, Encoding.UTF8) : "[]";
+                        string content = "[]";
+                        if (File.Exists(recordsFile)) {
+                            content = File.ReadAllText(recordsFile, Encoding.UTF8);
+                            var objects = ParseJsonArrayObjects(content);
+                            if (objects.Count > 0) {
+                                content = "[" + string.Join(",", objects.ToArray()) + "]";
+                            } else if (string.IsNullOrWhiteSpace(content)) {
+                                content = "[]";
+                            }
+                        }
                         res.Write("{\"success\":true,\"class\":\"" + classId + "\",\"resetAt\":" + resetEpoch + ",\"records\":" + content + "}");
                         break;
 
@@ -266,28 +354,32 @@ public class QuizApiHandler : IHttpHandler {
                                         }
                                     }
                                 }
-                                string updated = existing.Trim();
-                                if (updated.Length <= 2) {
-                                    updated = "[" + recordJson + "]";
-                                } else {
-                                    string sId = "";
-                                    int idPos = recordJson.IndexOf("\"studentId\":");
-                                    if (idPos >= 0) {
-                                        int vStart = recordJson.IndexOf("\"", idPos + 12) + 1;
-                                        int vEnd = recordJson.IndexOf("\"", vStart);
-                                        if (vStart > 0 && vEnd > vStart) sId = recordJson.Substring(vStart, vEnd - vStart);
-                                    }
-                                    if (!string.IsNullOrEmpty(sId) && updated.Contains("\"studentId\":\"" + sId + "\"")) {
-                                        int itemPos = updated.IndexOf("\"studentId\":\"" + sId + "\"");
-                                        int objStart = updated.LastIndexOf("{", itemPos);
-                                        int objEnd = updated.IndexOf("}", itemPos);
-                                        if (objStart >= 0 && objEnd > objStart) {
-                                            updated = updated.Substring(0, objStart) + recordJson + updated.Substring(objEnd + 1);
-                                        }
-                                    } else {
-                                        updated = updated.Substring(0, updated.Length - 1) + "," + recordJson + "]";
+
+                                string newSid = GetJsonStringProp(recordJson, "studentId");
+                                string newQid = GetJsonStringProp(recordJson, "quizId", "quiz_ch1_ch2");
+                                int newAttempt = GetJsonIntProp(recordJson, "attempt", 1);
+
+                                List<string> recordList = ParseJsonArrayObjects(existing);
+                                int matchIdx = -1;
+                                for (int i = 0; i < recordList.Count; i++) {
+                                    string item = recordList[i];
+                                    string itemSid = GetJsonStringProp(item, "studentId");
+                                    string itemQid = GetJsonStringProp(item, "quizId", "quiz_ch1_ch2");
+                                    int itemAttempt = GetJsonIntProp(item, "attempt", 1);
+
+                                    if (itemSid == newSid && itemQid == newQid && itemAttempt == newAttempt) {
+                                        matchIdx = i;
+                                        break;
                                     }
                                 }
+
+                                if (matchIdx >= 0) {
+                                    recordList[matchIdx] = recordJson;
+                                } else {
+                                    recordList.Add(recordJson);
+                                }
+
+                                string updated = "[" + string.Join(",", recordList.ToArray()) + "]";
                                 SafeWriteFile(recordsFile, updated);
                                 res.Write("{\"success\":true,\"records\":" + updated + "}");
                             } else {
@@ -309,12 +401,13 @@ public class QuizApiHandler : IHttpHandler {
                                     batchRecords = body.Substring(start, end - start + 1);
                                 }
                             }
+                            var objects = ParseJsonArrayObjects(batchRecords);
                             if (resetEpoch > 0) {
                                 bool hasNewRecord = false;
-                                MatchCollection subMatches = Regex.Matches(batchRecords, "\"submittedAt\"\\s*:\\s*\"([^\"]+)\"");
-                                foreach (Match sm in subMatches) {
+                                foreach (string obj in objects) {
+                                    string subTime = GetJsonStringProp(obj, "submittedAt");
                                     DateTime sdt;
-                                    if (DateTime.TryParse(sm.Groups[1].Value, out sdt)) {
+                                    if (DateTime.TryParse(subTime, out sdt)) {
                                         long sEpoch = (long)(sdt.ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
                                         if (sEpoch >= resetEpoch) {
                                             hasNewRecord = true;
@@ -322,13 +415,14 @@ public class QuizApiHandler : IHttpHandler {
                                         }
                                     }
                                 }
-                                if (!hasNewRecord && subMatches.Count > 0) {
+                                if (!hasNewRecord && objects.Count > 0) {
                                     res.Write("{\"success\":true,\"rejectedStale\":true,\"count\":0}");
                                     break;
                                 }
                             }
-                            SafeWriteFile(recordsFile, batchRecords);
-                            res.Write("{\"success\":true,\"count\":" + Regex.Matches(batchRecords, "\"studentId\"").Count + "}");
+                            string cleanBatch = "[" + string.Join(",", objects.ToArray()) + "]";
+                            SafeWriteFile(recordsFile, cleanBatch);
+                            res.Write("{\"success\":true,\"count\":" + objects.Count + "}");
                         } catch (Exception ex) {
                             res.Write("{\"success\":false,\"error\":\"" + ex.Message.Replace("\\", "\\\\").Replace("\"", "'") + "\"}");
                         }
