@@ -36,7 +36,7 @@ export const CLASSES_CONFIG = [
         title: '【习题2】第3章 数据链路层随堂测验',
         shortTitle: '习题2_第3章',
         chapters: '第3章 数据链路层与局域网',
-        totalQuestions: 16,
+        totalQuestions: 23,
       },
     ]
   },
@@ -72,7 +72,7 @@ export const CLASSES_CONFIG = [
         title: '【习题2】第3章 数据链路层随堂测验',
         shortTitle: '习题2_第3章',
         chapters: '第3章 数据链路层与局域网',
-        totalQuestions: 16,
+        totalQuestions: 23,
       },
     ]
   },
