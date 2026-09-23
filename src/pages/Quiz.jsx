@@ -95,6 +95,51 @@ const clearDeviceLock = (classId, quizId) => {
   }
 };
 
+// Helper to render subscripts (<sub>) and superscripts (<sup>) with scaled font size and baseline offset
+const renderFormattedContent = (text) => {
+  if (!text || typeof text !== 'string') return text;
+  if (!text.includes('<sub>') && !text.includes('<sup>')) {
+    return text;
+  }
+  const parts = [];
+  const regex = /<(sub|sup)>(.*?)<\/\1>/gi;
+  let lastIndex = 0;
+  let match;
+  let keyIdx = 0;
+
+  while ((match = regex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(text.slice(lastIndex, match.index));
+    }
+    const tag = match[1].toLowerCase();
+    const content = match[2];
+    if (tag === 'sub') {
+      parts.push(
+        <sub
+          key={`sub-${keyIdx++}`}
+          className="text-[0.72em] bottom-[-0.22em] relative font-semibold inline-block leading-none align-baseline px-[0.5px]"
+        >
+          {content}
+        </sub>
+      );
+    } else if (tag === 'sup') {
+      parts.push(
+        <sup
+          key={`sup-${keyIdx++}`}
+          className="text-[0.72em] top-[-0.45em] relative font-semibold inline-block leading-none align-baseline px-[0.5px]"
+        >
+          {content}
+        </sup>
+      );
+    }
+    lastIndex = regex.lastIndex;
+  }
+  if (lastIndex < text.length) {
+    parts.push(text.slice(lastIndex));
+  }
+  return parts;
+};
+
 export default function Quiz() {
   const [searchParams, setSearchParams] = useSearchParams();
   const urlClassId = searchParams.get('class');
@@ -1682,7 +1727,7 @@ export default function Quiz() {
 
                     {/* Question Statement */}
                     <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-relaxed my-4">
-                      {q.question}
+                      {renderFormattedContent(q.question)}
                     </h3>
 
                     {/* Options Grid (2 Columns on Desktop, Clean Gap between Letter and Text) */}
@@ -1721,7 +1766,7 @@ export default function Quiz() {
                                     : 'font-medium text-slate-700 group-hover:text-slate-950'
                                 }`}
                               >
-                                {opt.text}
+                                {renderFormattedContent(opt.text)}
                               </span>
                             </div>
 
@@ -1981,7 +2026,7 @@ export default function Quiz() {
                       </div>
 
                       <h4 className="text-base font-bold text-slate-900 leading-relaxed mb-5">
-                        {q.question}
+                        {renderFormattedContent(q.question)}
                       </h4>
 
                       {/* Option breakdown (2-column layout with generous gap) */}
@@ -2018,7 +2063,7 @@ export default function Quiz() {
                                   {opt.key}
                                 </span>
                                 <div className="leading-relaxed">
-                                  {opt.text}
+                                  {renderFormattedContent(opt.text)}
                                 </div>
                               </div>
                               {isStandardAns && (
@@ -2043,7 +2088,7 @@ export default function Quiz() {
                           <span className="font-extrabold text-indigo-900 mr-1.5">
                             【考点解析】
                           </span>
-                          {q.explanation}
+                          {renderFormattedContent(q.explanation)}
                         </div>
                       </div>
                     </div>

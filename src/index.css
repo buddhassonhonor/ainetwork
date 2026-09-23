@@ -16,6 +16,18 @@
 body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-primary); overflow-x: hidden; line-height: 1.7; font-size: 1.1rem; }
 h1, h2, h3, h4 { font-family: 'Outfit', sans-serif; font-weight: 800; letter-spacing: -0.03em; color: inherit; line-height: 1.2; }
 a { text-decoration: none; }
+sub, sup {
+  font-size: 0.72em;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+sub {
+  bottom: -0.22em;
+}
+sup {
+  top: -0.45em;
+}
 
 /* Layout & Utilities */
 .flex { display: flex; }
