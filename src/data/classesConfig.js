@@ -1,7 +1,8 @@
 import classRosters from './classRosters.json';
 import networkQuizQuestions from './quizQuestions.json';
 import networkQuizQuestionsCh3 from './quizQuestions_ch3.json';
-import matlabQuizQuestions from './matlabQuestions.json';
+import matlabQuizQuestions1 from './matlabQuestions.json';
+import matlabQuizQuestions2 from './matlabQuestions_quiz2.json';
 
 export const CLASSES_CONFIG = [
   {
@@ -101,14 +102,14 @@ export const CLASSES_CONFIG = [
         title: '随堂测验 1：MATLAB基础语法与矩阵运算',
         shortTitle: '第1次测验_基础矩阵',
         chapters: '第1-2章 环境与矩阵数组运算',
-        totalQuestions: 12,
+        totalQuestions: 26,
       },
       {
         id: 'quiz_matlab_2',
         title: '随堂测验 2：程序控制与数据可视化',
         shortTitle: '第2次测验_控制绘图',
         chapters: '第3-5章 控制流、绘图与函数脚本',
-        totalQuestions: 12,
+        totalQuestions: 5,
       }
     ]
   },
@@ -137,14 +138,14 @@ export const CLASSES_CONFIG = [
         title: '随堂测验 1：MATLAB基础语法与矩阵运算',
         shortTitle: '第1次测验_基础矩阵',
         chapters: '第1-2章 环境与矩阵数组运算',
-        totalQuestions: 12,
+        totalQuestions: 26,
       },
       {
         id: 'quiz_matlab_2',
         title: '随堂测验 2：程序控制与数据可视化',
         shortTitle: '第2次测验_控制绘图',
         chapters: '第3-5章 控制流、绘图与函数脚本',
-        totalQuestions: 12,
+        totalQuestions: 5,
       }
     ]
   },
@@ -154,9 +155,9 @@ export const getQuestionsForClass = (classId, quizId = 'quiz_ch1_ch2') => {
   const cfg = CLASSES_CONFIG.find((c) => c.id === classId);
   if (cfg && cfg.questionsType === 'matlab') {
     if (quizId === 'quiz_matlab_2') {
-      return matlabQuizQuestions.slice(12, 24);
+      return matlabQuizQuestions2;
     }
-    return matlabQuizQuestions.slice(0, 12);
+    return matlabQuizQuestions1;
   }
   if (quizId === 'quiz_ch3') {
     return networkQuizQuestionsCh3;

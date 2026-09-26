@@ -227,9 +227,9 @@ export default function QuizPortal({ onSelectClass, selectedClassId, onOpenAtten
                         </div>
                       </div>
                       <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100">
-                        <div className="text-[11px] font-bold text-slate-400">预留测验题目</div>
+                        <div className="text-[11px] font-bold text-slate-400">开放测验批次</div>
                         <div className="text-lg font-black text-slate-800 mt-0.5">
-                          12 <span className="text-xs font-normal text-slate-500">题 (测试版)</span>
+                          {cls.quizModules ? cls.quizModules.length : 2} <span className="text-xs font-normal text-slate-500">批</span>
                         </div>
                       </div>
                     </div>

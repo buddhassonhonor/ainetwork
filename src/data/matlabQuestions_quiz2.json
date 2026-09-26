@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "chapter": "第三章 程序控制结构",
+    "question": "在 MATLAB 循环语句中，若要提前终止并跳出当前整个 for 或 while 循环体，应使用的关键字是（ ）。",
+    "options": [
+      { "key": "A", "text": "continue" },
+      { "key": "B", "text": "return" },
+      { "key": "C", "text": "break" },
+      { "key": "D", "text": "exit" }
+    ],
+    "answer": "C",
+    "score": 1,
+    "explanation": "break 终止并跳出当前循环；continue 结束当前迭代并进入下一次循环。"
+  },
+  {
+    "id": 2,
+    "chapter": "第三章 程序控制结构",
+    "question": "下列 for 循环语句：for k = 10:-2:1 ... end，循环体将执行的次数是（ ）。",
+    "options": [
+      { "key": "A", "text": "4 次" },
+      { "key": "B", "text": "5 次" },
+      { "key": "C", "text": "6 次" },
+      { "key": "D", "text": "10 次" }
+    ],
+    "answer": "B",
+    "score": 1,
+    "explanation": "k 取值为 10, 8, 6, 4, 2，当下一次步进变为 0 时小于 1 退出，共执行 5 次。"
+  },
+  {
+    "id": 3,
+    "chapter": "第四章 数据可视化与绘图",
+    "question": "在同一个坐标系中绘制多条曲线时，为了保留已有图形而不被新绘制的曲线覆盖，应执行的命令是（ ）。",
+    "options": [
+      { "key": "A", "text": "hold on" },
+      { "key": "B", "text": "grid on" },
+      { "key": "C", "text": "figure" },
+      { "key": "D", "text": "axis keep" }
+    ],
+    "answer": "A",
+    "score": 1,
+    "explanation": "hold on 保持当前坐标区图形，使得后续绘图命令将新图形叠加在现有图形上；hold off 取消保持。"
+  },
+  {
+    "id": 4,
+    "chapter": "第四章 数据可视化与绘图",
+    "question": "若要将绘图窗口划分为 2 行 2 列共 4 个子绘图区域，并激活第 3 个子图（即第 2 行第 1 列），应使用的语句是（ ）。",
+    "options": [
+      { "key": "A", "text": "subplot(2, 2, 3)" },
+      { "key": "B", "text": "subplot(4, 3)" },
+      { "key": "C", "text": "plot(2, 2, 3)" },
+      { "key": "D", "text": "subgrid(2, 2, 3)" }
+    ],
+    "answer": "A",
+    "score": 1,
+    "explanation": "subplot(m, n, p) 将当前图窗分割为 m×n 个子区域，并选定第 p 个子区域进行绘图。"
+  },
+  {
+    "id": 5,
+    "chapter": "第五章 脚本与函数",
+    "question": "在编写 MATLAB 自定义函数文件时，第一行函数声明的正确语法结构是（ ）。",
+    "options": [
+      { "key": "A", "text": "def myFunc(in1, in2):" },
+      { "key": "B", "text": "function [out1, out2] = myFunc(in1, in2)" },
+      { "key": "C", "text": "void myFunc(in1, in2, out1, out2)" },
+      { "key": "D", "text": "myFunc = function(in1, in2) -> (out1, out2)" }
+    ],
+    "answer": "B",
+    "score": 1,
+    "explanation": "MATLAB 函数以 function 关键字开头，标准格式为 function [输出变量] = 函数名(输入变量)。"
+  }
+]
