@@ -25,39 +25,81 @@
     ],
     "answer": "B",
     "score": 1,
-    "explanation": "k 取值为 10, 8, 6, 4, 2，当下一次步进变为 0 时小于 1 退出，共执行 5 次。"
+    "explanation": "k 取值为 10, 8, 6, 4, 2，共执行 5 次。"
   },
   {
     "id": 3,
-    "chapter": "第四章 数据可视化与绘图",
-    "question": "在同一个坐标系中绘制多条曲线时，为了保留已有图形而不被新绘制的曲线覆盖，应执行的命令是（ ）。",
+    "chapter": "第三章 程序控制结构",
+    "question": "下列程序的输出结果是（ ）。\ny = 10;\nif y == 10\n    y = 20;\nelseif y > 0\n    y = 30;\nend\ndisp(y)",
     "options": [
-      { "key": "A", "text": "hold on" },
-      { "key": "B", "text": "grid on" },
-      { "key": "C", "text": "figure" },
-      { "key": "D", "text": "axis keep" }
+      { "key": "A", "text": "1" },
+      { "key": "B", "text": "30" },
+      { "key": "C", "text": "10" },
+      { "key": "D", "text": "20" }
     ],
-    "answer": "A",
+    "answer": "D",
     "score": 1,
-    "explanation": "hold on 保持当前坐标区图形，使得后续绘图命令将新图形叠加在现有图形上；hold off 取消保持。"
+    "explanation": "变量 y 初始值为 10，满足 if 条件 y == 10，因此执行 y = 20；后续 elseif 分支不再执行。最终 disp(y) 输出 20。"
   },
   {
     "id": 4,
-    "chapter": "第四章 数据可视化与绘图",
-    "question": "若要将绘图窗口划分为 2 行 2 列共 4 个子绘图区域，并激活第 3 个子图（即第 2 行第 1 列），应使用的语句是（ ）。",
+    "chapter": "第三章 程序控制结构",
+    "question": "有以下语句：\na = eye(5);\nfor n = a(2:end, :)\nfor 循环的循环次数是（ ）。",
     "options": [
-      { "key": "A", "text": "subplot(2, 2, 3)" },
-      { "key": "B", "text": "subplot(4, 3)" },
-      { "key": "C", "text": "plot(2, 2, 3)" },
-      { "key": "D", "text": "subgrid(2, 2, 3)" }
+      { "key": "A", "text": "3" },
+      { "key": "B", "text": "4" },
+      { "key": "C", "text": "5" },
+      { "key": "D", "text": "10" }
     ],
-    "answer": "A",
+    "answer": "C",
     "score": 1,
-    "explanation": "subplot(m, n, p) 将当前图窗分割为 m×n 个子区域，并选定第 p 个子区域进行绘图。"
+    "explanation": "a = eye(5) 为 5×5 矩阵，a(2:end, :) 截取第 2 至 5 行，构成 4 行 5 列的矩阵。在 MATLAB 中，当 for 循环的迭代对象为二维矩阵时，循环变量按列遍历，每次迭代取一列，因此循环次数等于矩阵的列数 5。"
   },
   {
     "id": 5,
-    "chapter": "第五章 脚本与函数",
+    "chapter": "第三章 程序控制结构",
+    "question": "设有程序段：\nk = 10;\nwhile k\n    k = k - 1;\nend\n则下面描述中正确的是（ ）。",
+    "options": [
+      { "key": "A", "text": "while 循环执行 10 次" },
+      { "key": "B", "text": "循环是无限循环" },
+      { "key": "C", "text": "循环体语句一次也不执行" },
+      { "key": "D", "text": "循环体语句执行一次" }
+    ],
+    "answer": "A",
+    "score": 1,
+    "explanation": "在 MATLAB 中，非零数值作为条件表达式时判定为真（true），0 判定为假（false）。k 从 10 逐次减 1，当 k 从 1 减为 0 时循环体正好执行了 10 次，随后判断条件为 0 终止循环，因此 while 循环共执行 10 次。"
+  },
+  {
+    "id": 6,
+    "chapter": "第三章 程序控制结构",
+    "question": "有以下程序段：\nx = reshape(1:12, 3, 4);\nm = 0;\nn = 0;\nfor k = 1:4\n    if x(:, k) <= 6\n        m = m + 1;\n    else\n        n = n + 1;\n    end\nend\n则 m 和 n 的值分别是（ ）。",
+    "options": [
+      { "key": "A", "text": "6  6" },
+      { "key": "B", "text": "2  1" },
+      { "key": "C", "text": "2  2" },
+      { "key": "D", "text": "1  2" }
+    ],
+    "answer": "C",
+    "score": 1,
+    "explanation": "reshape(1:12, 3, 4) 按列优先填充矩阵：第 1 列为 [1; 2; 3]，第 2 列为 [4; 5; 6]，第 3 列为 [7; 8; 9]，第 4 列为 [10; 11; 12]。在 MATLAB 中，if 条件后接向量时要求所有元素均为非零（真）才满足条件。前两列元素均 <= 6，故 m 累加 2 次；后两列元素均 > 6，故 n 累加 2 次。最终 m = 2, n = 2。"
+  },
+  {
+    "id": 7,
+    "chapter": "第四章 脚本与函数",
+    "question": "执行下列语句后，变量 A 的值是（ ）。\n>> f = @(x, y) log(exp(x + y));\n>> A = f(22, 3);",
+    "options": [
+      { "key": "A", "text": "22, 3" },
+      { "key": "B", "text": "22" },
+      { "key": "C", "text": "3" },
+      { "key": "D", "text": "25" }
+    ],
+    "answer": "D",
+    "score": 1,
+    "explanation": "f 为使用 @ 句柄定义的匿名函数，表达式 log(exp(x + y)) 计算 ln(e^(x+y)) = x + y。传入参数 x = 22, y = 3，得到 A = 22 + 3 = 25。"
+  },
+  {
+    "id": 8,
+    "chapter": "第四章 脚本与函数",
     "question": "在编写 MATLAB 自定义函数文件时，第一行函数声明的正确语法结构是（ ）。",
     "options": [
       { "key": "A", "text": "def myFunc(in1, in2):" },
@@ -68,5 +110,131 @@
     "answer": "B",
     "score": 1,
     "explanation": "MATLAB 函数以 function 关键字开头，标准格式为 function [输出变量] = 函数名(输入变量)。"
+  },
+  {
+    "id": 9,
+    "chapter": "第四章 脚本与函数",
+    "question": "关于脚本文件和函数文件，下列说法正确的是（ ）。",
+    "options": [
+      { "key": "A", "text": "脚本文件中的变量都是局部变量" },
+      { "key": "B", "text": "函数文件不能有输入参数" },
+      { "key": "C", "text": "脚本文件通常直接操作当前工作空间中的变量" },
+      { "key": "D", "text": "函数文件执行结束后，其局部变量仍保留在工作空间中" }
+    ],
+    "answer": "C",
+    "score": 1,
+    "explanation": "脚本文件（Script）没有独立的工作空间，直接操作和共享当前 MATLAB 基础工作空间（Base Workspace）中的变量；而函数文件（Function）拥有独立的函数局部工作空间，运行结束后其局部变量会被释放。"
+  },
+  {
+    "id": 10,
+    "chapter": "第四章 脚本与函数",
+    "question": "执行下列程序时，如果用户直接输入 A，变量 c 中保存的是（ ）。\nc = input('请输入一个字符：', 's');",
+    "options": [
+      { "key": "A", "text": "数值 65" },
+      { "key": "B", "text": "字符 'A'" },
+      { "key": "C", "text": "变量 A 的值" },
+      { "key": "D", "text": "会报错" }
+    ],
+    "answer": "B",
+    "score": 1,
+    "explanation": "input 函数带有 's' 参数时，会将用户的输入作为文本字符串直接存入变量，而不会将其作为表达式或变量名求值。因此直接输入 A 得到的是字符 'A'。"
+  },
+  {
+    "id": 11,
+    "chapter": "第三章 程序控制结构",
+    "question": "有如下代码：\nx = 3;\nif x > 5\n    y = 1;\nelse\n    y = 2;\nend\n\n执行后 y 的值为（ ）。",
+    "options": [
+      { "key": "A", "text": "1" },
+      { "key": "B", "text": "2" },
+      { "key": "C", "text": "3" },
+      { "key": "D", "text": "未定义" }
+    ],
+    "answer": "B",
+    "score": 1,
+    "explanation": "x 的值为 3，条件 x > 5 不成立（为假），程序执行 else 分支，因此 y 的值为 2。"
+  },
+  {
+    "id": 12,
+    "chapter": "第三章 程序控制结构",
+    "question": "若要根据成绩等级 'A'、'B'、'C' 分别输出不同评价，下列结构更合适的是（ ）。",
+    "options": [
+      { "key": "A", "text": "while" },
+      { "key": "B", "text": "for" },
+      { "key": "C", "text": "switch-case" },
+      { "key": "D", "text": "try-catch" }
+    ],
+    "answer": "C",
+    "score": 1,
+    "explanation": "switch-case 结构适合根据表达式的若干离散取值选择不同分支执行不同操作。"
+  },
+  {
+    "id": 13,
+    "chapter": "第三章 程序控制结构",
+    "question": "观察程序：\ns = 0;\nfor i = 1:4\n    s = s + i;\nend\n\n程序执行结束后，s 的值是（ ）。",
+    "options": [
+      { "key": "A", "text": "4" },
+      { "key": "B", "text": "6" },
+      { "key": "C", "text": "10" },
+      { "key": "D", "text": "15" }
+    ],
+    "answer": "C",
+    "score": 1,
+    "explanation": "for 循环遍历 1 到 4，每次累加到变量 s 中：s = 1 + 2 + 3 + 4 = 10。"
+  },
+  {
+    "id": 14,
+    "chapter": "第三章 程序控制结构",
+    "question": "以下程序的作用是（ ）。\nfor n = 100:200\n    if rem(n, 21) ~= 0\n        continue;\n    end\n    break;\nend",
+    "options": [
+      { "key": "A", "text": "找出 100～200 之间所有能被 21 整除的数" },
+      { "key": "B", "text": "找出 100～200 之间第一个能被 21 整除的数" },
+      { "key": "C", "text": "找出 100～200 之间最后一个能被 21 整除的数" },
+      { "key": "D", "text": "统计 100～200 之间能被 21 整除的数的个数" }
+    ],
+    "answer": "B",
+    "score": 1,
+    "explanation": "不能整除时执行 continue 跳过本次迭代；第一次遇到能整除的数时跳过 if 进入 break，立即终止整个循环。因此程序的作用是找出 100～200 之间第一个能被 21 整除的数（即 105）。"
+  },
+  {
+    "id": 15,
+    "chapter": "第三章 程序控制结构",
+    "question": "关于 break 和 continue，下列说法正确的是（ ）。",
+    "options": [
+      { "key": "A", "text": "break 和 continue 都终止整个循环" },
+      { "key": "B", "text": "break 跳过本次循环，continue 终止循环" },
+      { "key": "C", "text": "break 终止循环，continue 跳过本次循环剩余语句" },
+      { "key": "D", "text": "两者作用完全相同" }
+    ],
+    "answer": "C",
+    "score": 1,
+    "explanation": "break 命令用于终止当前所在的最内层循环结构；continue 命令用于跳过本次循环剩余语句，直接开始下一次循环判定与迭代。"
+  },
+  {
+    "id": 16,
+    "chapter": "第三章 程序控制结构",
+    "question": "若要不断接收用户输入，并在用户输入 0 时结束，更适合采用（ ）。",
+    "options": [
+      { "key": "A", "text": "if" },
+      { "key": "B", "text": "switch" },
+      { "key": "C", "text": "while" },
+      { "key": "D", "text": "try" }
+    ],
+    "answer": "C",
+    "score": 1,
+    "explanation": "循环次数事先未知、但具有明确的结束条件（输入 0 退出）时，最适合采用 while 条件循环结构。"
+  },
+  {
+    "id": 17,
+    "chapter": "第三章 程序控制结构",
+    "question": "已知：\nn = 100;\ni = 1:n;\nf = 1 ./ i.^2;\ny = sum(f);\n\n它与下面哪种程序实现的功能最接近？（ ）",
+    "options": [
+      { "key": "A", "text": "y = 0;\nfor i = 1:n\n    y = y + i^2;\nend" },
+      { "key": "B", "text": "y = 0;\nfor i = 1:n\n    y = y + 1/i^2;\nend" },
+      { "key": "C", "text": "y = 1;\nfor i = 1:n\n    y = y * i;\nend" },
+      { "key": "D", "text": "y = sum(1:n);" }
+    ],
+    "answer": "B",
+    "score": 1,
+    "explanation": "向量化代码 f = 1 ./ i.^2; y = sum(f) 计算的是 1/1^2 + 1/2^2 + ... + 1/n^2 的级数求和。选项 B 使用 for 循环逐项累加 1/i^2，计算过程和最终结果与原程序完全一致。"
   }
 ]

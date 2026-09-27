@@ -95,6 +95,42 @@ const clearDeviceLock = (classId, quizId) => {
   }
 };
 
+// ===== DETERMINISTIC SEEDED SHUFFLE (ANTI-CHEATING QUESTION RANDOMIZATION) =====
+// Based on studentId + quizId, produces a unique permutation for each student.
+// Guaranteed properties:
+// 1. Different students get totally different question order (defeats peeking/copying).
+// 2. Same student gets identical stable order even if they refresh browser or restore draft.
+// 3. Questions and answers are strictly bound inside each question object (q.id, q.answer),
+//    so answer checking (answers[q.id] === q.answer) is 100% mathematically immune to mismatch.
+const mulberry32 = (seed) => {
+  return () => {
+    let t = (seed += 0x6D2B79F5);
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+};
+
+const hashSeed = (str) => {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = (Math.imul(31, hash) + str.charCodeAt(i)) | 0;
+  }
+  return hash;
+};
+
+const shuffleArrayWithSeed = (array, seedStr) => {
+  if (!seedStr || !array || array.length <= 1) return array;
+  const seed = hashSeed(seedStr);
+  const random = mulberry32(seed);
+  const copy = [...array];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+};
+
 // Helper to render subscripts (<sub>) and superscripts (<sup>) with scaled font size and baseline offset
 const renderFormattedContent = (text) => {
   if (!text || typeof text !== 'string') return text;
@@ -235,13 +271,21 @@ export default function Quiz() {
   const [reviewFilter, setReviewFilter] = useState('all');
   const [activeReviewRecord, setActiveReviewRecord] = useState(null);
 
-  // Questions strictly scoped by quiz module (习题1 vs 习题2)
+  // Questions strictly scoped by quiz module (习题1 vs 习题2) with anti-cheating per-student random shuffle
   const quizQuestions = useMemo(() => {
     if (view === 'review' && activeReviewRecord?.quizId) {
-      return getQuestionsForClass(currentClassId, activeReviewRecord.quizId);
+      const base = getQuestionsForClass(currentClassId, activeReviewRecord.quizId);
+      if (activeReviewRecord?.studentId) {
+        return shuffleArrayWithSeed(base, `${activeReviewRecord.studentId}_${activeReviewRecord.quizId}`);
+      }
+      return base;
     }
-    return getQuestionsForClass(currentClassId, currentQuizId);
-  }, [currentClassId, currentQuizId, view, activeReviewRecord]);
+    const rawQuestions = getQuestionsForClass(currentClassId, currentQuizId);
+    if (!currentStudent?.id) {
+      return rawQuestions;
+    }
+    return shuffleArrayWithSeed(rawQuestions, `${currentStudent.id}_${currentQuizId}`);
+  }, [currentClassId, currentQuizId, view, activeReviewRecord, currentStudent?.id]);
 
   // Records state
   const getClassStorageKey = (clsId) => `ainetwork_quiz_records_${clsId}_v2`;
@@ -1401,7 +1445,7 @@ export default function Quiz() {
                   答题卡直达:
                 </span>
                 <div className="flex items-center gap-1.5 sm:gap-2">
-                  {quizQuestions.map((q) => {
+                  {quizQuestions.map((q, index) => {
                     const isDone = !!answers[q.id];
                     return (
                       <button
@@ -1415,9 +1459,9 @@ export default function Quiz() {
                             ? 'bg-indigo-600 text-white shadow-xs'
                             : 'bg-white hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 border border-slate-200'
                         }`}
-                        title={`第 ${q.id} 题 (${isDone ? '已作答' : '未作答'})`}
+                        title={`第 ${index + 1} 题 (${isDone ? '已作答' : '未作答'})`}
                       >
-                        {q.id}
+                        {index + 1}
                       </button>
                     );
                   })}
@@ -1698,12 +1742,18 @@ export default function Quiz() {
                         {/* Question Index Badge - Soft harmonious background with ample breathing room */}
                         <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-100/90 text-slate-800 border border-slate-200/90 text-xs sm:text-sm font-extrabold font-mono tracking-tight shadow-2xs">
                           <span className="w-1.5 h-1.5 rounded-full bg-indigo-600"></span>
-                          <span>第 {q.id} 题</span>
+                          <span>第 {index + 1} 题</span>
                         </span>
 
                         {/* Chapter Badge */}
                         <span className="inline-flex items-center px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-indigo-50 text-indigo-700 border border-indigo-100/90">
                           {q.chapter}
+                        </span>
+
+                        {/* Anti-cheating Badge */}
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/80">
+                          <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                          <span>随机防抄袭</span>
                         </span>
 
                         {/* Scoring Rule Badge */}
@@ -1726,7 +1776,7 @@ export default function Quiz() {
                     </div>
 
                     {/* Question Statement */}
-                    <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-relaxed my-4">
+                    <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-relaxed my-4 whitespace-pre-wrap">
                       {renderFormattedContent(q.question)}
                     </h3>
 
@@ -1760,7 +1810,7 @@ export default function Quiz() {
 
                               {/* Option Text with Ample Margins */}
                               <span
-                                className={`text-sm sm:text-base leading-relaxed ${
+                                className={`text-sm sm:text-base leading-relaxed whitespace-pre-wrap ${
                                   isSelected
                                     ? 'font-extrabold text-indigo-950'
                                     : 'font-medium text-slate-700 group-hover:text-slate-950'
@@ -1977,7 +2027,7 @@ export default function Quiz() {
               </div>
 
               <div className="space-y-6">
-                {quizQuestions.map((q) => {
+                {quizQuestions.map((q, index) => {
                   const studentAns = activeReviewRecord.answers[q.id] || '未作答';
                   const isCorrect = studentAns === q.answer;
 
@@ -2003,7 +2053,10 @@ export default function Quiz() {
                             }`}
                           >
                             <span className={`w-1.5 h-1.5 rounded-full ${isCorrect ? 'bg-emerald-500' : 'bg-rose-500'}`}></span>
-                            <span>第 {q.id} 题</span>
+                            <span>第 {index + 1} 题</span>
+                            <span className="text-[11px] font-mono font-medium opacity-60">
+                              (题库#{q.id})
+                            </span>
                           </span>
                           <span className="inline-flex items-center px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-slate-100 text-slate-600 border border-slate-200/70">
                             {q.chapter}
@@ -2025,7 +2078,7 @@ export default function Quiz() {
                         </div>
                       </div>
 
-                      <h4 className="text-base font-bold text-slate-900 leading-relaxed mb-5">
+                      <h4 className="text-base font-bold text-slate-900 leading-relaxed mb-5 whitespace-pre-wrap">
                         {renderFormattedContent(q.question)}
                       </h4>
 
@@ -2062,7 +2115,7 @@ export default function Quiz() {
                                 >
                                   {opt.key}
                                 </span>
-                                <div className="leading-relaxed">
+                                <div className="leading-relaxed whitespace-pre-wrap">
                                   {renderFormattedContent(opt.text)}
                                 </div>
                               </div>

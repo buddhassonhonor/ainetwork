@@ -106,10 +106,10 @@ export const CLASSES_CONFIG = [
       },
       {
         id: 'quiz_matlab_2',
-        title: '随堂测验 2：程序控制与数据可视化',
-        shortTitle: '第2次测验_控制绘图',
-        chapters: '第3-5章 控制流、绘图与函数脚本',
-        totalQuestions: 5,
+        title: '随堂测验 2：程序流程控制与函数',
+        shortTitle: '第2次测验_控制与函数',
+        chapters: '第3章 程序流程控制 · 第4章 脚本与函数',
+        totalQuestions: matlabQuizQuestions2.length,
       }
     ]
   },
@@ -142,10 +142,10 @@ export const CLASSES_CONFIG = [
       },
       {
         id: 'quiz_matlab_2',
-        title: '随堂测验 2：程序控制与数据可视化',
-        shortTitle: '第2次测验_控制绘图',
-        chapters: '第3-5章 控制流、绘图与函数脚本',
-        totalQuestions: 5,
+        title: '随堂测验 2：程序流程控制与函数',
+        shortTitle: '第2次测验_控制与函数',
+        chapters: '第3章 程序流程控制 · 第4章 脚本与函数',
+        totalQuestions: matlabQuizQuestions2.length,
       }
     ]
   },
