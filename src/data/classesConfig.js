@@ -3,6 +3,7 @@ import networkQuizQuestions from './quizQuestions.json';
 import networkQuizQuestionsCh3 from './quizQuestions_ch3.json';
 import matlabQuizQuestions1 from './matlabQuestions.json';
 import matlabQuizQuestions2 from './matlabQuestions_quiz2.json';
+import matlabQuizQuestions3 from './matlabQuestions_quiz3.json';
 
 export const CLASSES_CONFIG = [
   {
@@ -110,6 +111,13 @@ export const CLASSES_CONFIG = [
         shortTitle: '第2次测验_控制与函数',
         chapters: '第3章 程序流程控制 · 第4章 脚本与函数',
         totalQuestions: matlabQuizQuestions2.length,
+      },
+      {
+        id: 'quiz_matlab_3',
+        title: '随堂测验 3：第4章 上机编程算法与流程控制',
+        shortTitle: '第3次测验_编程算法',
+        chapters: '第4章 程序流程控制 · 综合上机编程',
+        totalQuestions: matlabQuizQuestions3.length,
       }
     ]
   },
@@ -146,6 +154,13 @@ export const CLASSES_CONFIG = [
         shortTitle: '第2次测验_控制与函数',
         chapters: '第3章 程序流程控制 · 第4章 脚本与函数',
         totalQuestions: matlabQuizQuestions2.length,
+      },
+      {
+        id: 'quiz_matlab_3',
+        title: '随堂测验 3：第4章 上机编程算法与流程控制',
+        shortTitle: '第3次测验_编程算法',
+        chapters: '第4章 程序流程控制 · 综合上机编程',
+        totalQuestions: matlabQuizQuestions3.length,
       }
     ]
   },
@@ -154,6 +169,9 @@ export const CLASSES_CONFIG = [
 export const getQuestionsForClass = (classId, quizId = 'quiz_ch1_ch2') => {
   const cfg = CLASSES_CONFIG.find((c) => c.id === classId);
   if (cfg && cfg.questionsType === 'matlab') {
+    if (quizId === 'quiz_matlab_3') {
+      return matlabQuizQuestions3;
+    }
     if (quizId === 'quiz_matlab_2') {
       return matlabQuizQuestions2;
     }
