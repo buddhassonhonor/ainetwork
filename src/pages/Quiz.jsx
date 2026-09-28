@@ -1739,25 +1739,18 @@ export default function Quiz() {
                     {/* Question Header */}
                     <div className="flex items-center justify-between gap-4 mb-4 pb-3 border-b border-slate-100">
                       <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap">
-                        {/* Question Index Badge - Soft harmonious background with ample breathing room */}
-                        <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-100/90 text-slate-800 border border-slate-200/90 text-xs sm:text-sm font-extrabold font-mono tracking-tight shadow-2xs">
-                          <span className="w-1.5 h-1.5 rounded-full bg-indigo-600"></span>
+                        {/* Question Index Badge - Clean, spacious rounded container */}
+                        <span className="inline-flex items-center px-4 py-1.5 sm:px-4.5 sm:py-2 rounded-xl bg-slate-100/90 text-slate-800 border border-slate-200/90 text-xs sm:text-sm font-bold shadow-2xs">
                           <span>第 {index + 1} 题</span>
                         </span>
 
                         {/* Chapter Badge */}
-                        <span className="inline-flex items-center px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-indigo-50 text-indigo-700 border border-indigo-100/90">
+                        <span className="inline-flex items-center px-4 py-1.5 sm:px-4.5 sm:py-2 rounded-xl text-xs sm:text-sm font-bold bg-indigo-50 text-indigo-700 border border-indigo-100/90">
                           {q.chapter}
                         </span>
 
-                        {/* Anti-cheating Badge */}
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/80">
-                          <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                          <span>随机防抄袭</span>
-                        </span>
-
                         {/* Scoring Rule Badge */}
-                        <span className="inline-flex items-center px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-50 text-slate-500 border border-slate-200/70">
+                        <span className="inline-flex items-center px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm font-medium bg-slate-50 text-slate-500 border border-slate-200/70">
                           按比例折算 · 百分制
                         </span>
                       </div>
@@ -2046,19 +2039,18 @@ export default function Quiz() {
                       <div className="flex items-start justify-between gap-4 mb-4">
                         <div className="flex items-center gap-2.5 flex-wrap">
                           <span
-                            className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-extrabold font-mono border shadow-2xs ${
+                            className={`inline-flex items-center px-4 py-1.5 sm:px-4.5 sm:py-2 rounded-xl text-xs sm:text-sm font-bold border shadow-2xs ${
                               isCorrect
                                 ? 'bg-emerald-50 text-emerald-800 border-emerald-200/90'
                                 : 'bg-rose-50 text-rose-800 border-rose-200/90'
                             }`}
                           >
-                            <span className={`w-1.5 h-1.5 rounded-full ${isCorrect ? 'bg-emerald-500' : 'bg-rose-500'}`}></span>
                             <span>第 {index + 1} 题</span>
-                            <span className="text-[11px] font-mono font-medium opacity-60">
+                            <span className="text-[11px] font-mono font-medium opacity-60 ml-1.5">
                               (题库#{q.id})
                             </span>
                           </span>
-                          <span className="inline-flex items-center px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-slate-100 text-slate-600 border border-slate-200/70">
+                          <span className="inline-flex items-center px-4 py-1.5 sm:px-4.5 sm:py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-100 text-slate-600 border border-slate-200/70">
                             {q.chapter}
                           </span>
                         </div>
