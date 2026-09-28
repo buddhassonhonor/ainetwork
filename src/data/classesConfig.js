@@ -46,7 +46,7 @@ export const CLASSES_CONFIG = [
         title: '【习题3】第4章 网络层随堂测验',
         shortTitle: '习题3_第4章',
         chapters: '第4章 网络层与IP编址路由',
-        totalQuestions: 20,
+        totalQuestions: networkQuizQuestionsCh4.length,
       },
     ]
   },
@@ -89,7 +89,7 @@ export const CLASSES_CONFIG = [
         title: '【习题3】第4章 网络层随堂测验',
         shortTitle: '习题3_第4章',
         chapters: '第4章 网络层与IP编址路由',
-        totalQuestions: 20,
+        totalQuestions: networkQuizQuestionsCh4.length,
       },
     ]
   },

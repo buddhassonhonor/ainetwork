@@ -487,33 +487,6 @@
   },
   {
     "id": 19,
-    "originalId": "p2_13",
-    "chapter": "第四章 网络层",
-    "question": "第 18 题中路由器的选择体现了 CIDR 的哪一原则？（ ）",
-    "options": [
-      {
-        "key": "A",
-        "text": "最短路径优先"
-      },
-      {
-        "key": "B",
-        "text": "最长前缀匹配"
-      },
-      {
-        "key": "C",
-        "text": "距离向量原则"
-      },
-      {
-        "key": "D",
-        "text": "默认路由原则"
-      }
-    ],
-    "answer": "B",
-    "score": 1,
-    "explanation": "当路由器表中有多条路由匹配目的IP时，选用网络前缀最长的项进行转发，此原则称为最长前缀匹配原则（Longest Prefix Match）。"
-  },
-  {
-    "id": 20,
     "originalId": "p2_14",
     "chapter": "第四章 网络层",
     "question": "用户执行 ping 命令测试另一台主机是否可达时，主要使用的是（ ）。",
