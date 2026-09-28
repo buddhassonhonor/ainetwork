@@ -89,7 +89,7 @@ export const CLASSES_CONFIG = [
     seq: '01',
     college: '物理与信息工程学院',
     major: '通信工程',
-    studentCount: 29,
+    studentCount: 34,
     status: 'preview',
     statusText: '预留测试入口',
     statusBadge: '预留测试',

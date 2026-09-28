@@ -1,0 +1,7492 @@
+[
+  {
+    "recordId": "221602025_quiz_matlab_1_1790579068834",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "221602025",
+    "studentName": "黄少欣",
+    "gender": "男",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 0,
+    "correctCount": 0,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T07:04:28.000Z",
+    "answers": {},
+    "detailList": []
+  },
+  {
+    "recordId": "230307021_quiz_matlab_1_1790579068834",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "230307021",
+    "studentName": "游文涛",
+    "gender": "男",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 0,
+    "correctCount": 0,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T07:04:28.000Z",
+    "answers": {},
+    "detailList": []
+  },
+  {
+    "recordId": "230308034_quiz_matlab_1_1790579068834",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "230308034",
+    "studentName": "彭志铭",
+    "gender": "男",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 0,
+    "correctCount": 0,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T07:04:28.000Z",
+    "answers": {},
+    "detailList": []
+  },
+  {
+    "recordId": "240802018_quiz_matlab_1_1790563981543",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "240802018",
+    "studentName": "欧国凯",
+    "gender": "男",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 81,
+    "correctCount": 21,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T02:53:01.543Z",
+    "answers": {
+      "1": "B",
+      "2": "C",
+      "3": "B",
+      "4": "B",
+      "5": "A",
+      "6": "B",
+      "7": "B",
+      "8": "C",
+      "9": "C",
+      "10": "A",
+      "11": "C",
+      "12": "D",
+      "13": "C",
+      "14": "A",
+      "15": "B",
+      "16": "B",
+      "17": "C",
+      "18": "C",
+      "19": "A",
+      "20": "B",
+      "21": "B",
+      "22": "A",
+      "23": "B",
+      "24": "C",
+      "25": "B",
+      "26": "A"
+    },
+    "detailList": [
+      {
+        "id": 10,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 15,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 16,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 5,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 24,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 19,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 4,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 23,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 12,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 7,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 8,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 18,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 6,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 1,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 21,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 17,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 2,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 26,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 3,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 20,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 13,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "D",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 9,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 11,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 14,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 25,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 22,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      }
+    ]
+  },
+  {
+    "recordId": "250307001_quiz_matlab_1_1790563293253",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "250307001",
+    "studentName": "陈熙媛",
+    "gender": "女",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 77,
+    "correctCount": 20,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T02:41:33.253Z",
+    "answers": {
+      "1": "A",
+      "2": "C",
+      "3": "B",
+      "4": "B",
+      "5": "A",
+      "6": "A",
+      "7": "C",
+      "8": "C",
+      "9": "D",
+      "10": "A",
+      "11": "C",
+      "12": "D",
+      "13": "D",
+      "14": "A",
+      "15": "B",
+      "16": "B",
+      "17": "C",
+      "18": "C",
+      "19": "A",
+      "20": "B",
+      "21": "A",
+      "22": "A",
+      "23": "B",
+      "24": "B",
+      "25": "B",
+      "26": "B"
+    },
+    "detailList": [
+      {
+        "id": 10,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 4,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 18,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 22,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 13,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 6,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 1,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "A",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 17,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 2,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 15,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 11,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 16,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 14,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 5,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 21,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 19,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 26,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 8,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 9,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 23,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 7,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 12,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 20,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 25,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 24,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 3,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      }
+    ]
+  },
+  {
+    "recordId": "250307002_quiz_matlab_1_1790563499023",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "250307002",
+    "studentName": "陈天棋",
+    "gender": "男",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 88,
+    "correctCount": 23,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T02:44:59.023Z",
+    "answers": {
+      "1": "B",
+      "2": "C",
+      "3": "B",
+      "4": "B",
+      "5": "C",
+      "6": "B",
+      "7": "B",
+      "8": "C",
+      "9": "C",
+      "10": "A",
+      "11": "B",
+      "12": "D",
+      "13": "D",
+      "14": "A",
+      "15": "B",
+      "16": "B",
+      "17": "C",
+      "18": "C",
+      "19": "A",
+      "20": "B",
+      "21": "C",
+      "22": "B",
+      "23": "B",
+      "24": "B",
+      "25": "B",
+      "26": "D"
+    },
+    "detailList": [
+      {
+        "id": 9,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 6,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 3,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 20,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 8,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 12,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 11,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 13,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 25,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 24,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 26,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 19,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 7,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 23,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 5,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "A",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 21,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 10,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 14,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 15,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 4,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 16,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 22,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "A",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 17,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 18,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 2,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 1,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      }
+    ]
+  },
+  {
+    "recordId": "250307003_quiz_matlab_1_1790563719165",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "250307003",
+    "studentName": "蔡凌楷",
+    "gender": "男",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 73,
+    "correctCount": 19,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T02:48:39.165Z",
+    "answers": {
+      "1": "B",
+      "2": "C",
+      "3": "B",
+      "4": "C",
+      "5": "A",
+      "6": "D",
+      "7": "B",
+      "8": "D",
+      "9": "C",
+      "10": "A",
+      "11": "B",
+      "12": "D",
+      "13": "D",
+      "14": "A",
+      "15": "B",
+      "16": "B",
+      "17": "C",
+      "18": "A",
+      "19": "D",
+      "20": "B",
+      "21": "B",
+      "22": "A",
+      "23": "B",
+      "24": "B",
+      "25": "A",
+      "26": "B"
+    },
+    "detailList": [
+      {
+        "id": 22,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 20,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 19,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "A",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 12,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 9,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 2,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 21,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 26,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 4,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 13,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 25,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 14,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 3,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 24,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 15,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 10,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 6,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 17,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 5,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 8,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 18,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 1,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 7,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 23,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 11,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 16,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      }
+    ]
+  },
+  {
+    "recordId": "250307004_quiz_matlab_1_1790563696848",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "250307004",
+    "studentName": "吴欣妍",
+    "gender": "女",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 85,
+    "correctCount": 22,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T02:48:16.848Z",
+    "answers": {
+      "1": "B",
+      "2": "C",
+      "3": "A",
+      "4": "B",
+      "5": "A",
+      "6": "B",
+      "7": "D",
+      "8": "C",
+      "9": "D",
+      "10": "A",
+      "11": "B",
+      "12": "D",
+      "13": "D",
+      "14": "C",
+      "15": "B",
+      "16": "B",
+      "17": "C",
+      "18": "C",
+      "19": "A",
+      "20": "B",
+      "21": "C",
+      "22": "A",
+      "23": "B",
+      "24": "B",
+      "25": "B",
+      "26": "B"
+    },
+    "detailList": [
+      {
+        "id": 22,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 20,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 1,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 6,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 16,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 18,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 2,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 9,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 17,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 4,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 25,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 15,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 3,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 11,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 12,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 7,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 8,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 10,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 21,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 26,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 5,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 19,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 13,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 23,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 24,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 14,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "A",
+        "isCorrect": false,
+        "score": 0
+      }
+    ]
+  },
+  {
+    "recordId": "250307005_quiz_matlab_1_1790563234409",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "250307005",
+    "studentName": "吴佳辉",
+    "gender": "男",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 85,
+    "correctCount": 22,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T02:40:34.409Z",
+    "answers": {
+      "1": "B",
+      "2": "C",
+      "3": "B",
+      "4": "B",
+      "5": "A",
+      "6": "B",
+      "7": "D",
+      "8": "B",
+      "9": "C",
+      "10": "A",
+      "11": "C",
+      "12": "D",
+      "13": "D",
+      "14": "A",
+      "15": "B",
+      "16": "B",
+      "17": "C",
+      "18": "C",
+      "19": "A",
+      "20": "B",
+      "21": "C",
+      "22": "A",
+      "23": "D",
+      "24": "B",
+      "25": "B",
+      "26": "B"
+    },
+    "detailList": [
+      {
+        "id": 7,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 18,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 8,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 13,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 9,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 15,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 4,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 26,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 25,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 16,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 24,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 21,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 20,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 22,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 23,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 14,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 17,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 5,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 2,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 3,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 6,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 12,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 10,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 1,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 11,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 19,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      }
+    ]
+  },
+  {
+    "recordId": "250307006_quiz_matlab_1_1790563301348",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "250307006",
+    "studentName": "林扬锜",
+    "gender": "男",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 77,
+    "correctCount": 20,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T02:41:41.348Z",
+    "answers": {
+      "1": "B",
+      "2": "C",
+      "3": "A",
+      "4": "B",
+      "5": "B",
+      "6": "B",
+      "7": "B",
+      "8": "C",
+      "9": "C",
+      "10": "C",
+      "11": "B",
+      "12": "D",
+      "13": "D",
+      "14": "A",
+      "15": "B",
+      "16": "B",
+      "17": "D",
+      "18": "C",
+      "19": "B",
+      "20": "B",
+      "21": "C",
+      "22": "A",
+      "23": "B",
+      "24": "B",
+      "25": "B",
+      "26": "D"
+    },
+    "detailList": [
+      {
+        "id": 13,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 8,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 2,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 7,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 11,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 25,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 9,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 23,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 6,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 26,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 12,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 20,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 10,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "A",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 18,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 17,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 1,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 24,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 14,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 16,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 15,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 4,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 3,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 19,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "A",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 22,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 5,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "A",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 21,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      }
+    ]
+  },
+  {
+    "recordId": "250307007_quiz_matlab_1_1790563647105",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "250307007",
+    "studentName": "洪铭杰",
+    "gender": "男",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 77,
+    "correctCount": 20,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T02:47:27.105Z",
+    "answers": {
+      "1": "B",
+      "2": "C",
+      "3": "C",
+      "4": "B",
+      "5": "B",
+      "6": "B",
+      "7": "B",
+      "8": "C",
+      "9": "A",
+      "10": "A",
+      "11": "B",
+      "12": "D",
+      "13": "D",
+      "14": "A",
+      "15": "B",
+      "16": "B",
+      "17": "D",
+      "18": "A",
+      "19": "A",
+      "20": "B",
+      "21": "C",
+      "22": "A",
+      "23": "B",
+      "24": "B",
+      "25": "B",
+      "26": "D"
+    },
+    "detailList": [
+      {
+        "id": 13,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 20,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 26,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 15,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 5,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "A",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 3,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 24,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 19,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 12,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 9,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "A",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 11,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 4,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 1,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 25,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 22,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 17,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 6,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 18,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 16,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 23,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 2,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 8,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 21,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 10,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 14,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 7,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      }
+    ]
+  },
+  {
+    "recordId": "250307008_quiz_matlab_1_1790563508791",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "250307008",
+    "studentName": "肖磊",
+    "gender": "男",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 69,
+    "correctCount": 18,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T02:45:08.791Z",
+    "answers": {
+      "1": "C",
+      "2": "C",
+      "3": "B",
+      "4": "B",
+      "5": "A",
+      "6": "B",
+      "7": "B",
+      "8": "B",
+      "9": "C",
+      "10": "A",
+      "11": "C",
+      "12": "D",
+      "13": "D",
+      "14": "A",
+      "15": "B",
+      "16": "B",
+      "17": "C",
+      "18": "C",
+      "19": "C",
+      "20": "D",
+      "21": "C",
+      "22": "B",
+      "23": "B",
+      "24": "C",
+      "25": "D",
+      "26": "B"
+    },
+    "detailList": [
+      {
+        "id": 6,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 3,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 19,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "A",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 23,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 14,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 4,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 25,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 16,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 5,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 22,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "A",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 11,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 17,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 15,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 21,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 18,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 9,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 26,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 13,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 8,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 1,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 10,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 7,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 24,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 2,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 20,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 12,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      }
+    ]
+  },
+  {
+    "recordId": "250307009_quiz_matlab_1_1790563402455",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "250307009",
+    "studentName": "王鹏飞",
+    "gender": "男",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 65,
+    "correctCount": 17,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T02:43:22.455Z",
+    "answers": {
+      "1": "D",
+      "2": "B",
+      "3": "B",
+      "4": "B",
+      "5": "C",
+      "6": "B",
+      "7": "B",
+      "8": "C",
+      "9": "A",
+      "10": "A",
+      "11": "D",
+      "12": "D",
+      "13": "B",
+      "14": "A",
+      "15": "B",
+      "16": "A",
+      "17": "C",
+      "18": "D",
+      "19": "A",
+      "20": "B",
+      "21": "B",
+      "22": "A",
+      "23": "B",
+      "24": "B",
+      "25": "B",
+      "26": "B"
+    },
+    "detailList": [
+      {
+        "id": 2,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 9,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "A",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 23,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 18,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 16,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 1,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 7,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 8,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 6,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 13,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "D",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 17,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 25,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 11,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 20,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 22,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 5,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "A",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 19,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 14,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 24,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 4,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 12,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 15,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 10,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 3,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 21,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 26,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      }
+    ]
+  },
+  {
+    "recordId": "250307010_quiz_matlab_1_1790563236101",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "250307010",
+    "studentName": "宋贝贝",
+    "gender": "女",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 100,
+    "correctCount": 26,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T02:40:36.101Z",
+    "answers": {
+      "1": "B",
+      "2": "C",
+      "3": "B",
+      "4": "B",
+      "5": "A",
+      "6": "B",
+      "7": "B",
+      "8": "C",
+      "9": "C",
+      "10": "A",
+      "11": "B",
+      "12": "D",
+      "13": "D",
+      "14": "A",
+      "15": "B",
+      "16": "B",
+      "17": "C",
+      "18": "C",
+      "19": "A",
+      "20": "B",
+      "21": "C",
+      "22": "A",
+      "23": "B",
+      "24": "B",
+      "25": "B",
+      "26": "B"
+    },
+    "detailList": [
+      {
+        "id": 18,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 13,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 6,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 19,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 11,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 7,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 15,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 5,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 17,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 9,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 26,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 2,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 14,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 23,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 24,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 22,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 4,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 8,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 3,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 16,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 10,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 12,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 21,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 25,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 1,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 20,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      }
+    ]
+  },
+  {
+    "recordId": "250307011_quiz_matlab_1_1790563828326",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "250307011",
+    "studentName": "章书鑫",
+    "gender": "男",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 69,
+    "correctCount": 18,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T02:50:28.326Z",
+    "answers": {
+      "1": "A",
+      "2": "C",
+      "3": "C",
+      "4": "B",
+      "5": "A",
+      "6": "B",
+      "7": "B",
+      "8": "C",
+      "9": "A",
+      "10": "A",
+      "11": "C",
+      "12": "D",
+      "13": "D",
+      "14": "C",
+      "15": "B",
+      "16": "B",
+      "17": "C",
+      "18": "C",
+      "19": "A",
+      "20": "B",
+      "21": "B",
+      "22": "A",
+      "23": "B",
+      "24": "A",
+      "25": "B",
+      "26": "A"
+    },
+    "detailList": [
+      {
+        "id": 4,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 19,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 20,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 24,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 14,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "A",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 6,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 22,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 8,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 18,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 9,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "A",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 5,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 15,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 10,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 13,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 21,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 26,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 3,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 7,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 23,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 16,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 11,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 2,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 17,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 12,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 25,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 1,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "A",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      }
+    ]
+  },
+  {
+    "recordId": "250307012_quiz_matlab_1_1790564025990",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "250307012",
+    "studentName": "吴伟晨",
+    "gender": "男",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 69,
+    "correctCount": 18,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T02:53:45.990Z",
+    "answers": {
+      "1": "B",
+      "2": "C",
+      "3": "D",
+      "4": "B",
+      "5": "A",
+      "6": "B",
+      "7": "B",
+      "8": "C",
+      "9": "A",
+      "10": "B",
+      "11": "B",
+      "12": "D",
+      "13": "D",
+      "14": "A",
+      "15": "B",
+      "16": "B",
+      "17": "C",
+      "18": "D",
+      "19": "A",
+      "20": "B",
+      "21": "D",
+      "22": "A",
+      "23": "B",
+      "24": "C",
+      "25": "D",
+      "26": "D"
+    },
+    "detailList": [
+      {
+        "id": 24,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 13,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 6,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 16,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 12,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 17,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 5,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 20,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 4,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 19,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 3,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 10,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "A",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 18,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 2,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 9,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "A",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 25,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 23,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 1,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 15,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 26,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 7,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 11,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 8,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 21,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 14,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 22,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      }
+    ]
+  },
+  {
+    "recordId": "250307013_quiz_matlab_1_1790563478549",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "250307013",
+    "studentName": "林钾庆",
+    "gender": "男",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 65,
+    "correctCount": 17,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T02:44:38.549Z",
+    "answers": {
+      "1": "B",
+      "2": "D",
+      "3": "B",
+      "4": "C",
+      "5": "A",
+      "6": "B",
+      "7": "B",
+      "8": "D",
+      "9": "C",
+      "10": "A",
+      "11": "C",
+      "12": "D",
+      "13": "C",
+      "14": "A",
+      "15": "B",
+      "16": "B",
+      "17": "C",
+      "18": "A",
+      "19": "B",
+      "20": "B",
+      "21": "A",
+      "22": "A",
+      "23": "B",
+      "24": "C",
+      "25": "B",
+      "26": "B"
+    },
+    "detailList": [
+      {
+        "id": 4,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 10,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 19,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "A",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 5,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 16,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 14,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 23,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 25,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 3,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 11,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 1,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 21,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 8,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 20,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 22,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 9,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 12,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 2,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 7,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 26,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 18,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 17,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 24,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 6,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 13,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "D",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 15,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      }
+    ]
+  },
+  {
+    "recordId": "250307014_quiz_matlab_1_1790563427455",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "250307014",
+    "studentName": "林晓艺",
+    "gender": "男",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 92,
+    "correctCount": 24,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T02:43:47.455Z",
+    "answers": {
+      "1": "B",
+      "2": "C",
+      "3": "B",
+      "4": "B",
+      "5": "A",
+      "6": "B",
+      "7": "B",
+      "8": "D",
+      "9": "C",
+      "10": "A",
+      "11": "D",
+      "12": "D",
+      "13": "D",
+      "14": "A",
+      "15": "B",
+      "16": "B",
+      "17": "C",
+      "18": "C",
+      "19": "A",
+      "20": "B",
+      "21": "C",
+      "22": "A",
+      "23": "B",
+      "24": "B",
+      "25": "B",
+      "26": "B"
+    },
+    "detailList": [
+      {
+        "id": 2,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 6,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 26,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 25,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 7,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 12,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 23,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 11,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 15,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 16,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 8,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 17,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 19,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 1,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 14,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 9,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 18,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 10,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 22,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 4,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 24,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 5,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 13,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 20,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 3,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 21,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      }
+    ]
+  },
+  {
+    "recordId": "250307015_quiz_matlab_1_1790563566103",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "250307015",
+    "studentName": "柯琳岚",
+    "gender": "女",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 96,
+    "correctCount": 25,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T02:46:06.103Z",
+    "answers": {
+      "1": "B",
+      "2": "C",
+      "3": "B",
+      "4": "B",
+      "5": "A",
+      "6": "B",
+      "7": "B",
+      "8": "C",
+      "9": "C",
+      "10": "A",
+      "11": "B",
+      "12": "D",
+      "13": "D",
+      "14": "C",
+      "15": "B",
+      "16": "B",
+      "17": "C",
+      "18": "C",
+      "19": "A",
+      "20": "B",
+      "21": "C",
+      "22": "A",
+      "23": "B",
+      "24": "B",
+      "25": "B",
+      "26": "B"
+    },
+    "detailList": [
+      {
+        "id": 25,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 19,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 2,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 6,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 7,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 15,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 11,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 26,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 16,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 14,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "A",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 3,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 12,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 5,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 1,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 10,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 23,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 24,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 8,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 21,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 4,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 13,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 20,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 18,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 9,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 17,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 22,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      }
+    ]
+  },
+  {
+    "recordId": "250307016_quiz_matlab_1_1790579068834",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "250307016",
+    "studentName": "廖灿杰",
+    "gender": "男",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 90,
+    "correctCount": 23,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T07:04:28.000Z",
+    "answers": {},
+    "detailList": []
+  },
+  {
+    "recordId": "250307017_quiz_matlab_1_1790563697441",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "250307017",
+    "studentName": "郑彦铭",
+    "gender": "男",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 69,
+    "correctCount": 18,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T02:48:17.441Z",
+    "answers": {
+      "1": "C",
+      "2": "C",
+      "3": "B",
+      "4": "B",
+      "5": "B",
+      "6": "A",
+      "7": "A",
+      "8": "C",
+      "9": "C",
+      "10": "A",
+      "11": "C",
+      "12": "D",
+      "13": "D",
+      "14": "A",
+      "15": "B",
+      "16": "A",
+      "17": "C",
+      "18": "C",
+      "19": "A",
+      "20": "B",
+      "21": "A",
+      "22": "A",
+      "23": "B",
+      "24": "B",
+      "25": "C",
+      "26": "B"
+    },
+    "detailList": [
+      {
+        "id": 25,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 14,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 11,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 20,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 6,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 17,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 8,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 12,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 7,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 5,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "A",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 18,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 2,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 9,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 23,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 24,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 26,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 21,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 3,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 10,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 16,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 15,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 13,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 22,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 1,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 19,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 4,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      }
+    ]
+  },
+  {
+    "recordId": "250307018_quiz_matlab_1_1790563384407",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "250307018",
+    "studentName": "许桢沣",
+    "gender": "男",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 85,
+    "correctCount": 22,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T02:43:04.407Z",
+    "answers": {
+      "1": "A",
+      "2": "C",
+      "3": "B",
+      "4": "B",
+      "5": "A",
+      "6": "B",
+      "7": "B",
+      "8": "C",
+      "9": "D",
+      "10": "A",
+      "11": "B",
+      "12": "D",
+      "13": "D",
+      "14": "A",
+      "15": "B",
+      "16": "A",
+      "17": "C",
+      "18": "C",
+      "19": "A",
+      "20": "B",
+      "21": "D",
+      "22": "A",
+      "23": "B",
+      "24": "B",
+      "25": "B",
+      "26": "B"
+    },
+    "detailList": [
+      {
+        "id": 14,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 1,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "A",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 15,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 17,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 22,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 11,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 13,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 20,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 21,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 9,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 5,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 12,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 16,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 18,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 26,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 19,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 7,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 23,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 3,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 6,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 24,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 8,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 25,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 2,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 4,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 10,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      }
+    ]
+  },
+  {
+    "recordId": "250307019_quiz_matlab_1_1790563225000",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "250307019",
+    "studentName": "张全钦",
+    "gender": "男",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 85,
+    "correctCount": 22,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T02:40:25.000Z",
+    "answers": {
+      "1": "B",
+      "2": "C",
+      "3": "B",
+      "4": "B",
+      "5": "A",
+      "6": "B",
+      "7": "B",
+      "8": "C",
+      "9": "C",
+      "10": "A",
+      "11": "B",
+      "12": "D",
+      "13": "D",
+      "14": "A",
+      "15": "B",
+      "16": "B",
+      "17": "C",
+      "18": "C",
+      "19": "C",
+      "20": "B",
+      "21": "C",
+      "22": "A",
+      "23": "C",
+      "24": "A",
+      "25": "B",
+      "26": "D"
+    },
+    "detailList": [
+      {
+        "id": 13,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 10,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 6,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 20,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 21,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 9,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 14,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 16,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 7,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 12,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 25,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 3,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 11,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 22,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 2,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 18,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 17,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 5,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 8,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 4,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 23,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 26,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 15,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 1,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 19,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "A",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 24,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      }
+    ]
+  },
+  {
+    "recordId": "250307020_quiz_matlab_1_1790563162571",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "250307020",
+    "studentName": "陈佳文",
+    "gender": "男",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 85,
+    "correctCount": 22,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T02:39:22.571Z",
+    "answers": {
+      "1": "B",
+      "2": "C",
+      "3": "B",
+      "4": "B",
+      "5": "A",
+      "6": "B",
+      "7": "B",
+      "8": "D",
+      "9": "C",
+      "10": "A",
+      "11": "D",
+      "12": "D",
+      "13": "D",
+      "14": "D",
+      "15": "B",
+      "16": "B",
+      "17": "C",
+      "18": "C",
+      "19": "A",
+      "20": "B",
+      "21": "C",
+      "22": "B",
+      "23": "B",
+      "24": "B",
+      "25": "B",
+      "26": "B"
+    },
+    "detailList": [
+      {
+        "id": 22,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "A",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 17,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 23,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 6,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 26,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 4,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 24,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 20,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 11,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 18,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 9,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 10,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 12,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 14,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "A",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 25,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 8,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 2,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 7,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 5,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 1,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 19,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 13,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 16,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 15,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 21,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 3,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      }
+    ]
+  },
+  {
+    "recordId": "250307021_quiz_matlab_1_1790563120610",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "250307021",
+    "studentName": "黄忠杰",
+    "gender": "男",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 81,
+    "correctCount": 21,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T02:38:40.610Z",
+    "answers": {
+      "1": "B",
+      "2": "C",
+      "3": "B",
+      "4": "B",
+      "5": "A",
+      "6": "B",
+      "7": "A",
+      "8": "C",
+      "9": "C",
+      "10": "A",
+      "11": "D",
+      "12": "A",
+      "13": "D",
+      "14": "A",
+      "15": "B",
+      "16": "A",
+      "17": "C",
+      "18": "C",
+      "19": "A",
+      "20": "D",
+      "21": "C",
+      "22": "A",
+      "23": "B",
+      "24": "B",
+      "25": "B",
+      "26": "B"
+    },
+    "detailList": [
+      {
+        "id": 19,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 26,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 10,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 15,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 8,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 6,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 5,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 18,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 22,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 13,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 17,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 16,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 25,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 24,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 14,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 11,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 2,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 7,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 20,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 12,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "D",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 1,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 21,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 9,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 23,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 4,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 3,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      }
+    ]
+  },
+  {
+    "recordId": "250307022_quiz_matlab_1_1790563573110",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "250307022",
+    "studentName": "陈彬阳",
+    "gender": "男",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 85,
+    "correctCount": 22,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T02:46:13.110Z",
+    "answers": {
+      "1": "B",
+      "2": "C",
+      "3": "B",
+      "4": "B",
+      "5": "A",
+      "6": "B",
+      "7": "B",
+      "8": "C",
+      "9": "D",
+      "10": "A",
+      "11": "B",
+      "12": "D",
+      "13": "D",
+      "14": "D",
+      "15": "B",
+      "16": "B",
+      "17": "C",
+      "18": "C",
+      "19": "A",
+      "20": "B",
+      "21": "C",
+      "22": "A",
+      "23": "B",
+      "24": "C",
+      "25": "D",
+      "26": "B"
+    },
+    "detailList": [
+      {
+        "id": 1,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 5,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 24,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 4,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 6,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 12,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 13,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 19,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 18,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 26,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 14,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "A",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 22,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 8,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 25,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 7,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 10,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 20,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 11,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 17,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 23,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 3,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 15,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 16,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 9,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 21,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 2,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      }
+    ]
+  },
+  {
+    "recordId": "250307023_quiz_matlab_1_1790564019776",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "250307023",
+    "studentName": "李炎平",
+    "gender": "女",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 62,
+    "correctCount": 16,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T02:53:39.776Z",
+    "answers": {
+      "1": "A",
+      "2": "D",
+      "3": "B",
+      "4": "B",
+      "5": "B",
+      "6": "B",
+      "7": "B",
+      "8": "B",
+      "9": "A",
+      "10": "A",
+      "11": "B",
+      "12": "D",
+      "13": "D",
+      "14": "A",
+      "15": "B",
+      "16": "B",
+      "17": "C",
+      "18": "D",
+      "19": "A",
+      "20": "A",
+      "21": "B",
+      "22": "A",
+      "23": "A",
+      "24": "B",
+      "25": "B",
+      "26": "A"
+    },
+    "detailList": [
+      {
+        "id": 13,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 23,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 24,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 5,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "A",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 4,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 7,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 11,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 3,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 18,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 15,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 8,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 21,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 16,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 10,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 17,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 26,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 20,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "A",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 6,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 1,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "A",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 2,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 12,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 9,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "A",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 14,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 22,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 19,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 25,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      }
+    ]
+  },
+  {
+    "recordId": "250307024_quiz_matlab_1_1790563945446",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "250307024",
+    "studentName": "黄家鸿",
+    "gender": "男",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 77,
+    "correctCount": 20,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T02:52:25.446Z",
+    "answers": {
+      "1": "B",
+      "2": "C",
+      "3": "B",
+      "4": "B",
+      "5": "C",
+      "6": "B",
+      "7": "B",
+      "8": "B",
+      "9": "C",
+      "10": "A",
+      "11": "B",
+      "12": "D",
+      "13": "D",
+      "14": "A",
+      "15": "B",
+      "16": "A",
+      "17": "C",
+      "18": "C",
+      "19": "A",
+      "20": "B",
+      "21": "B",
+      "22": "A",
+      "23": "D",
+      "24": "A",
+      "25": "B",
+      "26": "B"
+    },
+    "detailList": [
+      {
+        "id": 15,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 25,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 21,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 7,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 13,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 24,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 1,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 11,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 6,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 3,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 18,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 17,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 2,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 26,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 4,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 5,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "A",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 16,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 20,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 22,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 8,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 12,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 9,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 19,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 14,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 23,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 10,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      }
+    ]
+  },
+  {
+    "recordId": "250307025_quiz_matlab_1_1790563858068",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "250307025",
+    "studentName": "夏雪",
+    "gender": "女",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 73,
+    "correctCount": 19,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T02:50:58.068Z",
+    "answers": {
+      "1": "B",
+      "2": "C",
+      "3": "B",
+      "4": "B",
+      "5": "A",
+      "6": "B",
+      "7": "B",
+      "8": "C",
+      "9": "C",
+      "10": "A",
+      "11": "C",
+      "12": "A",
+      "13": "D",
+      "14": "D",
+      "15": "A",
+      "16": "B",
+      "17": "C",
+      "18": "D",
+      "19": "C",
+      "20": "B",
+      "21": "C",
+      "22": "A",
+      "23": "B",
+      "24": "B",
+      "25": "A",
+      "26": "B"
+    },
+    "detailList": [
+      {
+        "id": 19,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "A",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 4,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 13,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 9,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 17,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 2,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 23,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 22,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 25,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 18,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 16,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 21,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 26,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 24,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 10,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 7,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 8,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 15,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 11,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 1,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 20,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 12,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "D",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 6,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 3,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 14,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "A",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 5,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      }
+    ]
+  },
+  {
+    "recordId": "250307026_quiz_matlab_1_1790563847028",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "250307026",
+    "studentName": "刘斌",
+    "gender": "男",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 92,
+    "correctCount": 24,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T02:50:47.028Z",
+    "answers": {
+      "1": "B",
+      "2": "C",
+      "3": "B",
+      "4": "B",
+      "5": "A",
+      "6": "B",
+      "7": "B",
+      "8": "C",
+      "9": "C",
+      "10": "A",
+      "11": "B",
+      "12": "A",
+      "13": "D",
+      "14": "D",
+      "15": "B",
+      "16": "B",
+      "17": "C",
+      "18": "C",
+      "19": "A",
+      "20": "B",
+      "21": "C",
+      "22": "A",
+      "23": "B",
+      "24": "B",
+      "25": "B",
+      "26": "B"
+    },
+    "detailList": [
+      {
+        "id": 8,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 18,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 14,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "A",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 13,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 24,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 12,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "D",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 9,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 10,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 23,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 11,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 15,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 3,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 26,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 4,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 2,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 21,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 17,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 6,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 1,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 19,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 5,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 16,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 25,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 7,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 22,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 20,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      }
+    ]
+  },
+  {
+    "recordId": "250307027_quiz_matlab_1_1790563671931",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "250307027",
+    "studentName": "翁孜聪",
+    "gender": "男",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 54,
+    "correctCount": 14,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T02:47:51.931Z",
+    "answers": {
+      "1": "B",
+      "2": "D",
+      "3": "B",
+      "4": "B",
+      "5": "A",
+      "6": "B",
+      "7": "B",
+      "8": "C",
+      "9": "C",
+      "10": "B",
+      "11": "C",
+      "12": "C",
+      "13": "C",
+      "14": "D",
+      "15": "A",
+      "16": "A",
+      "17": "C",
+      "18": "C",
+      "19": "A",
+      "20": "B",
+      "21": "B",
+      "22": "A",
+      "23": "A",
+      "24": "C",
+      "25": "B",
+      "26": "A"
+    },
+    "detailList": [
+      {
+        "id": 15,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 4,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 10,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "A",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 1,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 5,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 11,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 25,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 16,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 2,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 9,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 20,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 17,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 13,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "D",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 24,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 14,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "A",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 18,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 7,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 21,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 26,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 8,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 19,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 6,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 23,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 3,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 22,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 12,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "D",
+        "isCorrect": false,
+        "score": 0
+      }
+    ]
+  },
+  {
+    "recordId": "250307028_quiz_matlab_1_1790579068834",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "250307028",
+    "studentName": "胡永超",
+    "gender": "男",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 90,
+    "correctCount": 23,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T07:04:28.000Z",
+    "answers": {},
+    "detailList": []
+  },
+  {
+    "recordId": "250307029_quiz_matlab_1_1790563907263",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "250307029",
+    "studentName": "申万超",
+    "gender": "男",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 88,
+    "correctCount": 23,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T02:51:47.263Z",
+    "answers": {
+      "1": "B",
+      "2": "C",
+      "3": "B",
+      "4": "B",
+      "5": "A",
+      "6": "B",
+      "7": "B",
+      "8": "C",
+      "9": "A",
+      "10": "A",
+      "11": "C",
+      "12": "D",
+      "13": "D",
+      "14": "D",
+      "15": "B",
+      "16": "B",
+      "17": "C",
+      "18": "C",
+      "19": "A",
+      "20": "B",
+      "21": "C",
+      "22": "A",
+      "23": "B",
+      "24": "B",
+      "25": "B",
+      "26": "B"
+    },
+    "detailList": [
+      {
+        "id": 24,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 11,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 4,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 1,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 18,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 5,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 22,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 17,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 3,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 7,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 9,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "A",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 26,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 10,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 15,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 19,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 8,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 21,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 6,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 14,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "A",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 13,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 2,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 12,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 20,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 25,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 16,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 23,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      }
+    ]
+  },
+  {
+    "recordId": "250307030_quiz_matlab_1_1790564084953",
+    "quizId": "quiz_matlab_1",
+    "quizTitle": "随堂测验 1：MATLAB基础语法与矩阵运算",
+    "studentId": "250307030",
+    "studentName": "苏鑫",
+    "gender": "女",
+    "class": "25级通信",
+    "college": "物理与信息工程学院",
+    "major": "通信工程",
+    "score": 58,
+    "correctCount": 15,
+    "totalQuestions": 26,
+    "attempt": 1,
+    "durationSeconds": 0,
+    "submittedAt": "2026-09-28T02:54:44.953Z",
+    "answers": {
+      "1": "B",
+      "2": "B",
+      "3": "A",
+      "4": "C",
+      "5": "A",
+      "6": "B",
+      "7": "B",
+      "8": "C",
+      "9": "C",
+      "10": "A",
+      "11": "C",
+      "12": "D",
+      "13": "D",
+      "14": "A",
+      "15": "B",
+      "16": "B",
+      "17": "B",
+      "18": "A",
+      "19": "B",
+      "20": "B",
+      "21": "A",
+      "22": "A",
+      "23": "D",
+      "24": "D",
+      "25": "B",
+      "26": "D"
+    },
+    "detailList": [
+      {
+        "id": 17,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 10,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 4,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 1,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 3,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 19,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "A",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 11,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 8,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 2,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 22,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 13,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 23,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 14,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 18,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 21,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "C",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 7,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 26,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 25,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 6,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 9,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "C",
+        "correctAns": "C",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 16,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 20,
+        "chapter": "第一章 MATLAB基础与环境",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 15,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "B",
+        "correctAns": "B",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 5,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "A",
+        "correctAns": "A",
+        "isCorrect": true,
+        "score": 1
+      },
+      {
+        "id": 24,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "B",
+        "isCorrect": false,
+        "score": 0
+      },
+      {
+        "id": 12,
+        "chapter": "第二章 矩阵与数组操作",
+        "studentAns": "D",
+        "correctAns": "D",
+        "isCorrect": true,
+        "score": 1
+      }
+    ]
+  }
+]

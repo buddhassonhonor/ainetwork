@@ -22,6 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+*_backup.xls
 
 # Source courseware folder (large, not needed in repo)
 计算机网络课件/
