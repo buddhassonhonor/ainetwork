@@ -1,6 +1,7 @@
 import classRosters from './classRosters.json';
 import networkQuizQuestions from './quizQuestions.json';
 import networkQuizQuestionsCh3 from './quizQuestions_ch3.json';
+import networkQuizQuestionsCh4 from './quizQuestions_ch4.json';
 import matlabQuizQuestions1 from './matlabQuestions.json';
 import matlabQuizQuestions2 from './matlabQuestions_quiz2.json';
 import matlabQuizQuestions3 from './matlabQuestions_quiz3.json';
@@ -40,6 +41,13 @@ export const CLASSES_CONFIG = [
         chapters: '第3章 数据链路层与局域网',
         totalQuestions: 23,
       },
+      {
+        id: 'quiz_ch4',
+        title: '【习题3】第4章 网络层随堂测验',
+        shortTitle: '习题3_第4章',
+        chapters: '第4章 网络层与IP编址路由',
+        totalQuestions: 20,
+      },
     ]
   },
   {
@@ -75,6 +83,13 @@ export const CLASSES_CONFIG = [
         shortTitle: '习题2_第3章',
         chapters: '第3章 数据链路层与局域网',
         totalQuestions: 23,
+      },
+      {
+        id: 'quiz_ch4',
+        title: '【习题3】第4章 网络层随堂测验',
+        shortTitle: '习题3_第4章',
+        chapters: '第4章 网络层与IP编址路由',
+        totalQuestions: 20,
       },
     ]
   },
@@ -176,6 +191,9 @@ export const getQuestionsForClass = (classId, quizId = 'quiz_ch1_ch2') => {
       return matlabQuizQuestions2;
     }
     return matlabQuizQuestions1;
+  }
+  if (quizId === 'quiz_ch4') {
+    return networkQuizQuestionsCh4;
   }
   if (quizId === 'quiz_ch3') {
     return networkQuizQuestionsCh3;
