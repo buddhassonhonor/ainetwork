@@ -290,8 +290,8 @@ public class QuizApiHandler : IHttpHandler {
                             SafeWriteFile(recordsFile, "[" + string.Join(",", remaining.ToArray()) + "]");
 
                             // Delete official score for this quiz only
-                            string targetOfficial = Path.Combine(dataDir, "official_scores_" + classId + "_" + targetQuizId + ".json");
-                            try { if (File.Exists(targetOfficial)) File.Delete(targetOfficial); } catch { }
+                            string quizOfficialFile = Path.Combine(dataDir, "official_scores_" + classId + "_" + targetQuizId + ".json");
+                            try { if (File.Exists(quizOfficialFile)) File.Delete(quizOfficialFile); } catch { }
 
                             // Clear lock for this quiz only
                             try {
