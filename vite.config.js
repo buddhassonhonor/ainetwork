@@ -127,8 +127,15 @@ function quizDataApiPlugin() {
 
               case 'get_records': {
                 const recs = readJson(recordsFile, []);
-                const resetData = readJson(resetFile, { resetAt: 0 });
-                res.end(JSON.stringify({ success: true, class: classId, resetAt: resetData?.resetAt || 0, count: recs.length, records: recs }));
+                const resetData = readJson(resetFile, { resetAt: 0, quizResets: {} });
+                res.end(JSON.stringify({
+                  success: true,
+                  class: classId,
+                  resetAt: resetData?.resetAt || 0,
+                  quizResets: resetData?.quizResets || {},
+                  count: recs.length,
+                  records: recs
+                }));
                 break;
               }
 
@@ -139,8 +146,49 @@ function quizDataApiPlugin() {
                   res.end(JSON.stringify({ success: false, error: '密码错误，请输入正确的教师管理密码' }));
                   return;
                 }
+                const targetQuizId = (params.get('quizId') || body?.quizId || '').trim();
                 const nowEpoch = Date.now();
-                writeJson(resetFile, { classId, resetAt: nowEpoch });
+                const resetData = readJson(resetFile, { classId, resetAt: 0, quizResets: {} });
+                if (!resetData.quizResets) resetData.quizResets = {};
+
+                if (targetQuizId && targetQuizId !== 'all') {
+                  // Clear ONLY records for this specific quiz
+                  const recs = readJson(recordsFile, []);
+                  const remaining = recs.filter((r) => (r.quizId || 'quiz_ch1_ch2') !== targetQuizId);
+                  writeJson(recordsFile, remaining);
+
+                  // Delete ONLY official score file for this quiz
+                  const targetOfficial = resolve(dataDir, `official_scores_${classId}_${targetQuizId}.json`);
+                  if (fs.existsSync(targetOfficial)) {
+                    try { fs.unlinkSync(targetOfficial); } catch {}
+                  }
+
+                  // Clear device lock for this quiz only
+                  const locks = readJson(locksFile, {});
+                  if (locks && locks[targetQuizId]) {
+                    delete locks[targetQuizId];
+                    writeJson(locksFile, locks);
+                  }
+
+                  // Record quiz reset timestamp
+                  resetData.quizResets[targetQuizId] = nowEpoch;
+                  writeJson(resetFile, resetData);
+
+                  res.end(JSON.stringify({
+                    success: true,
+                    class: classId,
+                    quizId: targetQuizId,
+                    resetAt: resetData.resetAt || 0,
+                    quizResets: resetData.quizResets,
+                    count: remaining.length
+                  }));
+                  return;
+                }
+
+                // Global fallback if no specific quizId provided or targetQuizId === 'all'
+                resetData.resetAt = nowEpoch;
+                resetData.quizResets = {};
+                writeJson(resetFile, resetData);
                 writeJson(recordsFile, []);
                 try {
                   const files = fs.readdirSync(dataDir);
@@ -151,7 +199,7 @@ function quizDataApiPlugin() {
                   });
                 } catch {}
                 writeJson(locksFile, {});
-                res.end(JSON.stringify({ success: true, class: classId, resetAt: nowEpoch, count: 0 }));
+                res.end(JSON.stringify({ success: true, class: classId, quizId: 'all', resetAt: nowEpoch, count: 0 }));
                 break;
               }
 

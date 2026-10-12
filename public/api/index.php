@@ -101,11 +101,12 @@ switch ($action) {
     case 'get_records':
         $records = readJsonFile($recordsFile, []);
         $resetFile = $dataDir . DIRECTORY_SEPARATOR . "reset_{$classId}.json";
-        $resetData = readJsonFile($resetFile, ['resetAt' => 0]);
+        $resetData = readJsonFile($resetFile, ['resetAt' => 0, 'quizResets' => []]);
         echo json_encode([
             'success' => true,
             'class' => $classId,
             'resetAt' => isset($resetData['resetAt']) ? (int)$resetData['resetAt'] : 0,
+            'quizResets' => isset($resetData['quizResets']) ? $resetData['quizResets'] : new stdClass(),
             'count' => count($records),
             'records' => $records
         ]);
@@ -202,9 +203,57 @@ switch ($action) {
             echo json_encode(['success' => false, 'error' => '密码错误，请输入正确的教师管理密码']);
             break;
         }
+        $targetQuizId = isset($inputBody['quizId']) ? $inputBody['quizId'] : (isset($_GET['quizId']) ? $_GET['quizId'] : '');
+        $targetQuizId = trim($targetQuizId);
         $nowEpoch = round(microtime(true) * 1000);
         $resetFile = $dataDir . DIRECTORY_SEPARATOR . "reset_{$classId}.json";
-        writeJsonFile($resetFile, ['classId' => $classId, 'resetAt' => $nowEpoch]);
+        $resetData = readJsonFile($resetFile, ['classId' => $classId, 'resetAt' => 0, 'quizResets' => []]);
+        if (!isset($resetData['quizResets']) || !is_array($resetData['quizResets'])) {
+            $resetData['quizResets'] = [];
+        }
+
+        if (!empty($targetQuizId) && $targetQuizId !== 'all') {
+            // Clear ONLY records for this specific quiz
+            $allRecords = readJsonFile($recordsFile, []);
+            $remaining = [];
+            foreach ($allRecords as $r) {
+                $qid = isset($r['quizId']) && !empty($r['quizId']) ? $r['quizId'] : 'quiz_ch1_ch2';
+                if ($qid !== $targetQuizId) {
+                    $remaining[] = $r;
+                }
+            }
+            writeJsonFile($recordsFile, $remaining);
+
+            // Only remove official score for this quiz
+            $officialFile = $dataDir . DIRECTORY_SEPARATOR . "official_scores_{$classId}_{$targetQuizId}.json";
+            if (file_exists($officialFile)) { @unlink($officialFile); }
+
+            // Only clear lock for this quiz
+            $locks = readJsonFile($locksFile, []);
+            if (isset($locks[$targetQuizId])) {
+                unset($locks[$targetQuizId]);
+                writeJsonFile($locksFile, $locks);
+            }
+
+            // Update quizResets timestamp
+            $resetData['quizResets'][$targetQuizId] = $nowEpoch;
+            writeJsonFile($resetFile, $resetData);
+
+            echo json_encode([
+                'success' => true,
+                'class' => $classId,
+                'quizId' => $targetQuizId,
+                'resetAt' => isset($resetData['resetAt']) ? (int)$resetData['resetAt'] : 0,
+                'quizResets' => $resetData['quizResets'],
+                'count' => count($remaining)
+            ]);
+            break;
+        }
+
+        // Global fallback clear if targetQuizId is empty or 'all'
+        $resetData['resetAt'] = $nowEpoch;
+        $resetData['quizResets'] = [];
+        writeJsonFile($resetFile, $resetData);
         writeJsonFile($recordsFile, []);
         // Also remove official scores for this class
         $officialFiles = glob($dataDir . DIRECTORY_SEPARATOR . "official_scores_{$classId}_*.json");
@@ -213,7 +262,7 @@ switch ($action) {
         }
         // Also clear device locks
         writeJsonFile($locksFile, new stdClass());
-        echo json_encode(['success' => true, 'class' => $classId, 'resetAt' => $nowEpoch, 'count' => 0]);
+        echo json_encode(['success' => true, 'class' => $classId, 'quizId' => 'all', 'resetAt' => $nowEpoch, 'count' => 0]);
         break;
 
     // --- STUDENT LOGINS (for Attendance) ---

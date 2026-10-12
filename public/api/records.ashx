@@ -182,11 +182,20 @@ public class QuizApiHandler : IHttpHandler {
             string locksFile = Path.Combine(dataDir, "device_locks_" + classId + ".json");
             string resetFile = Path.Combine(dataDir, "reset_" + classId + ".json");
             long resetEpoch = 0;
+            string quizResetsJson = "{}";
             try {
                 if (File.Exists(resetFile)) {
                     string rText = File.ReadAllText(resetFile, Encoding.UTF8);
                     Match rm = Regex.Match(rText, "\"resetAt\"\\s*:\\s*(\\d+)");
                     if (rm.Success) long.TryParse(rm.Groups[1].Value, out resetEpoch);
+                    int qrIdx = rText.IndexOf("\"quizResets\":");
+                    if (qrIdx >= 0) {
+                        int s = rText.IndexOf("{", qrIdx);
+                        int e = rText.IndexOf("}", s >= 0 ? s : qrIdx);
+                        if (s >= 0 && e > s) {
+                            quizResetsJson = rText.Substring(s, e - s + 1);
+                        }
+                    }
                 }
             } catch { }
 
@@ -250,7 +259,7 @@ public class QuizApiHandler : IHttpHandler {
                                 content = "[]";
                             }
                         }
-                        res.Write("{\"success\":true,\"class\":\"" + classId + "\",\"resetAt\":" + resetEpoch + ",\"records\":" + content + "}");
+                        res.Write("{\"success\":true,\"class\":\"" + classId + "\",\"resetAt\":" + resetEpoch + ",\"quizResets\":" + quizResetsJson + ",\"records\":" + content + "}");
                         break;
 
                     case "clear_records":
@@ -258,8 +267,75 @@ public class QuizApiHandler : IHttpHandler {
                             res.Write("{\"success\":false,\"error\":\"\\u5bc6\\u7801\\u9519\\u8bef\\uff0c\\u8bf7\\u8f93\\u5165\\u6b63\\u786e\\u7684\\u6559\\u5e08\\u7ba1\\u7406\\u5bc6\\u7801\"}");
                             break;
                         }
+                        string targetQuizId = req.QueryString["quizId"] ?? "";
+                        if (string.IsNullOrEmpty(targetQuizId)) {
+                            targetQuizId = GetJsonStringProp(body, "quizId", "");
+                        }
+                        targetQuizId = targetQuizId.Trim();
                         long nowReset = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
-                        SafeWriteFile(resetFile, "{\"classId\":\"" + classId + "\",\"resetAt\":" + nowReset + "}");
+
+                        if (!string.IsNullOrEmpty(targetQuizId) && targetQuizId != "all") {
+                            // Scoped clear for specific quiz only
+                            List<string> remaining = new List<string>();
+                            if (File.Exists(recordsFile)) {
+                                string rContent = File.ReadAllText(recordsFile, Encoding.UTF8);
+                                var objects = ParseJsonArrayObjects(rContent);
+                                foreach (string obj in objects) {
+                                    string qid = GetJsonStringProp(obj, "quizId", "quiz_ch1_ch2");
+                                    if (qid != targetQuizId) {
+                                        remaining.Add(obj);
+                                    }
+                                }
+                            }
+                            SafeWriteFile(recordsFile, "[" + string.Join(",", remaining.ToArray()) + "]");
+
+                            // Delete official score for this quiz only
+                            string targetOfficial = Path.Combine(dataDir, "official_scores_" + classId + "_" + targetQuizId + ".json");
+                            try { if (File.Exists(targetOfficial)) File.Delete(targetOfficial); } catch { }
+
+                            // Clear lock for this quiz only
+                            try {
+                                if (File.Exists(locksFile)) {
+                                    string curLocks = File.ReadAllText(locksFile, Encoding.UTF8);
+                                    string pattern = "\\\"" + Regex.Escape(targetQuizId) + "\\\"\\s*:\\s*\\{[^}]*\\},?";
+                                    string cleanLocks = Regex.Replace(curLocks, pattern, "");
+                                    cleanLocks = Regex.Replace(cleanLocks, @",\s*}", "}");
+                                    cleanLocks = Regex.Replace(cleanLocks, @"{\s*,", "{");
+                                    SafeWriteFile(locksFile, cleanLocks);
+                                }
+                            } catch { }
+
+                            // Update resetFile with quizResets
+                            string curResets = "{}";
+                            if (File.Exists(resetFile)) {
+                                try {
+                                    string curR = File.ReadAllText(resetFile, Encoding.UTF8);
+                                    int qrIdx = curR.IndexOf("\"quizResets\":");
+                                    if (qrIdx >= 0) {
+                                        int s = curR.IndexOf("{", qrIdx);
+                                        int e = curR.IndexOf("}", s >= 0 ? s : qrIdx);
+                                        if (s >= 0 && e > s) curResets = curR.Substring(s, e - s + 1);
+                                    }
+                                } catch { }
+                            }
+                            string newResets = curResets.Trim();
+                            if (newResets.Length <= 2) {
+                                newResets = "{\"" + targetQuizId + "\":" + nowReset + "}";
+                            } else {
+                                string ptn = "\\\"" + Regex.Escape(targetQuizId) + "\\\"\\s*:\\s*\\d+,?";
+                                newResets = Regex.Replace(newResets, ptn, "");
+                                newResets = Regex.Replace(newResets, @",\s*}", "}");
+                                newResets = Regex.Replace(newResets, @"{\s*,", "{");
+                                if (newResets.Length <= 2) newResets = "{\"" + targetQuizId + "\":" + nowReset + "}";
+                                else newResets = newResets.Substring(0, newResets.Length - 1) + ",\"" + targetQuizId + "\":" + nowReset + "}";
+                            }
+                            SafeWriteFile(resetFile, "{\"classId\":\"" + classId + "\",\"resetAt\":" + resetEpoch + ",\"quizResets\":" + newResets + "}");
+                            res.Write("{\"success\":true,\"class\":\"" + classId + "\",\"quizId\":\"" + targetQuizId + "\",\"resetAt\":" + resetEpoch + ",\"quizResets\":" + newResets + ",\"count\":" + remaining.Count + "}");
+                            break;
+                        }
+
+                        // Global fallback clear
+                        SafeWriteFile(resetFile, "{\"classId\":\"" + classId + "\",\"resetAt\":" + nowReset + ",\"quizResets\":{}}");
                         SafeWriteFile(recordsFile, "[]");
                         try {
                             if (Directory.Exists(dataDir)) {
@@ -272,7 +348,7 @@ public class QuizApiHandler : IHttpHandler {
                         try {
                             if (File.Exists(locksFile)) SafeWriteFile(locksFile, "{}");
                         } catch { }
-                        res.Write("{\"success\":true,\"class\":\"" + classId + "\",\"resetAt\":" + nowReset + ",\"count\":0}");
+                        res.Write("{\"success\":true,\"class\":\"" + classId + "\",\"quizId\":\"all\",\"resetAt\":" + nowReset + ",\"count\":0}");
                         break;
 
                     case "get_official_scores":

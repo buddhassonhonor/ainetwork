@@ -145,10 +145,12 @@ export async function fetchQuizRecords(classId) {
 
   let serverRecords = null;
   let serverResetAt = 0;
+  let serverQuizResets = {};
   const res = await apiRequest('get_records', classId, 'GET');
   if (res.ok && res.data && Array.isArray(res.data.records)) {
     serverRecords = res.data.records;
     serverResetAt = Number(res.data.resetAt || 0);
+    serverQuizResets = res.data.quizResets && typeof res.data.quizResets === 'object' ? res.data.quizResets : {};
   } else {
     // Static JSON fallback if API is offline / 404
     try {
@@ -162,7 +164,7 @@ export async function fetchQuizRecords(classId) {
     } catch {}
   }
 
-  // Check if server was reset after our local timestamp
+  // Check if server was reset after our local timestamp (global class reset)
   if (serverResetAt > localResetAt) {
     localStorage.setItem(localResetKey, String(serverResetAt));
     localStorage.removeItem(localKey);
@@ -174,6 +176,48 @@ export async function fetchQuizRecords(classId) {
     localStorage.removeItem('ainetwork_device_lock_quiz_ch1_ch2');
     localRecords = [];
     localResetAt = serverResetAt;
+  }
+
+  // Check if any specific quiz was reset on server after our local per-quiz reset timestamp
+  if (serverQuizResets && typeof serverQuizResets === 'object') {
+    Object.entries(serverQuizResets).forEach(([qId, qResetEpoch]) => {
+      const qReset = Number(qResetEpoch || 0);
+      if (!qReset) return;
+      const localQResetKey = `ainetwork_reset_at_${classId}_${qId}`;
+      const localQReset = Number(localStorage.getItem(localQResetKey) || 0);
+      if (qReset > localQReset) {
+        localStorage.setItem(localQResetKey, String(qReset));
+        // Remove local records for this specific quiz only
+        localRecords = localRecords.filter((r) => (r.quizId || 'quiz_ch1_ch2') !== qId);
+        // Remove device lock for this quiz
+        localStorage.removeItem(`ainetwork_device_lock_${classId}_${qId}`);
+        localStorage.removeItem(`ainetwork_device_lock_${qId}`);
+        try {
+          document.cookie = `ainetwork_device_lock_${classId}_${qId}=;path=/;max-age=0`;
+        } catch {}
+        try {
+          const rawLocks = localStorage.getItem(`ainetwork_device_locks_${classId}`);
+          if (rawLocks) {
+            const parsed = JSON.parse(rawLocks);
+            if (parsed[qId]) {
+              delete parsed[qId];
+              localStorage.setItem(`ainetwork_device_locks_${classId}`, JSON.stringify(parsed));
+            }
+          }
+        } catch {}
+        // Remove official sheet for this quiz
+        localStorage.removeItem(`ainetwork_official_scores_${classId}_${qId}`);
+        // Remove local drafts for this quiz
+        try {
+          for (let i = localStorage.length - 1; i >= 0; i--) {
+            const k = localStorage.key(i);
+            if (k && k.startsWith(`ainetwork_quiz_draft_answers_${classId}_${qId}_`)) {
+              localStorage.removeItem(k);
+            }
+          }
+        } catch {}
+      }
+    });
   }
 
   if (serverRecords) {
@@ -189,8 +233,10 @@ export async function fetchQuizRecords(classId) {
     const unpushed = [];
     localRecords.forEach((r) => {
       const subTime = new Date(r.submittedAt || 0).getTime();
-      if (subTime >= serverResetAt) {
-        const key = `${r.studentId}_${r.quizId || 'quiz_ch1_ch2'}_${r.attempt || 1}`;
+      const rQid = r.quizId || 'quiz_ch1_ch2';
+      const qReset = Number(serverQuizResets[rQid] || 0);
+      if (subTime >= serverResetAt && subTime >= qReset) {
+        const key = `${r.studentId}_${rQid}_${r.attempt || 1}`;
         if (!recordMap.has(key)) {
           recordMap.set(key, r);
           unpushed.push(r);
@@ -220,11 +266,75 @@ export async function fetchQuizRecords(classId) {
   return localRecords;
 }
 
-export async function clearClassQuizRecords(classId, password = '5163') {
+export async function clearClassQuizRecords(classId, quizId = null, password = '5163') {
+  // Support both signatures: clearClassQuizRecords(classId, '5163') and clearClassQuizRecords(classId, 'quiz_ch1_ch2', '5163')
+  let targetQuizId = quizId;
+  let targetPassword = password;
+  if (typeof quizId === 'string' && (quizId === '5163' || (password === '5163' && !quizId.startsWith('quiz') && quizId !== 'all'))) {
+    targetPassword = quizId;
+    targetQuizId = null;
+  }
+
   const localKey = STORAGE_KEYS.quizRecords(classId);
-  const localResetKey = `ainetwork_reset_at_${classId}`;
   const now = Date.now();
 
+  if (targetQuizId && targetQuizId !== 'all') {
+    // Scoped clear for specific quiz only
+    const localQuizResetKey = `ainetwork_reset_at_${classId}_${targetQuizId}`;
+    localStorage.setItem(localQuizResetKey, String(now));
+
+    // Filter local records: keep records of all other quizzes, remove only targetQuizId
+    try {
+      const raw = localStorage.getItem(localKey);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        const remaining = Array.isArray(parsed)
+          ? parsed.filter((r) => (r.quizId || 'quiz_ch1_ch2') !== targetQuizId)
+          : [];
+        localStorage.setItem(localKey, JSON.stringify(remaining));
+        if (classId === '24-1') {
+          localStorage.setItem('ainetwork_quiz_records_v2', JSON.stringify(remaining));
+        }
+      }
+    } catch {}
+
+    // Clear device locks for this specific quiz
+    localStorage.removeItem(`ainetwork_device_lock_${classId}_${targetQuizId}`);
+    localStorage.removeItem(`ainetwork_device_lock_${targetQuizId}`);
+    try {
+      document.cookie = `ainetwork_device_lock_${classId}_${targetQuizId}=;path=/;max-age=0`;
+    } catch {}
+    try {
+      const rawLocks = localStorage.getItem(`ainetwork_device_locks_${classId}`);
+      if (rawLocks) {
+        const parsed = JSON.parse(rawLocks);
+        if (parsed[targetQuizId]) {
+          delete parsed[targetQuizId];
+          localStorage.setItem(`ainetwork_device_locks_${classId}`, JSON.stringify(parsed));
+        }
+      }
+    } catch {}
+
+    // Clear official score sheet for this specific quiz only
+    localStorage.removeItem(`ainetwork_official_scores_${classId}_${targetQuizId}`);
+
+    // Clear local student drafts for this specific quiz
+    try {
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith(`ainetwork_quiz_draft_answers_${classId}_${targetQuizId}_`)) {
+          localStorage.removeItem(k);
+        }
+      }
+    } catch {}
+
+    // Notify server to clear only this quiz
+    const res = await apiRequest('clear_records', classId, 'POST', { password: targetPassword, quizId: targetQuizId }, { quizId: targetQuizId });
+    return res;
+  }
+
+  // Global clear fallback
+  const localResetKey = `ainetwork_reset_at_${classId}`;
   localStorage.setItem(localResetKey, String(now));
   localStorage.removeItem(localKey);
   if (classId === '24-1') {
@@ -237,15 +347,15 @@ export async function clearClassQuizRecords(classId, password = '5163') {
 
   // Remove any local official score sheets for this class
   try {
-    for (let i = 0; i < localStorage.length; i++) {
+    for (let i = localStorage.length - 1; i >= 0; i--) {
       const k = localStorage.key(i);
-      if (k && k.startsWith(`ainetwork_official_scores_${classId}_`)) {
+      if (k && (k.startsWith(`ainetwork_official_scores_${classId}_`) || k.startsWith(`ainetwork_quiz_draft_answers_${classId}_`))) {
         localStorage.removeItem(k);
       }
     }
   } catch {}
 
-  const res = await apiRequest('clear_records', classId, 'POST', { password });
+  const res = await apiRequest('clear_records', classId, 'POST', { password: targetPassword, quizId: 'all' }, { quizId: 'all' });
   return res;
 }
 

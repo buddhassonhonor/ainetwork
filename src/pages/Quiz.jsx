@@ -1215,11 +1215,27 @@ export default function Quiz() {
     triggerFileDownload(blob, fileName);
   };
 
-  // Clear records for current class (both on central server and local)
+  // Clear records for current class and currently selected quiz
   const handleClearRecords = async () => {
     const className = classConfig.name;
+
+    // Safety guard: If looking at the aggregate "all" view, guide teacher to choose a specific test
+    if (selectedQuizId === 'all') {
+      alert(
+        `⚠️ 当前处于【全班所有测验总汇明细】视图。\n\n为保护学生历史测试数据，系统不支持一键清空全部测验。\n请先在上方【测验批次】下拉菜单中选择您要清空的具体某次测验（例如：${QUIZ_MODULES[0]?.title || '习题1'}），然后再点击清空。`
+      );
+      return;
+    }
+
+    const currentModule = QUIZ_MODULES.find((m) => m.id === selectedQuizId) || {
+      id: selectedQuizId,
+      title: selectedQuizId,
+      shortTitle: selectedQuizId,
+    };
+    const quizTitle = currentModule.title;
+
     const inputPwd = window.prompt(
-      `⚠️ 警告：此操作将清空【${className}】在中央服务器及本地的所有交卷记录、官方成绩单与设备锁定！\n\n请输入任课教师管理授权密码确认清空：`
+      `⚠️ 警告：此操作将【仅清空】当前选中的【${className}】·【${quizTitle}】在中央服务器及本地的交卷记录、官方成绩单与设备锁定！\n\n✅ 清空后学生可重新进入本次测验答题。\n🔒 该班其他章节测验成绩与另外班级的成绩均完好保留，不受任何影响！\n\n请输入任课教师管理授权密码确认清空：`
     );
     if (!inputPwd) return;
 
@@ -1229,17 +1245,23 @@ export default function Quiz() {
     }
 
     try {
-      const res = await clearClassQuizRecords(currentClassId, inputPwd.trim());
+      const res = await clearClassQuizRecords(currentClassId, selectedQuizId, inputPwd.trim());
       if (res && res.ok && res.data && res.data.success === false) {
         alert(`❌ 服务器返回失败：${res.data.error || '未知错误'}`);
         return;
       }
-      setRecords([]);
+      // Only remove records of the selected quiz from React state! Keep other quizzes!
+      setRecords((prev) => prev.filter((r) => (r.quizId || 'quiz_ch1_ch2') !== selectedQuizId));
       setOfficialSheet(null);
-      setActiveReviewRecord(null);
-      setOfficialSuccessToast('已成功彻底清空本班所有测试成绩与设备锁定！');
-      if (view === 'review') setView('login');
-      alert(`✅ 已彻底清空【${className}】的所有测试记录！后续所有电脑与浏览器刷新后均将呈现 0 人。`);
+      if (activeReviewRecord && (activeReviewRecord.quizId || 'quiz_ch1_ch2') === selectedQuizId) {
+        setActiveReviewRecord(null);
+        if (view === 'review') setView('scoreboard');
+      }
+      clearDeviceLock(currentClassId, selectedQuizId);
+      setOfficialSuccessToast(`已成功清空【${quizTitle}】的成绩与设备锁定，学生现可重新作答！`);
+      alert(
+        `✅ 已成功清空【${className}】的【${quizTitle}】测验记录！\n\n该次测验的设备锁定已解除，学生可重新作答本次测验。\n该班其他章节测验成绩及另外班级成绩均完好保留。`
+      );
     } catch (err) {
       alert('清空过程中出现异常：' + err.message);
     }
@@ -2259,10 +2281,19 @@ export default function Quiz() {
                   id="btn-clear-test-records"
                   onClick={handleClearRecords}
                   className="px-3 py-2 rounded-xl bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-500 font-bold text-xs transition-all flex items-center gap-1.5 cursor-pointer"
-                  title="输入教师授权密码，彻底清空本班所有测试成绩与设备锁定"
+                  title={
+                    selectedQuizId === 'all'
+                      ? '请先在左侧选择要清空的具体某次测验'
+                      : `输入教师授权密码，仅清空当前选中的【${selectedQuizModule.shortTitle || selectedQuizModule.title}】成绩与设备锁定，保留其他测试`
+                  }
                 >
                   <Trash2 className="w-3.5 h-3.5 text-rose-500" />
-                  <span className="hidden sm:inline">清空测试成绩</span>
+                  <span className="hidden sm:inline">
+                    {selectedQuizId === 'all'
+                      ? '清空某次测试成绩'
+                      : `清空本次成绩 (${selectedQuizModule.shortTitle || '当前批次'})`}
+                  </span>
+                  <span className="sm:hidden">清空本次成绩</span>
                 </button>
               </div>
             </div>
